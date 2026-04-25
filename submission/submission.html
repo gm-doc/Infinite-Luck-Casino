@@ -1069,7 +1069,7 @@
       setTickets(tickets + prize.ticketBonus);
     }
 
-    if (!prize.isFree) {
+    if (!prize.isFree && prize.ticketBonus === 0) {
       addToPrizeList(prize);
     }
 
