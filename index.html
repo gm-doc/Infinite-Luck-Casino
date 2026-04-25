@@ -11,16 +11,19 @@
     html, body {
       margin: 0;
       background: #000;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
     }
 
     #frame-wrap {
-      position: relative;
+      position: absolute;
+      top: 50%;
+      left: 50%;
       width: 960px;
       height: 540px;
+      transform-origin: center center;
+      /* transform: translate(-50%, -50%) scale(n) — set by JS */
     }
 
     iframe {
@@ -38,7 +41,15 @@
 
   <script>
     (function () {
+      const wrap   = document.getElementById('frame-wrap');
       const iframe = document.getElementById('game');
+
+      function scaleGame() {
+        const scale = Math.min(1, window.innerWidth / 960, window.innerHeight / 540);
+        wrap.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
+      }
+      scaleGame();
+      window.addEventListener('resize', scaleGame);
 
       // Fire adStarted as soon as the iframe loads
       iframe.addEventListener('load', function () {
