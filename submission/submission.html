@@ -1339,9 +1339,9 @@
     for (let i = 0; i < count; i++) {
       confParticles.push({
         x: Math.random() * 960,
-        y: Math.random() * 200 + 100,
+        y: Math.random() * 540,
         vx: (Math.random() - 0.5) * 6,
-        vy: Math.random() * -6 - 2,
+        vy: (Math.random() - 0.5) * 8,
         color: colors[Math.floor(Math.random() * colors.length)],
         size: Math.random() * 8 + 4,
         rot: Math.random() * Math.PI * 2,
