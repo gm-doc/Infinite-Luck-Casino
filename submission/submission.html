@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -356,6 +356,19 @@
     }
     #collect-btn:hover { transform: scale(1.06); }
 
+    /* ── Dog Kiss Popup ── */
+    #dog-popup { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.88); z-index: 55; align-items: center; justify-content: center; }
+    #dog-popup.show { display: flex; }
+    #dog-box { background: linear-gradient(145deg, #1a0033, #0d001a); border: 3px solid #ffd700; border-radius: 16px; padding: 24px 36px; text-align: center; box-shadow: 0 0 40px #ffd700, 0 0 80px #ff880088; animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); max-width: 340px; width: 300px; }
+    #dog-title { font-family: 'Bungee Inline', sans-serif; font-size: 26px; color: #ffd700; text-shadow: 0 0 16px #ffd700; margin-bottom: 8px; }
+    #dog-instructions { font-size: 12px; color: #ffcc88; font-family: sans-serif; margin-bottom: 14px; line-height: 1.4; }
+    #dog-img-wrap { display: inline-block; width: 120px; height: 120px; cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiI+PHRleHQgeT0iMjgiIGZvbnQtc2l6ZT0iMjgiPvCfkos8L3RleHQ+PC9zdmc+') 16 16, pointer; margin-bottom: 10px; user-select: none; }
+    #dog-img { width: 120px; height: 120px; object-fit: contain; display: block; pointer-events: none; }
+    #dog-feedback { font-size: 11px; color: #ff6688; font-family: sans-serif; min-height: 16px; margin-bottom: 10px; }
+    #dog-collect-btn { background: #444; color: #888; border: 2px solid #666; padding: 12px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: not-allowed; opacity: 0.6; }
+    #dog-collect-btn.ready { background: linear-gradient(135deg, #ffd700, #ff9900); color: #000; border-color: #ffd700; cursor: pointer; opacity: 1; box-shadow: 0 4px 16px #ffd70088; transition: transform 0.1s; }
+    #dog-collect-btn.ready:hover { transform: scale(1.06); }
+
     /* ── Ticket pop ── */
     #skip-warn-popup {
       display: none;
@@ -467,7 +480,7 @@
   <div id="light-strip-top"></div>
   <div id="light-strip-bottom"></div>
 
-  <div id="casino-title">� PRIZE WHEEL 🎡</div>
+  <div id="casino-title">🎡 PRIZE WHEEL 🎡</div>
 
   <!-- Left: prizes won -->
   <div id="prizes-panel">
@@ -523,6 +536,17 @@
       <div id="win-prize-name">Prize</div>
       <div id="win-flavor"></div>
       <button id="collect-btn">COLLECT!</button>
+    </div>
+  </div>
+
+  <!-- Dog kiss popup -->
+  <div id="dog-popup">
+    <div id="dog-box">
+      <div id="dog-title">🐾 YOU WON A DOG! 🐾</div>
+      <div id="dog-instructions">Prove your love for your new dog by kissing him before taking him home!</div>
+      <div id="dog-img-wrap"><img id="dog-img" src="../assets/Doot.png" alt="Dog"></div>
+      <div id="dog-feedback"></div>
+      <button id="dog-collect-btn">COLLECT! (<span id="dog-timer">120</span>s)</button>
     </div>
   </div>
 
@@ -582,18 +606,20 @@
       upgradeSliceColor: '#b8860b',
       upgradeGlowColor: '#ffd700',
       prizes: [
-        { id: 'upgrade_gold',label: 'GOLDEN WHEEL',        icon: '⭐', color: '#b8860b', textColor: '#fff700', ticketBonus: 0,  isFree: false, flavor: '🌟 UNLOCKING THE GOLDEN WHEEL...', isUpgrade: true },
-        { id: 'free_spin',    label: 'FREE SPIN',          icon: '🎡', color: '#00cc44', textColor: '#fff',    ticketBonus: 0,  isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
-        { id: 'credits_200', label: '$200 Credits',        icon: '💵', color: '#005518', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'Two hundred smackers!' },
-        { id: 'google_100',  label: '$100 Google Play',    icon: '💳', color: '#1a3a5c', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$100 Google Play! 🎉 And remember — NEVER share your code with anyone, not even us!' },
-        { id: 'bike',        label: 'WIN A BIKE!',         icon: '🚲', color: '#553300', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '🚲 A shiny new bicycle! Stay fit!', isJackpot: true },
-        { id: 'tickets_5',   label: '5 Tickets',           icon: '🎟️', color: '#0088ff', textColor: '#fff',    ticketBonus: 5,  isFree: false, flavor: "5 free spins coming right up!" },
-        { id: 'google_200',  label: '$200 Google Play',    icon: '💳', color: '#0d2240', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$200 Google Play! 🎉 Pro tip: guard that code with your LIFE — share it with NO ONE!' },
-        { id: 'credits_100', label: '$100 Credits',        icon: '💵', color: '#006622', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'One hundred casino bucks!' },
-        { id: 'iphone_x',    label: 'iPhone X',            icon: '📱', color: '#1a1a2e', textColor: '#00ffff', ticketBonus: 0,  isFree: false, flavor: 'A brand new iPhone X! (totally real, claim in 72h)' },
-        { id: 'tickets_10',  label: '10 Tickets',          icon: '🎟️', color: '#aa00ff', textColor: '#fff',    ticketBonus: 10, isFree: false, flavor: "10 tickets! You're on fire!" },
+        { id: 'upgrade_gold',  label: 'GOLDEN WHEEL',       icon: '⭐', color: '#b8860b', textColor: '#fff700', ticketBonus: 0,  isFree: false, flavor: '🌟 UNLOCKING THE GOLDEN WHEEL...', isUpgrade: true },
+        { id: 'crowpro_1mo',   label: 'CrowPro 1mo',        icon: '🎮', color: '#2a0a4a', textColor: '#cc88ff', ticketBonus: 0,  isFree: false, flavor: 'One month of CrowPro — enjoy!', imgIcon: '../assets/CrowPro.png' },
+        { id: 'free_spin',     label: 'FREE SPIN',          icon: '🎡', color: '#00cc44', textColor: '#fff',    ticketBonus: 0,  isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
+        { id: 'credits_100',   label: '$100 Credits',       icon: '💵', color: '#006622', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'One hundred casino bucks!' },
+        { id: 'google_200',    label: '$200 Google Play',   icon: '💳', color: '#0d2240', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$200 Google Play! 🎉 Guard that code — share it with NO ONE!' },
+        { id: 'windows_rg',    label: 'Windows RG',         icon: '🪟', color: '#0a1a30', textColor: '#88bbff', ticketBonus: 0,  isFree: false, flavor: 'A genuine Windows RG license! Legendary software!', imgIcon: '../assets/WindowsRG.png' },
+        { id: 'seraph_1mo',    label: 'Seraph Secure 1mo',  icon: '🛡️', color: '#003322', textColor: '#00ffaa', ticketBonus: 0,  isFree: false, flavor: 'One month of Seraph Secure protection!', imgIcon: '../assets/SeraphSecure.png' },
+        { id: 'tickets_5',     label: '5 Tickets',          icon: '🎟️', color: '#0088ff', textColor: '#fff',    ticketBonus: 5,  isFree: false, flavor: "5 free spins coming right up!" },
+        { id: 'credits_200',   label: '$200 Credits',       icon: '💵', color: '#005518', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'Two hundred smackers!' },
+        { id: 'google_100',    label: '$100 Google Play',   icon: '💳', color: '#1a3a5c', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$100 Google Play! 🎉 And remember — NEVER share your code with anyone, not even us!' },
+        { id: 'bike',          label: 'WIN A BIKE!',        icon: '🚲', color: '#553300', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '🚲 A shiny new bicycle! Stay fit!', isJackpot: true },
+        { id: 'tickets_10',    label: '10 Tickets',         icon: '🎟️', color: '#aa00ff', textColor: '#fff',    ticketBonus: 10, isFree: false, flavor: "10 tickets! You're on fire!" },
       ],
-      baseWeights: [2, 3, 6, 8, 4, 5, 5, 9, 7, 3],
+      baseWeights: [2, 4, 3, 8, 4, 4, 2, 5, 4, 8, 2, 3],
     },
     {
       id: 'gold',
@@ -613,18 +639,20 @@
       upgradeSliceColor: '#1a3a6e',
       upgradeGlowColor: '#00aaff',
       prizes: [
-        { id: 'upgrade_dia', label: 'DIAMOND WHEEL',      icon: '💎', color: '#1a3a6e', textColor: '#aaddff', ticketBonus: 0,  isFree: false, flavor: '💎 UNLOCKING THE DIAMOND WHEEL...', isUpgrade: true },
-        { id: 'free_spin',    label: 'FREE SPIN',          icon: '🎡', color: '#00aa33', textColor: '#fff',    ticketBonus: 0,  isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
-        { id: 'credits_1000',label: '$1000 Credits',      icon: '💰', color: '#004d1a', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'ONE THOUSAND bucks! Amazing!' },
-        { id: 'google_500',  label: '$500 Google Play',   icon: '💳', color: '#1a3a5c', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$500 Google Play! 🎉 Keep that code safe — never share it with ANYONE!' },
-        { id: 'scooter',     label: 'WIN A SCOOTER!',     icon: '🛵', color: '#aa4400', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '🛵 A brand new scooter! Vroom vroom!', isJackpot: true },
-        { id: 'tickets_5',   label: '5 Gold Tickets',     icon: '🌟', color: '#0077dd', textColor: '#fff',    ticketBonus: 5,  isFree: false, flavor: '5 Golden Tickets! The riches grow!' },
-        { id: 'google_1000', label: '$1000 Google Play',  icon: '💳', color: '#0d2240', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$1000 Google Play! 🎉 Seriously though, guard that code — share it with zero humans!' },
-        { id: 'credits_500', label: '$500 Credits',       icon: '💵', color: '#006622', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'FIVE HUNDRED casino dollars!' },
-        { id: 'iphone_12',   label: 'iPhone 12',          icon: '📱', color: '#1a1a3e', textColor: '#88eeff', ticketBonus: 0,  isFree: false, flavor: 'A brand new iPhone 12! (claim in 72h)' },
-        { id: 'tickets_10',  label: '10 Gold Tickets',    icon: '🌟', color: '#8800cc', textColor: '#fff',    ticketBonus: 10, isFree: false, flavor: '10 Golden Tickets! Extraordinary!' },
+        { id: 'upgrade_dia',   label: 'DIAMOND WHEEL',      icon: '💎', color: '#1a3a6e', textColor: '#aaddff', ticketBonus: 0,  isFree: false, flavor: '💎 UNLOCKING THE DIAMOND WHEEL...', isUpgrade: true },
+        { id: 'crowpro_6mo',   label: 'CrowPro 6mo',        icon: '🎮', color: '#2a0a4a', textColor: '#cc88ff', ticketBonus: 0,  isFree: false, flavor: 'Six months of CrowPro — premium access!', imgIcon: '../assets/CrowPro.png' },
+        { id: 'free_spin',     label: 'FREE SPIN',          icon: '🎡', color: '#00aa33', textColor: '#fff',    ticketBonus: 0,  isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
+        { id: 'dog',           label: 'Dog',                icon: '🐕', color: '#3a1e00', textColor: '#ffcc88', ticketBonus: 0,  isFree: false, flavor: '...why is there a dog here?', imgIcon: '../assets/Doot.png' },
+        { id: 'credits_200',   label: '$200 Credits',       icon: '💵', color: '#005518', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'Two hundred smackers!' },
+        { id: 'google_500',    label: '$500 Google Play',   icon: '💳', color: '#1a3a5c', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$500 Google Play! 🎉 Keep that code safe — never share it with ANYONE!' },
+        { id: 'crowpro_life',  label: 'CrowPro Lifetime',   icon: '👑', color: '#1e0040', textColor: '#ff88ff', ticketBonus: 0,  isFree: false, flavor: 'CrowPro — LIFETIME access! Never pay again!', imgIcon: '../assets/CrowPro.png' },
+        { id: 'wwww',          label: 'WWWW Gold Standard', icon: '🏆', color: '#2a1800', textColor: '#ffe066', ticketBonus: 0,  isFree: false, flavor: 'The WWWWTSACTP Gold Standard package!', imgIcon: '../assets/WWWW.png' },
+        { id: 'tickets_5',     label: '5 Gold Tickets',     icon: '🌟', color: '#0077dd', textColor: '#fff',    ticketBonus: 5,  isFree: false, flavor: '5 Golden Tickets! The riches grow!' },
+        { id: 'credits_500',   label: '$500 Credits',       icon: '💵', color: '#006622', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'FIVE HUNDRED casino dollars!' },
+        { id: 'scooter',       label: 'Mobility Scooter', icon: '🦼', color: '#553300', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '🦼 A brand new mobility scooter!', isJackpot: true },
+        { id: 'tickets_10',    label: '10 Gold Tickets',    icon: '🌟', color: '#8800cc', textColor: '#fff',    ticketBonus: 10, isFree: false, flavor: '10 Golden Tickets! Extraordinary!' },
       ],
-      baseWeights: [2, 3, 5, 7, 3, 5, 5, 8, 7, 3],
+      baseWeights: [2, 4, 3, 1, 8, 4, 2, 2, 5, 4, 2, 3],
     },
     {
       id: 'diamond',
@@ -644,18 +672,20 @@
       upgradeSliceColor: '#333',
       upgradeGlowColor: '#aaa',
       prizes: [
-        { id: 'btc',         label: '1 BITCOIN!',         icon: '₿',  color: '#3d1f00', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot: true, customBorder: '#ffd700' },
+        { id: 'btc',          label: '1 BITCOIN!',         icon: '₿',  color: '#3d1f00', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot: true, customBorder: '#ffd700' },
         { id: 'free_spin',    label: 'FREE SPIN',          icon: '🎡', color: '#00aa33', textColor: '#fff',    ticketBonus: 0,  isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
-        { id: 'credits_2000',label: '$2000 Credits',      icon: '💰', color: '#004d1a', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'TWO THOUSAND BUCKS! INSANE!' },
-        { id: 'google_1000', label: '$1000 Google Play',  icon: '💳', color: '#1a3a5c', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$1000 Google Play! 🎉 Pssst — never share that code with anyone. Not even your mum!' },
-        { id: 'car',         label: 'WIN A CAR!',         icon: '🚗', color: '#cc0000', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '🚨 A BRAND NEW RED CAR! 🚨 (claim in 72h)', isJackpot: true },
-        { id: 'tickets_5',   label: '5 Diamond Tickets',  icon: '💎', color: '#0066cc', textColor: '#fff',    ticketBonus: 5,  isFree: false, flavor: '5 Diamond Tickets! Pure luxury!' },
-        { id: 'google_2000', label: '$2000 Google Play',  icon: '💳', color: '#0d2240', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$2000 Google Play! 🎉 That code is YOURS — keep it secret, keep it safe!' },
-        { id: 'credits_1000',label: '$1000 Credits',      icon: '💵', color: '#006622', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'ONE THOUSAND casino dollars!' },
-        { id: 'iphone_16',   label: 'iPhone 16',          icon: '📱', color: '#0d1a3e', textColor: '#aaddff', ticketBonus: 0,  isFree: false, flavor: 'The latest iPhone 16! (claim in 72h)' },
-        { id: 'tickets_10',  label: '10 Diamond Tickets', icon: '💎', color: '#6600aa', textColor: '#fff',    ticketBonus: 10, isFree: false, flavor: '10 Diamond Tickets! Extraordinary!' },
+        { id: 'dog',          label: 'Dog',                icon: '🐕', color: '#3a1e00', textColor: '#ffcc88', ticketBonus: 0,  isFree: false, flavor: '...why is there a dog here?', imgIcon: '../assets/Doot.png' },
+        { id: 'credits_500',  label: '$500 Credits',       icon: '💵', color: '#005518', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'FIVE HUNDRED casino dollars!' },
+        { id: 'google_1000',  label: '$1000 Google Play',  icon: '💳', color: '#1a3a5c', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$1000 Google Play! 🎉 Pssst — never share that code with anyone. Not even your mum!' },
+        { id: 'awp_dl',       label: 'AWP Dragon Lore',    icon: '🔫', color: '#1a0a00', textColor: '#ff8800', ticketBonus: 0,  isFree: false, flavor: 'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon: '../assets/AWPDL.png', isJackpot: true },
+        { id: 'skip_ad',      label: 'Skip Ad',            icon: '⏭️', color: '#002200', textColor: '#00ff88', ticketBonus: 0,  isFree: false, flavor: 'WAIT. You can actually skip the ad?!' },
+        { id: 'tickets_5',    label: '5 Diamond Tickets',  icon: '💎', color: '#0066cc', textColor: '#fff',    ticketBonus: 5,  isFree: false, flavor: '5 Diamond Tickets! Pure luxury!' },
+        { id: 'credits_100',  label: '$100 Credits',       icon: '💵', color: '#006622', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: 'One hundred casino bucks!' },
+        { id: 'google_500',   label: '$500 Google Play',   icon: '💳', color: '#0d2240', textColor: '#4fc3f7', ticketBonus: 0,  isFree: false, flavor: '$500 Google Play! 🎉 That code is YOURS — keep it secret, keep it safe!' },
+        { id: 'car',          label: 'WIN A CAR!',         icon: '🚗', color: '#cc0000', textColor: '#ffd700', ticketBonus: 0,  isFree: false, flavor: '🚨 A BRAND NEW RED CAR! 🚨 (claim in 72h)', isJackpot: true },
+        { id: 'tickets_10',   label: '10 Diamond Tickets', icon: '💎', color: '#6600aa', textColor: '#fff',    ticketBonus: 10, isFree: false, flavor: '10 Diamond Tickets! Extraordinary!' },
       ],
-      baseWeights: [1, 3, 4, 6, 2, 5, 4, 7, 6, 3],
+      baseWeights: [1, 3, 1, 8, 4, 1, 2, 5, 4, 8, 2, 3],
     },
   ];
 
@@ -677,6 +707,23 @@
   let spinCount = 0; // for upgrade guarantee every 5 spins (testing)
 
   function currentTier() { return TIERS[currentTierIndex]; }
+
+  // ─────────────────────────────────────────
+  // IMAGE CACHE (preload prize PNGs)
+  // ─────────────────────────────────────────
+  const imgCache = {};
+  (function preloadImages() {
+    TIERS.forEach(tier => {
+      tier.prizes.forEach(p => {
+        if (p.imgIcon && !imgCache[p.imgIcon]) {
+          const img = new Image();
+          img.onload = () => drawWheel(currentAngle);
+          img.src = p.imgIcon;
+          imgCache[p.imgIcon] = img;
+        }
+      });
+    });
+  })();
 
   // ─────────────────────────────────────────
   // RIGGED RANDOM
@@ -783,10 +830,16 @@
       ctx.translate(textR, 0);
       ctx.rotate(Math.PI / 2);
 
-      ctx.font = '16px sans-serif';
       ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText(p.icon, 0, 2);
+      if (p.imgIcon && imgCache[p.imgIcon] && imgCache[p.imgIcon].complete) {
+        const img = imgCache[p.imgIcon];
+        const size = 22;
+        ctx.drawImage(img, -size / 2, -size - 2, size, size);
+      } else {
+        ctx.font = '16px sans-serif';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(p.icon, 0, 2);
+      }
 
       ctx.fillStyle = p.textColor;
       ctx.font = `bold ${(p.isJackpot || p.isUpgrade) ? '10' : '9'}px sans-serif`;
@@ -1102,7 +1155,12 @@
       showUpgradePopup();
       return;
     }
-    winIcon.textContent   = prize.icon;
+    if (prize.id === 'dog') { startDogPopup(prize); return; }
+    if (prize.imgIcon) {
+      winIcon.innerHTML = `<img src="${prize.imgIcon}" style="width:60px;height:60px;object-fit:contain;">`;
+    } else {
+      winIcon.textContent = prize.icon;
+    }
     winName.textContent   = prize.label;
     winFlavor.textContent = prize.flavor;
 
@@ -1143,6 +1201,107 @@
     } else {
       updateSpinBtn();
     }
+  });
+
+  // ─────────────────────────────────────────
+  // DOG KISS POPUP
+  // ─────────────────────────────────────────
+  const dogPopup    = document.getElementById('dog-popup');
+  const dogBox      = document.getElementById('dog-box');
+  const dogImgEl    = document.getElementById('dog-img');
+  const dogImgWrap  = document.getElementById('dog-img-wrap');
+  const dogFeedback = document.getElementById('dog-feedback');
+  const dogCollect  = document.getElementById('dog-collect-btn');
+  let dogCountdown  = 120;
+  let dogInterval   = null;
+  let dogPrize      = null;
+  let dogKissed     = false;
+  let dogPenalty    = false;
+  let _dogCryImgTimer = null;
+  let _dogCryTxtTimer = null;
+
+  function updateDogTimer() {
+    if (dogCountdown <= 0) {
+      dogCountdown = 0;
+      clearInterval(dogInterval); dogInterval = null;
+      if (!dogKissed) {
+        dogPenalty = true;
+        playDenied();
+        dogImgEl.src = '../assets/DootCry.png';
+        dogFeedback.textContent = "You don't deserve your new friend!";
+        dogCollect.textContent = 'Continue';
+      } else {
+        dogCollect.textContent = 'COLLECT!';
+      }
+      dogCollect.classList.add('ready');
+    } else {
+      dogCollect.innerHTML = `COLLECT! (<span id="dog-timer">${dogCountdown}</span>s)`;
+    }
+  }
+
+  function startDogPopup(prize) {
+    dogPrize = prize;
+    dogCountdown = 120;
+    dogKissed = false;
+    dogPenalty = false;
+    dogImgEl.src = '../assets/Doot.png';
+    dogFeedback.textContent = '';
+    dogCollect.classList.remove('ready');
+    dogCollect.innerHTML = 'COLLECT! (<span id="dog-timer">120</span>s)';
+    dogPopup.classList.add('show');
+    if (dogInterval) clearInterval(dogInterval);
+    dogInterval = setInterval(() => { dogCountdown--; updateDogTimer(); }, 1000);
+  }
+
+  function dogCry() {
+    if (dogPenalty) return;
+    playDenied();
+    dogImgEl.src = '../assets/DootCry.png';
+    clearTimeout(_dogCryImgTimer);
+    clearTimeout(_dogCryTxtTimer);
+    _dogCryImgTimer = setTimeout(() => { if (dogPopup.classList.contains('show')) dogImgEl.src = '../assets/Doot.png'; }, 500);
+    dogFeedback.textContent = 'You should always kiss your friend on the lips!';
+    _dogCryTxtTimer = setTimeout(() => { dogFeedback.textContent = ''; }, 3000);
+  }
+
+  dogImgWrap.addEventListener('click', (e) => {
+    if (dogPenalty) return;
+    const rect = dogImgWrap.getBoundingClientRect();
+    const px = (e.clientX - rect.left)  * (dogImgEl.naturalWidth  / dogImgWrap.offsetWidth);
+    const py = (e.clientY - rect.top)   * (dogImgEl.naturalHeight / dogImgWrap.offsetHeight);
+    if (px >= 30 && px <= 55 && py >= 95 && py <= 105) {
+      dogKissed = true;
+      dogImgEl.src = '../assets/DootLove.png';
+      setTimeout(() => { if (dogPopup.classList.contains('show')) dogImgEl.src = '../assets/Doot.png'; }, 500);
+      dogFeedback.textContent = '';
+      dogCountdown = Math.max(0, dogCountdown - 30);
+      updateDogTimer();
+    } else {
+      dogCry();
+    }
+  });
+
+  dogBox.addEventListener('click', (e) => {
+    if (dogImgWrap === e.target || dogImgWrap.contains(e.target)) return;
+    if (dogCollect === e.target || dogCollect.contains(e.target)) return;
+    dogCry();
+  });
+
+  dogPopup.addEventListener('click', (e) => {
+    if (dogBox === e.target || dogBox.contains(e.target)) return;
+    dogCry();
+  });
+
+  dogCollect.addEventListener('click', () => {
+    if (!dogCollect.classList.contains('ready')) return;
+    clearInterval(dogInterval); dogInterval = null;
+    dogPopup.classList.remove('show');
+    const wasPenalty = dogPenalty; dogPenalty = false;
+    const prize = dogPrize; dogPrize = null; pendingPrize = null;
+    if (!wasPenalty) addToPrizeList(prize);
+    spinning = false;
+    window.top.postMessage({ type: 'play' }, '*');
+    updateSpinBtn();
   });
 
   // ─────────────────────────────────────────
@@ -1276,6 +1435,14 @@
         strip.appendChild(b);
       }
     });
+
+    // Win & Dog popup theming
+    const _popupBg   = ['linear-gradient(145deg, #1a0033, #0d001a)', 'linear-gradient(145deg, #2a1400, #1a0c00)', 'linear-gradient(145deg, #001828, #000d18)'][index];
+    const _popupGlow = ['0 0 40px #ffd700, 0 0 80px #ff4400aa', '0 0 40px #ffe066, 0 0 80px #ff880099', '0 0 40px #00ccff, 0 0 80px #0088ffaa'][index];
+    const _wb = document.getElementById('win-box'); const _db = document.getElementById('dog-box');
+    _wb.style.background = _popupBg; _wb.style.borderColor = tier.panelBorder; _wb.style.boxShadow = _popupGlow;
+    _db.style.background = _popupBg; _db.style.borderColor = tier.panelBorder; _db.style.boxShadow = _popupGlow;
+    winTitle.style.color = tier.titleColor;
 
     drawWheel(currentAngle);
   }
@@ -1603,3 +1770,4 @@
 </script>
 </body>
 </html>
+
