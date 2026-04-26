@@ -426,6 +426,10 @@
       transition: transform 0.1s;
     }
     #upgrade-ok:hover { transform: scale(1.06); }
+    /* Volume slider */
+    #vol-slider-wrap { position: absolute; bottom: 14px; left: 14px; z-index: 20; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.65); border: 1px solid #ffd70055; border-radius: 20px; padding: 5px 10px; }
+    #vol-slider-wrap label { font-size: 11px; color: #ffd700; font-family: 'Bungee', sans-serif; cursor: default; }
+    #vol-slider { width: 70px; cursor: pointer; accent-color: #ffd700; }
   </style>
 </head>
 <body>
@@ -436,7 +440,7 @@
   <div id="light-strip-top"></div>
   <div id="light-strip-bottom"></div>
 
-  <div id="casino-title">🎰 INFINITE LUCK CASINO 🎰</div>
+  <div id="casino-title">� PRIZE WHEEL 🎡</div>
 
   <!-- Left: prizes won -->
   <div id="prizes-panel">
@@ -507,6 +511,12 @@
     </div>
   </div>
 
+  <!-- Volume -->
+  <div id="vol-slider-wrap">
+    <label>🔊</label>
+    <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.5">
+  </div>
+
   <!-- Confetti canvas -->
   <canvas id="confetti-canvas" width="960" height="540"></canvas>
 
@@ -521,7 +531,7 @@
   const TIERS = [
     {
       id: 'base',
-      name: '🎰 INFINITE LUCK CASINO 🎰',
+      name: '� PRIZE WHEEL 🎡',
       ticketLabel: '🎟️ YOUR TICKETS',
       ticketIcon: '🎟️',
       ticketName: 'Tickets',
@@ -784,11 +794,28 @@
   // AUDIO (Web Audio API — no external files)
   // ─────────────────────────────────────────
   let _ac = null;
+  let _masterGain = null;
+  let _acProxy = null;
   function getAC() {
-    if (!_ac) _ac = new (window.AudioContext || window.webkitAudioContext)();
+    if (!_ac) {
+      _ac = new (window.AudioContext || window.webkitAudioContext)();
+      _masterGain = _ac.createGain();
+      _masterGain.gain.value = 0.5;
+      _masterGain.connect(_ac.destination);
+      _acProxy = new Proxy(_ac, {
+        get(target, prop) {
+          if (prop === 'destination') return _masterGain;
+          const val = target[prop];
+          return typeof val === 'function' ? val.bind(target) : val;
+        }
+      });
+    }
     if (_ac.state === 'suspended') _ac.resume();
-    return _ac;
+    return _acProxy;
   }
+  document.getElementById('vol-slider').addEventListener('input', function() {
+    if (_masterGain) _masterGain.gain.value = parseFloat(this.value);
+  });
 
   // Schedule tick clicks synced to the wheel's easing curve
   function scheduleWheelTicks(totalDelta, spinSecs) {
@@ -1164,6 +1191,7 @@
     currentTierIndex = index;
     const tier = TIERS[index];
     currentAngle = 0;
+    window.top.postMessage({ type: 'tierChange', tier: index }, '*');
 
     // Background
     document.getElementById('overlay-container').style.background = tier.bg;

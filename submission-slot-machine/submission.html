@@ -1,0 +1,1293 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Infinite Luck Casino — Slots</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 960px; height: 540px;
+      overflow: hidden;
+      background: transparent;
+      font-family: 'Bungee', sans-serif;
+    }
+
+    #overlay-container {
+      position: relative;
+      width: 960px; height: 540px;
+      background: radial-gradient(ellipse at center, #1a0a2e 0%, #0d0618 60%, #000 100%);
+      overflow: hidden;
+    }
+
+    /* ── Stars ── */
+    .bg-star {
+      position: absolute; border-radius: 50%; background: white;
+      animation: twinkle 2s infinite alternate; pointer-events: none;
+    }
+    @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
+
+    /* ── Border bulbs ── */
+    #light-strip-top, #light-strip-bottom {
+      position: absolute; left: 0; right: 0; height: 12px;
+      display: flex; justify-content: space-around; align-items: center; z-index: 10;
+    }
+    #light-strip-top { top: 0; } #light-strip-bottom { bottom: 0; }
+    .bulb {
+      width: 10px; height: 10px; border-radius: 50%;
+      animation: bulb-blink 0.7s infinite alternate;
+    }
+    @keyframes bulb-blink { from { opacity: 0.3; } to { opacity: 1; box-shadow: 0 0 6px 3px currentColor; } }
+
+    /* ── Title ── */
+    #casino-title {
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      font-family: 'Bungee Inline', sans-serif; font-size: 26px; color: #ffd700;
+      text-shadow: 0 0 10px #ff9900, 0 0 24px #ff4400, 2px 2px 0 #8b0000;
+      white-space: nowrap; z-index: 10;
+      animation: title-pulse 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes title-pulse {
+      from { text-shadow: 0 0 10px #ff9900, 0 0 24px #ff4400, 2px 2px 0 #8b0000; }
+      to   { text-shadow: 0 0 20px #ffcc00, 0 0 40px #ff6600, 2px 2px 0 #8b0000; }
+    }
+
+    /* ── Left panel: prizes won ── */
+    #prizes-panel {
+      position: absolute; top: 50px; left: 8px; width: 158px;
+      background: rgba(0,0,0,0.75); border: 2px solid #ffd700; border-radius: 8px;
+      padding: 8px; z-index: 10; box-shadow: 0 0 12px #ffd700aa;
+    }
+    #prizes-panel h3 {
+      font-size: 11px; color: #ffd700; text-align: center; margin-bottom: 6px;
+      letter-spacing: 1px; text-shadow: 0 0 6px #ffd700;
+    }
+    #prizes-list { list-style: none; }
+    #prizes-list li {
+      font-size: 11px; color: #fff; padding: 3px 4px;
+      border-bottom: 1px solid rgba(255,215,0,0.15);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    #prizes-list li:last-child { border-bottom: none; }
+    .prize-count {
+      color: #ffd700; font-size: 11px; background: rgba(255,215,0,0.15);
+      border-radius: 4px; padding: 1px 5px;
+    }
+    #prizes-empty { font-size: 10px; color: #888; text-align: center; padding: 4px 0; font-family: sans-serif; }
+    #collect-prizes-btn {
+      margin-top: 8px; width: 100%; padding: 7px 4px;
+      background: linear-gradient(135deg, #ffd700, #ff9900);
+      color: #000; border: none; border-radius: 6px;
+      font-family: 'Bungee', sans-serif; font-size: 10px;
+      cursor: pointer; box-shadow: 0 0 8px #ffd70088;
+      transition: transform 0.1s, box-shadow 0.1s; letter-spacing: 0.5px;
+    }
+    #collect-prizes-btn:hover { transform: scale(1.04); box-shadow: 0 0 14px #ffd700bb; }
+
+    /* ── Right panel: ticket counter ── */
+    #ticket-panel {
+      position: absolute; top: 50px; right: 8px; width: 158px;
+      background: rgba(0,0,0,0.75); border: 2px solid #ffd700; border-radius: 8px;
+      padding: 12px 8px; z-index: 10; box-shadow: 0 0 12px #ffd700aa; text-align: center;
+    }
+    #ticket-panel h3 { font-size: 11px; color: #ffd700; letter-spacing: 1px; margin-bottom: 8px; text-shadow: 0 0 6px #ffd700; }
+    #ticket-count {
+      font-size: 48px; color: #ffd700;
+      text-shadow: 0 0 12px #ffd700, 0 0 24px #ff9900;
+      line-height: 1; transition: transform 0.15s;
+    }
+    #ticket-count.bump { transform: scale(1.4); }
+    #ticket-icon { font-size: 28px; margin-top: 4px; }
+    #ticket-label { font-size: 10px; color: #aaa; margin-top: 4px; font-family: sans-serif; }
+
+    /* ── Slot machine cabinet ── */
+    #slot-area {
+      position: absolute;
+      top: 44px; left: 50%; transform: translateX(-50%);
+      width: 420px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0; z-index: 5;
+    }
+
+    /* Cabinet top bar */
+    #slot-marquee {
+      width: 100%; padding: 6px 0 4px;
+      background: linear-gradient(180deg, #3a1a00 0%, #1a0a00 100%);
+      border: 3px solid #ffd700;
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      text-align: center;
+      font-size: 13px; color: #ffd700;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #ffd700;
+      box-shadow: 0 0 12px #ffd700aa;
+    }
+
+    /* Reels window */
+    #reels-window {
+      width: 100%;
+      background: #050010;
+      border-left: 3px solid #ffd700;
+      border-right: 3px solid #ffd700;
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 12px #ffd700aa;
+    }
+
+    /* Single reel viewport */
+    .reel-viewport {
+      width: 104px; height: 264px;
+      overflow: hidden;
+      border: 2px solid #ffd700;
+      border-radius: 6px;
+      background: #000;
+      position: relative;
+      box-shadow: inset 0 0 12px #00000099;
+    }
+    /* Top and bottom fade masks */
+    .reel-viewport::before, .reel-viewport::after {
+      content: ''; position: absolute; left: 0; right: 0; height: 68px; z-index: 3; pointer-events: none;
+    }
+    .reel-viewport::before { top: 0; background: linear-gradient(180deg, #000e 0%, transparent 100%); }
+    .reel-viewport::after  { bottom: 0; background: linear-gradient(0deg, #000e 0%, transparent 100%); }
+
+    /* The moving strip inside a reel */
+    .reel-strip {
+      position: absolute; left: 0; right: 0; top: 0;
+      display: flex; flex-direction: column;
+      will-change: transform; /* animated via translateY */
+    }
+
+    /* One cell on the strip */
+    .reel-cell {
+      width: 100px; height: 88px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2px;
+      border-bottom: 1px solid rgba(255,215,0,0.15);
+      flex-shrink: 0;
+    }
+    .reel-cell .cell-icon { font-size: 32px; line-height: 1; }
+    .reel-cell .cell-icon.btc-icon {
+      font-size: 26px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #ffd700, #b8860b);
+      color: #5a2d00;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 8px #ffd700, 0 0 16px #ff9900;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .reel-cell .cell-label {
+      font-size: 8.5px; color: #fff; text-align: center;
+      font-family: 'Bungee', sans-serif;
+      line-height: 1.2;
+      text-shadow: 1px 1px 2px #000;
+      max-width: 90px;
+      word-break: break-word;
+    }
+
+    /* Win-line highlight bar */
+    #win-line {
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%; transform: translateY(-50%);
+      height: 88px;
+      border-top: 2px solid #ffd700cc;
+      border-bottom: 2px solid #ffd700cc;
+      pointer-events: none;
+      z-index: 2;
+      background: rgba(255,215,0,0.04);
+    }
+    #win-line.flash {
+      animation: winline-flash 0.25s steps(1) 6;
+    }
+    @keyframes winline-flash {
+      0%, 100% { border-color: #ffd700cc; background: rgba(255,215,0,0.04); }
+      50% { border-color: #ffffffff; background: rgba(255,255,255,0.15); }
+    }
+
+    /* Cabinet bottom: lever + decorations */
+    #slot-bottom {
+      width: 100%;
+      background: linear-gradient(0deg, #3a1a00 0%, #1a0a00 100%);
+      border: 3px solid #ffd700;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      box-shadow: 0 0 12px #ffd700aa;
+    }
+
+    /* SPIN button — big lever style */
+    #spin-btn {
+      padding: 10px 28px;
+      background: radial-gradient(circle at 40% 35%, #ff6600, #8b0000);
+      color: #ffd700;
+      font-family: 'Bungee', sans-serif;
+      font-size: 16px;
+      border: 3px solid #ffd700;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 14px #ffd700, 0 0 28px #ff4400;
+      transition: transform 0.1s, box-shadow 0.1s;
+      text-shadow: 1px 1px 2px #000;
+      letter-spacing: 1px;
+    }
+    #spin-btn:hover:not(:disabled) {
+      transform: scale(1.07);
+      box-shadow: 0 0 22px #ffd700, 0 0 44px #ff4400;
+    }
+    #spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Decorative coin icons on cabinet */
+    .slot-coin { font-size: 22px; animation: coin-spin 3s linear infinite; }
+    @keyframes coin-spin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+
+    /* ── Skip button ── */
+    #skip {
+      display: none; position: absolute;
+      bottom: 16px; right: 0; padding: 9px 14px;
+      background: rgba(0,0,0,0.7); border: 1px solid #555;
+      border-right-width: 0; font-size: 11px; border-radius: 4px 0 0 4px;
+      color: #aaa; cursor: pointer; font-family: 'Bungee', sans-serif; z-index: 30;
+      transition: background 0.3s, color 0.3s;
+    }
+    #skip.ready { border-color: #ffd700; color: #ffd700; box-shadow: 0 0 8px #ffd70066; }
+    #skip.ready:hover { background: rgba(255,215,0,0.15); }
+    #skip-timer { display: block; font-size: 9px; color: #888; margin-top: 2px; font-family: sans-serif; }
+
+    /* ── Popups (identical to wheel) ── */
+    @keyframes pop-in {
+      from { transform: scale(0.4); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    /* Win popup */
+    #win-popup {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.82); z-index: 50;
+      align-items: center; justify-content: center; flex-direction: column;
+    }
+    #win-popup.show { display: flex; }
+    #win-box {
+      background: linear-gradient(145deg, #1a0033, #0d001a);
+      border: 3px solid #ffd700; border-radius: 16px;
+      padding: 28px 40px; text-align: center;
+      box-shadow: 0 0 40px #ffd700, 0 0 80px #ff4400aa;
+      animation: pop-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); max-width: 340px;
+    }
+    #win-title {
+      font-family: 'Bungee Inline', sans-serif; font-size: 36px; color: #ffd700;
+      text-shadow: 0 0 16px #ffd700, 0 0 32px #ff9900;
+      animation: title-pulse 0.8s ease-in-out infinite alternate;
+    }
+    #win-prize-icon { font-size: 60px; margin: 10px 0 4px; }
+    #win-prize-name { font-size: 20px; color: #fff; text-shadow: 0 0 8px #00ffff; margin-bottom: 6px; }
+    #win-flavor { font-size: 12px; color: #ffcc88; font-family: sans-serif; margin-bottom: 16px; min-height: 18px; }
+    #collect-btn {
+      background: linear-gradient(135deg, #ffd700, #ff9900); color: #000; border: none;
+      padding: 12px 36px; font-family: 'Bungee', sans-serif; font-size: 16px;
+      border-radius: 8px; cursor: pointer; box-shadow: 0 4px 16px #ffd70088; transition: transform 0.1s;
+    }
+    #collect-btn:hover { transform: scale(1.06); }
+
+    /* Skip warn popup */
+    #skip-warn-popup {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.82); z-index: 60; align-items: center; justify-content: center;
+    }
+    #skip-warn-popup.show { display: flex; }
+    #skip-warn-box {
+      background: linear-gradient(145deg, #1a0033, #0d001a); border: 3px solid #ff4444;
+      border-radius: 16px; padding: 24px 32px; text-align: center; max-width: 320px;
+      box-shadow: 0 0 30px #ff4444aa; animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #skip-warn-box h2 { font-size: 20px; color: #ff4444; text-shadow: 0 0 12px #ff4444; margin-bottom: 10px; }
+    #skip-warn-box p { font-size: 13px; color: #ffcccc; font-family: sans-serif; margin-bottom: 16px; line-height: 1.5; }
+    #skip-warn-ok { background: #ff4444; color: white; border: none; padding: 10px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: pointer; }
+    #skip-warn-ok:hover { background: #cc0000; }
+
+    /* Collect prizes warn popup */
+    #collect-warn-popup {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.82); z-index: 60; align-items: center; justify-content: center;
+    }
+    #collect-warn-popup.show { display: flex; }
+    #collect-warn-box {
+      background: linear-gradient(145deg, #001a33, #001433); border: 3px solid #00ccff;
+      border-radius: 16px; padding: 24px 28px; text-align: center; max-width: 340px;
+      box-shadow: 0 0 30px #00ccffaa; animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #collect-warn-box .cw-emoji { font-size: 40px; margin-bottom: 8px; }
+    #collect-warn-box h2 { font-size: 18px; color: #00eeff; text-shadow: 0 0 12px #00ccff; margin-bottom: 10px; line-height: 1.3; }
+    #collect-warn-box p { font-size: 12px; color: #ccf0ff; font-family: sans-serif; margin-bottom: 16px; line-height: 1.6; }
+    #collect-warn-ok {
+      background: linear-gradient(135deg, #00ccff, #0066ff); color: white; border: none;
+      padding: 10px 24px; font-family: 'Bungee', sans-serif; font-size: 13px; border-radius: 8px;
+      cursor: pointer; box-shadow: 0 0 10px #00ccff88;
+    }
+    #collect-warn-ok:hover { filter: brightness(1.15); }
+
+    /* Tier upgrade popup */
+    #upgrade-popup {
+      display: none; position: absolute; inset: 0; z-index: 80;
+      align-items: center; justify-content: center; flex-direction: column;
+    }
+    #upgrade-popup.show { display: flex; }
+    #upgrade-bg { position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.6s; }
+    #upgrade-bg.dark { background: rgba(0,0,0,0.92); }
+    #upgrade-box {
+      position: relative; border-radius: 20px; padding: 36px 48px; text-align: center; max-width: 420px;
+      opacity: 0; transform: scale(0.3) rotate(-8deg);
+      transition: opacity 0.5s 0.4s, transform 0.5s 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    #upgrade-box.visible { opacity: 1; transform: scale(1) rotate(0deg); }
+    #upgrade-tier-icon { font-size: 72px; margin-bottom: 8px; }
+    #upgrade-title { font-family: 'Bungee Inline', sans-serif; font-size: 32px; margin-bottom: 6px; }
+    #upgrade-subtitle { font-size: 13px; font-family: sans-serif; margin-bottom: 20px; opacity: 0.9; line-height: 1.5; }
+    #upgrade-ok {
+      font-family: 'Bungee', sans-serif; font-size: 15px; padding: 12px 36px;
+      border: none; border-radius: 10px; cursor: pointer; transition: transform 0.1s;
+    }
+    #upgrade-ok:hover { transform: scale(1.06); }
+
+    /* ── Confetti ── */
+    #confetti-canvas { position: absolute; inset: 0; pointer-events: none; z-index: 45; }
+
+    /* ── Near-miss flash overlay ── */
+    #near-miss-msg {
+      display: none;
+      position: absolute;
+      bottom: 70px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      border: 2px solid #ff4400;
+      border-radius: 8px;
+      padding: 6px 18px;
+      font-size: 12px; color: #ff8844;
+      z-index: 20;
+      white-space: nowrap;
+      font-family: 'Bungee', sans-serif;
+      text-shadow: 0 0 8px #ff4400;
+    }
+    /* Volume slider */
+    #vol-slider-wrap { position: absolute; bottom: 14px; left: 14px; z-index: 20; display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.65); border: 1px solid #ffd70055; border-radius: 20px; padding: 5px 10px; }
+    #vol-slider-wrap label { font-size: 11px; color: #ffd700; font-family: 'Bungee', sans-serif; cursor: default; }
+    #vol-slider { width: 70px; cursor: pointer; accent-color: #ffd700; }
+  </style>
+</head>
+<body>
+<div id="overlay-container">
+
+  <div id="light-strip-top"></div>
+  <div id="light-strip-bottom"></div>
+  <div id="casino-title">🎰 SLOT MACHINE 🎰</div>
+
+  <!-- Left: prizes won -->
+  <div id="prizes-panel">
+    <h3>🏆 PRIZES WON</h3>
+    <ul id="prizes-list"><li id="prizes-empty" style="list-style:none;border:none;">No prizes yet!</li></ul>
+    <button id="collect-prizes-btn">🎁 COLLECT PRIZES!</button>
+  </div>
+
+  <!-- Slot machine -->
+  <div id="slot-area">
+    <div id="slot-marquee">✦ INSERT TICKET TO PLAY ✦</div>
+    <div id="reels-window">
+      <div class="reel-viewport" id="reel-0">
+        <div class="reel-strip" id="strip-0"></div>
+        <div id="win-line"></div>
+      </div>
+      <div class="reel-viewport" id="reel-1">
+        <div class="reel-strip" id="strip-1"></div>
+      </div>
+      <div class="reel-viewport" id="reel-2">
+        <div class="reel-strip" id="strip-2"></div>
+      </div>
+    </div>
+    <div id="slot-bottom">
+      <span class="slot-coin">🪙</span>
+      <button id="spin-btn" disabled>🎰 SPIN!</button>
+      <span class="slot-coin" style="animation-delay:-1.5s">🪙</span>
+    </div>
+  </div>
+
+  <!-- Right: ticket counter -->
+  <div id="ticket-panel">
+    <h3>🎟️ YOUR TICKETS</h3>
+    <div id="ticket-count">10</div>
+    <div id="ticket-icon">🎟️</div>
+    <div id="ticket-label">Use tickets to spin!</div>
+  </div>
+
+  <!-- Skip -->
+  <button id="skip" style="display:none;">Skip Ad<span id="skip-timer"></span></button>
+
+  <!-- Near miss message -->
+  <div id="near-miss-msg">SO CLOSE! Try again! 🔥</div>
+
+  <!-- Win popup -->
+  <div id="win-popup">
+    <div id="win-box">
+      <div id="win-title">YOU WON!</div>
+      <div id="win-prize-icon">🎁</div>
+      <div id="win-prize-name">Prize</div>
+      <div id="win-flavor"></div>
+      <button id="collect-btn">COLLECT!</button>
+    </div>
+  </div>
+
+  <!-- Skip warn -->
+  <div id="skip-warn-popup">
+    <div id="skip-warn-box">
+      <h2>⚠️ WAIT!</h2>
+      <p>You have unspent tickets! Please use all your tickets before closing the ad.</p>
+      <button id="skip-warn-ok">OK, I'll Keep Playing!</button>
+    </div>
+  </div>
+
+  <!-- Collect prizes warn -->
+  <div id="collect-warn-popup">
+    <div id="collect-warn-box">
+      <div class="cw-emoji">🤩</div>
+      <h2>YOU'RE SO CLOSE TO WINNING MORE!</h2>
+      <p id="collect-warn-msg">Keep spinning!</p>
+      <button id="collect-warn-ok">LET'S KEEP WINNING! 🚀</button>
+    </div>
+  </div>
+
+  <!-- Upgrade popup -->
+  <div id="upgrade-popup">
+    <div id="upgrade-bg"></div>
+    <div id="upgrade-box">
+      <div id="upgrade-tier-icon">🌟</div>
+      <div id="upgrade-title">GOLDEN SLOTS!</div>
+      <div id="upgrade-subtitle">You unlocked the Golden Slots!<br>Bigger prizes await!</div>
+      <button id="upgrade-ok">SPIN THE GOLDEN SLOTS! 🌟</button>
+    </div>
+  </div>
+
+  <!-- Volume -->
+  <div id="vol-slider-wrap">
+    <label>🔊</label>
+    <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.5">
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti-canvas" width="960" height="540"></canvas>
+</div>
+
+<script>
+(function(window, document) {
+
+  // ─────────────────────────────────────────
+  // TIER CONFIG  (same prizes as wheel)
+  // ─────────────────────────────────────────
+  const TIERS = [
+    {
+      id: 'base',
+      name: '🎰 SLOT MACHINE 🎰',
+      marquee: '✦ INSERT TICKET TO PLAY ✦',
+      ticketLabel: '🎟️ YOUR TICKETS',
+      ticketIcon: '🎟️',
+      bg: 'radial-gradient(ellipse at center, #1a0a2e 0%, #0d0618 60%, #000 100%)',
+      titleColor: '#ffd700',
+      panelBorder: '#ffd700',
+      panelGlow: '#ffd700aa',
+      bulbColors: ['#ff0044','#ffd700','#00ffcc','#ff6600','#aa00ff','#00aaff'],
+      cabinetBg: 'linear-gradient(180deg, #3a1a00 0%, #1a0a00 100%)',
+      cabinetBorder: '#ffd700',
+      reelBg: '#050010',
+      prizes: [
+        { id: 'upgrade_gold', label: 'GOLDEN SLOTS',   icon: '⭐', ticketBonus: 0, isFree: false, flavor: '🌟 UNLOCKING THE GOLDEN SLOTS...', isUpgrade: true },
+        { id: 'free_spin',    label: 'FREE SPIN',       icon: '🎡', ticketBonus: 0, isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
+        { id: 'credits_200',  label: '$200 Credits',    icon: '💵', ticketBonus: 0, isFree: false, flavor: 'Two hundred smackers!' },
+        { id: 'google_100',   label: '$100 Google Play',icon: '💳', ticketBonus: 0, isFree: false, flavor: '$100 Google Play! 🎉 NEVER share your code with anyone!' },
+        { id: 'bike',         label: 'WIN A BIKE!',     icon: '🚲', ticketBonus: 0, isFree: false, flavor: '🚲 A shiny new bicycle! Stay fit!', isJackpot: true },
+        { id: 'tickets_5',    label: '5 Tickets',       icon: '🎟️', ticketBonus: 5, isFree: false, flavor: '5 free spins coming right up!' },
+        { id: 'google_200',   label: '$200 Google Play',icon: '💳', ticketBonus: 0, isFree: false, flavor: '$200 Google Play! 🎉 Guard that code — share with NO ONE!' },
+        { id: 'credits_100',  label: '$100 Credits',    icon: '💵', ticketBonus: 0, isFree: false, flavor: 'One hundred casino bucks!' },
+        { id: 'iphone_x',     label: 'iPhone X',        icon: '📱', ticketBonus: 0, isFree: false, flavor: 'A brand new iPhone X! (claim in 72h)' },
+        { id: 'tickets_10',   label: '10 Tickets',      icon: '🎟️', ticketBonus: 10, isFree: false, flavor: "10 tickets! You're on fire!" },
+      ],
+      // weights control how often each symbol appears on reels
+      weights: [2, 3, 6, 8, 4, 5, 5, 9, 7, 3],
+    },
+    {
+      id: 'gold',
+      name: '🌟 GOLDEN SLOTS 🌟',
+      marquee: '✦ GOLDEN SLOTS — BIGGER PRIZES ✦',
+      ticketLabel: '🌟 GOLDEN TICKETS',
+      ticketIcon: '🌟',
+      bg: 'radial-gradient(ellipse at center, #2a1800 0%, #1a0e00 60%, #000 100%)',
+      titleColor: '#ffe066',
+      panelBorder: '#ffe066',
+      panelGlow: '#ffe066aa',
+      bulbColors: ['#ffd700','#ffaa00','#ffe066','#ff8800','#ffcc44','#ffdd88'],
+      cabinetBg: 'linear-gradient(180deg, #4a2800 0%, #2a1400 100%)',
+      cabinetBorder: '#ffe066',
+      reelBg: '#0d0800',
+      prizes: [
+        { id: 'upgrade_dia',  label: 'DIAMOND SLOTS',   icon: '💎', ticketBonus: 0, isFree: false, flavor: '💎 UNLOCKING THE DIAMOND SLOTS...', isUpgrade: true },
+        { id: 'free_spin',    label: 'FREE SPIN',        icon: '🎡', ticketBonus: 0, isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
+        { id: 'credits_1000', label: '$1000 Credits',    icon: '💰', ticketBonus: 0, isFree: false, flavor: 'ONE THOUSAND bucks! Amazing!' },
+        { id: 'google_500',   label: '$500 Google Play', icon: '💳', ticketBonus: 0, isFree: false, flavor: '$500 Google Play! 🎉 Never share that code — not even with us!' },
+        { id: 'scooter',      label: 'WIN A SCOOTER!',   icon: '🛵', ticketBonus: 0, isFree: false, flavor: '🛵 A brand new scooter! Vroom vroom!', isJackpot: true },
+        { id: 'tickets_5',    label: '5 Gold Tickets',   icon: '🌟', ticketBonus: 5, isFree: false, flavor: '5 Golden Tickets! The riches grow!' },
+        { id: 'google_1000',  label: '$1000 Google Play',icon: '💳', ticketBonus: 0, isFree: false, flavor: '$1000 Google Play! 🎉 Guard that code — share with zero humans!' },
+        { id: 'credits_500',  label: '$500 Credits',     icon: '💵', ticketBonus: 0, isFree: false, flavor: 'FIVE HUNDRED casino dollars!' },
+        { id: 'iphone_12',    label: 'iPhone 12',        icon: '📱', ticketBonus: 0, isFree: false, flavor: 'A brand new iPhone 12! (claim in 72h)' },
+        { id: 'tickets_10',   label: '10 Gold Tickets',  icon: '🌟', ticketBonus: 10, isFree: false, flavor: '10 Golden Tickets! Extraordinary!' },
+      ],
+      weights: [2, 3, 5, 7, 3, 5, 5, 8, 7, 3],
+    },
+    {
+      id: 'diamond',
+      name: '💎 DIAMOND SLOTS 💎',
+      marquee: '✦ DIAMOND SLOTS — LEGENDARY PRIZES ✦',
+      ticketLabel: '💎 DIAMOND TICKETS',
+      ticketIcon: '💎',
+      bg: 'radial-gradient(ellipse at center, #001828 0%, #000d18 60%, #000 100%)',
+      titleColor: '#aaddff',
+      panelBorder: '#00ccff',
+      panelGlow: '#00ccffaa',
+      bulbColors: ['#00ccff','#0088ff','#aaddff','#0044cc','#66bbff','#88ddff'],
+      cabinetBg: 'linear-gradient(180deg, #002040 0%, #000d20 100%)',
+      cabinetBorder: '#00ccff',
+      reelBg: '#00060e',
+      prizes: [
+        { id: 'btc',          label: '1 BITCOIN!',       icon: '₿',  ticketBonus: 0, isFree: false, flavor: '₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot: true },
+        { id: 'free_spin',    label: 'FREE SPIN',         icon: '🎡', ticketBonus: 0, isFree: true,  flavor: 'Lucky you! Spinning again for free...' },
+        { id: 'credits_2000', label: '$2000 Credits',     icon: '💰', ticketBonus: 0, isFree: false, flavor: 'TWO THOUSAND BUCKS! INSANE!' },
+        { id: 'google_1000',  label: '$1000 Google Play', icon: '💳', ticketBonus: 0, isFree: false, flavor: '$1000 Google Play! 🎉 Never share that code — not even your mum!' },
+        { id: 'car',          label: 'WIN A CAR!',        icon: '🚗', ticketBonus: 0, isFree: false, flavor: '🚨 A BRAND NEW RED CAR! 🚨 (claim in 72h)', isJackpot: true },
+        { id: 'tickets_5',    label: '5 Diamond Tickets', icon: '💎', ticketBonus: 5, isFree: false, flavor: '5 Diamond Tickets! Pure luxury!' },
+        { id: 'google_2000',  label: '$2000 Google Play', icon: '💳', ticketBonus: 0, isFree: false, flavor: '$2000 Google Play! 🎉 That code is YOURS — keep it secret!' },
+        { id: 'credits_1000', label: '$1000 Credits',     icon: '💵', ticketBonus: 0, isFree: false, flavor: 'ONE THOUSAND casino dollars!' },
+        { id: 'iphone_16',    label: 'iPhone 16',         icon: '📱', ticketBonus: 0, isFree: false, flavor: 'The latest iPhone 16! (claim in 72h)' },
+        { id: 'tickets_10',   label: '10 Diamond Tickets',icon: '💎', ticketBonus: 10, isFree: false, flavor: '10 Diamond Tickets! Extraordinary!' },
+      ],
+      weights: [1, 3, 4, 6, 2, 5, 4, 7, 6, 3],
+    },
+  ];
+
+  // ─────────────────────────────────────────
+  // STATE
+  // ─────────────────────────────────────────
+  let currentTierIndex = 0;
+  let tickets = 10;
+  let spinning = false;
+  let adActive = false;
+  let skipUnlocked = false;
+  let skipCooldown = 60;
+  let skipTimer = null;
+  let pendingPrize = null;
+  let wonPrizes = {};
+  let spinCount = 0;
+  let lastWasNearMiss = false;
+
+  function currentTier() { return TIERS[currentTierIndex]; }
+
+  // ─────────────────────────────────────────
+  // RIGGED RANDOM  (identical logic to wheel)
+  // ─────────────────────────────────────────
+
+  // Pick the winning prize index (within current tier's prizes array)
+  function pickPrize() {
+    const prizes = currentTier().prizes;
+    const weights = currentTier().weights;
+
+    const ticketPrizeIndices = prizes.reduce((acc, p, i) => {
+      if (p.ticketBonus > 0) acc.push(i);
+      return acc;
+    }, []);
+    const upgradeIndex = prizes.findIndex(p => p.isUpgrade);
+
+    function randomTicketPrize() {
+      return ticketPrizeIndices[Math.floor(Math.random() * ticketPrizeIndices.length)];
+    }
+
+    // Safety net first
+    if (tickets <= 1)                               return randomTicketPrize();
+    if (tickets === 2 && Math.random() < 0.75)     return randomTicketPrize();
+    if (tickets === 3 && Math.random() < 0.50)     return randomTicketPrize();
+
+    // Upgrade guarantee every 5 spins
+    if (upgradeIndex !== -1 && spinCount > 0 && spinCount % 5 === 0) {
+      return upgradeIndex;
+    }
+
+    // 50% chance of winning anything at all (excluding free spin / tickets / upgrade)
+    // If we decide "no win", pick a random non-winning symbol for all reels
+    if (Math.random() < 0.50) {
+      // Normal weighted win
+      const total = weights.reduce((a, b) => a + b, 0);
+      let r = Math.random() * total;
+      for (let i = 0; i < weights.length; i++) {
+        r -= weights[i];
+        if (r <= 0) return i;
+      }
+      return 0;
+    } else {
+      return -1; // -1 = intentional loss
+    }
+  }
+
+  // For a loss, pick 3 different symbols (guaranteed no match)
+  function pickLossSymbols() {
+    const prizes = currentTier().prizes;
+    const n = prizes.length;
+    const a = Math.floor(Math.random() * n);
+    let b = Math.floor(Math.random() * (n - 1));
+    if (b >= a) b++;
+    // Third must differ from both a and b
+    let c;
+    do { c = Math.floor(Math.random() * n); } while (c === a || c === b);
+    return [a, b, c];
+  }
+
+  // ─────────────────────────────────────────
+  // REEL SETUP
+  // ─────────────────────────────────────────
+  const CELL_H = 88;        // px — must match CSS .reel-cell height
+  const VISIBLE_CELLS = 3;  // cells visible in the viewport
+  const VIEWPORT_H = CELL_H * VISIBLE_CELLS;  // 264px — must match CSS
+
+  // Strip has STRIP_COPIES copies of the prize list.
+  // After each spin we normalize to MID_COPY so there's always room ahead.
+  const STRIP_COPIES = 10;
+  const MID_COPY = 3; // 0-indexed; rest/normalize position
+
+  // CSS translateY that centres prizeIndex of copyIndex in the 3-cell viewport
+  function centreY(copyIndex, prizeIndex, n) {
+    return -((copyIndex * n + prizeIndex) * CELL_H) + CELL_H;
+  }
+
+  // Build reel strip DOM for a given tier
+  function buildReel(stripEl, tier) {
+    stripEl.innerHTML = '';
+    for (let c = 0; c < STRIP_COPIES; c++) {
+      for (const p of tier.prizes) {
+        const cell = document.createElement('div');
+        cell.className = 'reel-cell';
+        const iconClass = p.id === 'btc' ? 'cell-icon btc-icon' : 'cell-icon';
+        cell.innerHTML = `<span class="${iconClass}">${p.icon}</span><span class="cell-label">${p.label}</span>`;
+        stripEl.appendChild(cell);
+      }
+    }
+  }
+
+  const strips = [0, 1, 2].map(i => document.getElementById('strip-' + i));
+
+  function rebuildReels() {
+    strips.forEach(s => buildReel(s, currentTier()));
+    const n = currentTier().prizes.length;
+    const initY = centreY(MID_COPY, 0, n);
+    strips.forEach(s => {
+      s.style.transition = 'none';
+      s.style.transform = `translateY(${initY}px)`;
+    });
+  }
+
+  rebuildReels();
+
+  // ─────────────────────────────────────────
+  // SPIN ANIMATION
+  // ─────────────────────────────────────────
+  const N_PRIZES = () => currentTier().prizes.length;
+
+  // Animate reel to show targetIndex in the centre row.
+  // Always starts from the normalized MID_COPY position and lands 3-4 copies ahead,
+  // then snaps back to MID_COPY (visually identical). No pre-spin snap = no gap.
+  function spinReel(stripEl, targetIndex, delay, duration, onDone) {
+    const n = N_PRIZES();
+    // Land 3 or 4 copies ahead of MID_COPY — guaranteed 3+ full visual rotations
+    const landingCopy = MID_COPY + 3 + Math.floor(Math.random() * 2);
+    const endY = centreY(landingCopy, targetIndex, n);
+    const normalY = centreY(MID_COPY, targetIndex, n);
+
+    setTimeout(() => {
+      stripEl.style.transition = `transform ${duration}ms cubic-bezier(0.17, 0.67, 0.12, 1.0)`;
+      stripEl.style.transform = `translateY(${endY}px)`;
+      setTimeout(() => {
+        // Snap back to MID_COPY — same visual content, resets strip for next spin
+        stripEl.style.transition = 'none';
+        stripEl.style.transform = `translateY(${normalY}px)`;
+        if (onDone) onDone();
+      }, duration + 20);
+    }, delay);
+  }
+
+  // ─────────────────────────────────────────
+  // AUDIO
+  // ─────────────────────────────────────────
+  let _ac = null;
+  let _masterGain = null;
+  let _acProxy = null;
+  function getAC() {
+    if (!_ac) {
+      _ac = new (window.AudioContext || window.webkitAudioContext)();
+      _masterGain = _ac.createGain();
+      _masterGain.gain.value = 0.5;
+      _masterGain.connect(_ac.destination);
+      _acProxy = new Proxy(_ac, {
+        get(target, prop) {
+          if (prop === 'destination') return _masterGain;
+          const val = target[prop];
+          return typeof val === 'function' ? val.bind(target) : val;
+        }
+      });
+    }
+    if (_ac.state === 'suspended') _ac.resume();
+    return _acProxy;
+  }
+  document.getElementById('vol-slider').addEventListener('input', function() {
+    if (_masterGain) _masterGain.gain.value = parseFloat(this.value);
+  });
+
+  function playReelStop(when, pitch) {
+    const ac = getAC();
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(pitch, when);
+    osc.frequency.exponentialRampToValueAtTime(pitch * 0.5, when + 0.12);
+    g.gain.setValueAtTime(0.3, when);
+    g.gain.exponentialRampToValueAtTime(0.001, when + 0.18);
+    osc.connect(g); g.connect(ac.destination);
+    osc.start(when); osc.stop(when + 0.2);
+  }
+
+  function playSpinStart() {
+    const ac = getAC();
+    const t = ac.currentTime;
+    // Coin drop clunk
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(400, t);
+    osc.frequency.exponentialRampToValueAtTime(60, t + 0.14);
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+    osc.connect(g); g.connect(ac.destination);
+    osc.start(t); osc.stop(t + 0.2);
+    // Reel whirr — filtered noise burst
+    const bufLen = Math.floor(ac.sampleRate * 0.3);
+    const buf = ac.createBuffer(1, bufLen, ac.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) d[i] = Math.random() * 2 - 1;
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const flt = ac.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 1200; flt.Q.value = 0.8;
+    const wg = ac.createGain(); wg.gain.setValueAtTime(0.2, t); wg.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    src.connect(flt); flt.connect(wg); wg.connect(ac.destination);
+    src.start(t);
+  }
+
+  function playKaChing() {
+    const ac = getAC();
+    const t = ac.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+      const osc = ac.createOscillator(); const g = ac.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const w = t + i * 0.09;
+      g.gain.setValueAtTime(0, w); g.gain.linearRampToValueAtTime(0.38, w + 0.01); g.gain.exponentialRampToValueAtTime(0.001, w + 0.45);
+      osc.connect(g); g.connect(ac.destination); osc.start(w); osc.stop(w + 0.5);
+    });
+  }
+
+  function playJackpot() {
+    const ac = getAC(); const t = ac.currentTime;
+    [261.63,329.63,392,523.25,659.25,783.99,1046.5,1318.51].forEach((freq, i) => {
+      const osc = ac.createOscillator(); const g = ac.createGain();
+      osc.type = 'square'; osc.frequency.value = freq;
+      const w = t + i * 0.065;
+      g.gain.setValueAtTime(0, w); g.gain.linearRampToValueAtTime(0.22, w + 0.01); g.gain.exponentialRampToValueAtTime(0.001, w + 0.55);
+      osc.connect(g); g.connect(ac.destination); osc.start(w); osc.stop(w + 0.6);
+    });
+  }
+
+  function playDenied() {
+    const ac = getAC(); const t = ac.currentTime;
+    [392, 311.13, 261.63].forEach((freq, i) => {
+      const osc = ac.createOscillator(); const g = ac.createGain();
+      osc.type = 'sawtooth';
+      const w = t + i * 0.19;
+      osc.frequency.setValueAtTime(freq, w); osc.frequency.exponentialRampToValueAtTime(freq * 0.82, w + 0.18);
+      g.gain.setValueAtTime(0, w); g.gain.linearRampToValueAtTime(0.3, w + 0.02); g.gain.exponentialRampToValueAtTime(0.001, w + 0.18);
+      osc.connect(g); g.connect(ac.destination); osc.start(w); osc.stop(w + 0.22);
+    });
+  }
+
+  function playTierUpgrade() {
+    const ac = getAC(); const t = ac.currentTime;
+    const notes = [261.63,329.63,392,523.25,659.25,783.99,1046.5,1318.51,1567.98,2093];
+    notes.forEach((freq, i) => {
+      const osc = ac.createOscillator(); const g = ac.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const w = t + i * 0.09;
+      g.gain.setValueAtTime(0, w); g.gain.linearRampToValueAtTime(0.3, w + 0.02); g.gain.exponentialRampToValueAtTime(0.001, w + 0.7);
+      osc.connect(g); g.connect(ac.destination); osc.start(w); osc.stop(w + 0.75);
+    });
+    const osc2 = ac.createOscillator(); const g2 = ac.createGain();
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(55, t); osc2.frequency.exponentialRampToValueAtTime(110, t + 1.2);
+    g2.gain.setValueAtTime(0.2, t); g2.gain.exponentialRampToValueAtTime(0.001, t + 1.4);
+    osc2.connect(g2); g2.connect(ac.destination); osc2.start(t); osc2.stop(t + 1.5);
+  }
+
+  function playNearMiss() {
+    const ac = getAC(); const t = ac.currentTime;
+    const osc = ac.createOscillator(); const g = ac.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(880, t); osc.frequency.exponentialRampToValueAtTime(440, t + 0.2);
+    g.gain.setValueAtTime(0.25, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+    osc.connect(g); g.connect(ac.destination); osc.start(t); osc.stop(t + 0.25);
+  }
+
+  // ─────────────────────────────────────────
+  // TICKET COUNTER
+  // ─────────────────────────────────────────
+  const ticketCountEl = document.getElementById('ticket-count');
+  function setTickets(n) {
+    tickets = n;
+    ticketCountEl.textContent = n;
+    ticketCountEl.classList.remove('bump');
+    void ticketCountEl.offsetWidth;
+    ticketCountEl.classList.add('bump');
+    setTimeout(() => ticketCountEl.classList.remove('bump'), 200);
+    updateSpinBtn();
+  }
+
+  // ─────────────────────────────────────────
+  // SPIN BUTTON
+  // ─────────────────────────────────────────
+  const spinBtn = document.getElementById('spin-btn');
+  function updateSpinBtn() {
+    spinBtn.disabled = spinning || tickets <= 0 || !adActive;
+    spinBtn.textContent = tickets <= 0 ? 'NO TICKETS' : (spinning ? '...' : '🎰 SPIN!');
+  }
+
+  spinBtn.addEventListener('click', () => {
+    if (spinning || tickets <= 0 || !adActive) return;
+    doSpin(false);
+  });
+
+  // ─────────────────────────────────────────
+  // MAIN SPIN LOGIC
+  // ─────────────────────────────────────────
+  function doSpin(isFree) {
+    spinning = true;
+    updateSpinBtn();
+    playSpinStart();
+    window.top.postMessage({ type: 'pause' }, '*');
+
+    spinCount++;
+    const prizeIndex = pickPrize(); // -1 means loss
+    if (!isFree) setTickets(tickets - 1);
+
+    const prizes = currentTier().prizes;
+    let reel0, reel1, reel2;
+
+    if (prizeIndex === -1) {
+      // Loss — guaranteed no 3-of-a-kind, engineered near-miss ~40% of losses
+      const [a, b, c] = pickLossSymbols();
+      // Near miss: two matching + one off by 1
+      if (Math.random() < 0.40) {
+        reel0 = a; reel1 = a; reel2 = (a + 1) % prizes.length;
+        lastWasNearMiss = true;
+      } else {
+        reel0 = a; reel1 = b; reel2 = c;
+        lastWasNearMiss = false;
+      }
+      pendingPrize = null;
+    } else {
+      // Win — all 3 reels show the winning symbol
+      reel0 = prizeIndex; reel1 = prizeIndex; reel2 = prizeIndex;
+      pendingPrize = prizes[prizeIndex];
+    }
+
+    // Schedule reel stops with staggered timing
+    const SPIN_TIMES = [1200, 1800, 2400]; // ms each reel spins
+    const ac = getAC();
+    const nowAC = ac.currentTime;
+    playReelStop(nowAC + SPIN_TIMES[0] / 1000, 220);
+    playReelStop(nowAC + SPIN_TIMES[1] / 1000, 196);
+    playReelStop(nowAC + SPIN_TIMES[2] / 1000, 174);
+
+    let done = 0;
+    function onReelDone() {
+      done++;
+      if (done === 3) onAllReelsDone();
+    }
+
+    spinReel(strips[0], reel0, 0,   SPIN_TIMES[0], onReelDone);
+    spinReel(strips[1], reel1, 200, SPIN_TIMES[1], onReelDone);
+    spinReel(strips[2], reel2, 400, SPIN_TIMES[2], onReelDone);
+  }
+
+  function onAllReelsDone() {
+    if (!pendingPrize) {
+      // Loss — check if it was a near miss (flag set in doSpin)
+      if (lastWasNearMiss) {
+        playNearMiss();
+        const nmEl = document.getElementById('near-miss-msg');
+        const msgs = ['SO CLOSE! Try again! 🔥','ONE MORE SPIN! 😤','ALMOST! The next one is yours! ⚡'];
+        nmEl.textContent = msgs[Math.floor(Math.random() * msgs.length)];
+        nmEl.style.display = 'block';
+        setTimeout(() => { nmEl.style.display = 'none'; }, 1800);
+      }
+
+      spinning = false;
+      window.top.postMessage({ type: 'play' }, '*');
+      updateSpinBtn();
+    } else {
+      // Win — flash win line then show popup
+      const winLine = document.getElementById('win-line');
+      winLine.classList.add('flash');
+      setTimeout(() => { winLine.classList.remove('flash'); }, 1500);
+      showWinPopup(pendingPrize);
+    }
+  }
+
+  // ─────────────────────────────────────────
+  // WIN POPUP
+  // ─────────────────────────────────────────
+  const winPopup   = document.getElementById('win-popup');
+  const winIcon    = document.getElementById('win-prize-icon');
+  const winName    = document.getElementById('win-prize-name');
+  const winFlavor  = document.getElementById('win-flavor');
+  const collectBtn = document.getElementById('collect-btn');
+  const winTitle   = document.getElementById('win-title');
+
+  function showWinPopup(prize) {
+    if (prize.isUpgrade) { showUpgradePopup(); return; }
+    winIcon.textContent   = prize.icon;
+    winName.textContent   = prize.label;
+    winFlavor.textContent = prize.flavor;
+    if (prize.isJackpot) {
+      winTitle.textContent = '🚨 JACKPOT! 🚨';
+      winTitle.style.fontSize = '28px';
+      fireConfetti(200); playJackpot();
+    } else {
+      winTitle.textContent = 'YOU WON!';
+      winTitle.style.fontSize = '36px';
+      if (prize.ticketBonus > 0) fireConfetti(80);
+      playKaChing();
+    }
+    collectBtn.textContent = prize.isFree ? 'FREE SPIN! →' : 'COLLECT!';
+    winPopup.classList.add('show');
+  }
+
+  collectBtn.addEventListener('click', () => {
+    winPopup.classList.remove('show');
+    const prize = pendingPrize;
+    pendingPrize = null;
+    if (prize.ticketBonus > 0) setTickets(tickets + prize.ticketBonus);
+    if (!prize.isFree && prize.ticketBonus === 0) addToPrizeList(prize);
+    spinning = false;
+    window.top.postMessage({ type: 'play' }, '*');
+    if (prize.isFree) { setTimeout(() => doSpin(true), 600); }
+    else { updateSpinBtn(); }
+  });
+
+  // ─────────────────────────────────────────
+  // TIER UPGRADE
+  // ─────────────────────────────────────────
+  const upgradePopup    = document.getElementById('upgrade-popup');
+  const upgradeBg       = document.getElementById('upgrade-bg');
+  const upgradeBox      = document.getElementById('upgrade-box');
+  const upgradeTierIcon = document.getElementById('upgrade-tier-icon');
+  const upgradeTitle    = document.getElementById('upgrade-title');
+  const upgradeSub      = document.getElementById('upgrade-subtitle');
+  const upgradeOk       = document.getElementById('upgrade-ok');
+
+  const UPGRADE_CONFIGS = [
+    null,
+    {
+      icon: '🌟', title: 'GOLDEN SLOTS UNLOCKED!',
+      subtitle: "You've earned access to the exclusive Golden Slots!<br>Bigger prizes. Golden Tickets. Insane rewards!",
+      btnText: 'SPIN THE GOLDEN SLOTS! 🌟',
+      boxBg: 'linear-gradient(145deg, #2a1400, #1a0c00)',
+      border: '#ffe066', glow: '#ffd700aa',
+      titleColor: '#ffe066', subColor: '#fff5cc',
+      btnBg: 'linear-gradient(135deg, #ffe066, #ff9900)', btnColor: '#000',
+    },
+    {
+      icon: '💎', title: 'DIAMOND SLOTS UNLOCKED!',
+      subtitle: 'The rarest slots of all — the Diamond Slots!<br>Cars, Bitcoin, and prizes beyond imagination!',
+      btnText: 'SPIN THE DIAMOND SLOTS! 💎',
+      boxBg: 'linear-gradient(145deg, #001828, #000d18)',
+      border: '#00ccff', glow: '#00ccffaa',
+      titleColor: '#aaddff', subColor: '#ccf0ff',
+      btnBg: 'linear-gradient(135deg, #00ccff, #0066ff)', btnColor: '#fff',
+    },
+  ];
+
+  function showUpgradePopup() {
+    const nextIdx = currentTierIndex + 1;
+    if (nextIdx >= TIERS.length) {
+      pendingPrize = null; spinning = false;
+      window.top.postMessage({ type: 'play' }, '*');
+      updateSpinBtn(); return;
+    }
+    const cfg = UPGRADE_CONFIGS[nextIdx];
+    upgradeTierIcon.textContent = cfg.icon;
+    upgradeTitle.textContent    = cfg.title;
+    upgradeSub.innerHTML        = cfg.subtitle;
+    upgradeOk.textContent       = cfg.btnText;
+    upgradeBox.style.cssText    = `background:${cfg.boxBg}; border:3px solid ${cfg.border}; box-shadow:0 0 40px ${cfg.glow}, 0 0 80px ${cfg.glow};`;
+    upgradeTitle.style.color    = cfg.titleColor;
+    upgradeSub.style.color      = cfg.subColor;
+    upgradeOk.style.cssText     = `background:${cfg.btnBg}; color:${cfg.btnColor}; font-family:'Bungee',sans-serif; font-size:15px; padding:12px 36px; border:none; border-radius:10px; cursor:pointer;`;
+    playTierUpgrade(); fireConfetti(300);
+    upgradePopup.classList.add('show');
+    requestAnimationFrame(() => {
+      upgradeBg.classList.add('dark');
+      requestAnimationFrame(() => upgradeBox.classList.add('visible'));
+    });
+  }
+
+  upgradeOk.addEventListener('click', () => {
+    upgradeBox.classList.remove('visible');
+    upgradeBg.classList.remove('dark');
+    setTimeout(() => {
+      upgradePopup.classList.remove('show');
+      applyTier(currentTierIndex + 1);
+      pendingPrize = null; spinning = false;
+      window.top.postMessage({ type: 'play' }, '*');
+      updateSpinBtn();
+    }, 500);
+  });
+
+  // ─────────────────────────────────────────
+  // APPLY TIER (reskin + rebuild reels)
+  // ─────────────────────────────────────────
+  function applyTier(index) {
+    currentTierIndex = index;
+    const tier = TIERS[index];
+    window.top.postMessage({ type: 'tierChange', tier: index }, '*');
+
+    document.getElementById('overlay-container').style.background = tier.bg;
+
+    const title = document.getElementById('casino-title');
+    title.textContent = tier.name;
+    title.style.color = tier.titleColor;
+    title.style.animation = 'none'; void title.offsetWidth; title.style.animation = '';
+
+    document.getElementById('prizes-panel').style.borderColor  = tier.panelBorder;
+    document.getElementById('prizes-panel').style.boxShadow    = `0 0 12px ${tier.panelGlow}`;
+    document.getElementById('ticket-panel').style.borderColor  = tier.panelBorder;
+    document.getElementById('ticket-panel').style.boxShadow    = `0 0 12px ${tier.panelGlow}`;
+    document.getElementById('prizes-panel').querySelector('h3').style.color = tier.titleColor;
+    document.getElementById('ticket-panel').querySelector('h3').textContent  = tier.ticketLabel;
+    document.getElementById('ticket-panel').querySelector('h3').style.color  = tier.titleColor;
+    document.getElementById('ticket-count').style.color        = tier.titleColor;
+    document.getElementById('ticket-count').style.textShadow   = `0 0 12px ${tier.panelBorder}, 0 0 24px ${tier.panelBorder}`;
+    document.getElementById('ticket-icon').textContent          = tier.ticketIcon;
+
+    // Cabinet reskin
+    const marquee = document.getElementById('slot-marquee');
+    marquee.textContent = tier.marquee;
+    marquee.style.borderColor = tier.cabinetBorder;
+    marquee.style.color       = tier.cabinetBorder;
+    marquee.style.textShadow  = `0 0 8px ${tier.cabinetBorder}`;
+    marquee.style.background  = tier.cabinetBg;
+    document.getElementById('slot-bottom').style.borderColor   = tier.cabinetBorder;
+    document.getElementById('slot-bottom').style.background    = tier.cabinetBg;
+    spinBtn.style.borderColor  = tier.cabinetBorder;
+    spinBtn.style.boxShadow    = `0 0 14px ${tier.cabinetBorder}, 0 0 28px ${tier.cabinetBorder}`;
+
+    document.getElementById('reels-window').style.borderColor  = tier.cabinetBorder;
+    document.getElementById('reels-window').style.boxShadow    = `inset 0 0 20px rgba(0,0,0,0.8), 0 0 12px ${tier.panelGlow}`;
+    [0,1,2].forEach(i => {
+      document.getElementById('reel-' + i).style.borderColor = tier.cabinetBorder;
+    });
+    document.getElementById('win-line').style.borderColor = tier.cabinetBorder + 'cc';
+
+    // Rebuild bulbs
+    ['top','bottom'].forEach(pos => {
+      const strip = document.getElementById('light-strip-' + pos);
+      strip.innerHTML = '';
+      for (let i = 0; i < 40; i++) {
+        const b = document.createElement('div');
+        b.className = 'bulb';
+        const c = tier.bulbColors[i % tier.bulbColors.length];
+        b.style.color = c; b.style.background = c;
+        b.style.animationDelay = (i * 0.08) + 's';
+        strip.appendChild(b);
+      }
+    });
+
+    rebuildReels();
+  }
+
+  // ─────────────────────────────────────────
+  // PRIZES WON LIST
+  // ─────────────────────────────────────────
+  const prizesList  = document.getElementById('prizes-list');
+  const prizesEmpty = document.getElementById('prizes-empty');
+
+  function addToPrizeList(prize) {
+    if (prizesEmpty && prizesEmpty.parentNode) prizesEmpty.remove();
+    if (wonPrizes[prize.id]) {
+      wonPrizes[prize.id].count++;
+      const li = document.getElementById('prize-li-' + prize.id);
+      if (li) { const c = li.querySelector('.prize-count'); if (c) c.textContent = wonPrizes[prize.id].count + 'x'; }
+    } else {
+      wonPrizes[prize.id] = { prize, count: 1 };
+      const li = document.createElement('li');
+      li.id = 'prize-li-' + prize.id;
+      li.innerHTML = `<span>${prize.icon} ${prize.label}</span><span class="prize-count">1x</span>`;
+      prizesList.appendChild(li);
+    }
+  }
+
+  // ─────────────────────────────────────────
+  // COLLECT PRIZES BUTTON
+  // ─────────────────────────────────────────
+  const collectPrizesBtn = document.getElementById('collect-prizes-btn');
+  const collectWarnPopup = document.getElementById('collect-warn-popup');
+  const collectWarnOk    = document.getElementById('collect-warn-ok');
+
+  const collectEncouragements = [
+    { emoji: '🤩', heading: "YOU'RE SO CLOSE TO WINNING MORE!",       msg: `You still have <strong>{n}</strong> tickets! That's basically FREE MONEY. Use them all first!` },
+    { emoji: '🔥', heading: "YOU'RE ON A HOT STREAK!",                msg: `Don't quit now with <strong>{n}</strong> tickets left. The next spin could be the big one!` },
+    { emoji: '🏆', heading: "CHAMPIONS DON'T LEAVE EARLY!",           msg: `<strong>{n}</strong> unspent tickets? Our winners always spin until the last one!` },
+    { emoji: '💰', heading: "FREE TICKETS = FREE PRIZES!",            msg: `You have <strong>{n}</strong> FREE spins just sitting there! It would be a CRIME to leave.` },
+    { emoji: '🎰', heading: "THE SLOTS ARE CALLING YOUR NAME!",       msg: `The machine whispered to us — <strong>{n}</strong> more spins and something INCREDIBLE happens!` },
+  ];
+  let collectMsgIndex = 0;
+
+  collectPrizesBtn.addEventListener('click', () => {
+    if (tickets > 0) {
+      playDenied();
+      const pick = collectEncouragements[collectMsgIndex % collectEncouragements.length];
+      collectMsgIndex++;
+      const box = document.getElementById('collect-warn-box');
+      box.querySelector('.cw-emoji').textContent = pick.emoji;
+      box.querySelector('h2').textContent = pick.heading;
+      document.getElementById('collect-warn-msg').innerHTML = pick.msg.replace('{n}', tickets);
+      collectWarnPopup.classList.add('show');
+    }
+  });
+  collectWarnOk.addEventListener('click', () => collectWarnPopup.classList.remove('show'));
+
+  // ─────────────────────────────────────────
+  // SKIP BUTTON + TIMER
+  // ─────────────────────────────────────────
+  const skipBtn      = document.getElementById('skip');
+  const skipTimerEl  = document.getElementById('skip-timer');
+  const skipWarnPopup = document.getElementById('skip-warn-popup');
+  const skipWarnOk   = document.getElementById('skip-warn-ok');
+
+  function startSkipCooldown() {
+    skipCooldown = 60; skipUnlocked = false;
+    skipBtn.classList.remove('ready'); updateSkipTimer();
+    skipTimer = setInterval(() => {
+      skipCooldown--;
+      updateSkipTimer();
+      if (skipCooldown <= 0) {
+        clearInterval(skipTimer); skipUnlocked = true;
+        skipBtn.classList.add('ready'); skipTimerEl.textContent = '';
+      }
+    }, 1000);
+  }
+
+  function updateSkipTimer() {
+    if (!skipUnlocked) skipTimerEl.textContent = `Available in ${skipCooldown}s`;
+  }
+
+  skipBtn.addEventListener('click', () => {
+    if (!skipUnlocked) { playDenied(); return; }
+    if (tickets > 0) {
+      playDenied();
+      skipWarnPopup.classList.add('show');
+      skipUnlocked = false; skipBtn.classList.remove('ready');
+      clearInterval(skipTimer); startSkipCooldown();
+    } else {
+      window.top.postMessage({ type: 'success' }, '*');
+    }
+  });
+  skipWarnOk.addEventListener('click', () => skipWarnPopup.classList.remove('show'));
+
+  // ─────────────────────────────────────────
+  // CONFETTI
+  // ─────────────────────────────────────────
+  const confCanvas = document.getElementById('confetti-canvas');
+  const confCtx = confCanvas.getContext('2d');
+  let confParticles = [];
+  let confAnimating = false;
+
+  function fireConfetti(count) {
+    const colors = ['#ffd700','#ff4400','#00ffcc','#ff00ff','#00aaff','#ffffff','#ff6666'];
+    for (let i = 0; i < count; i++) {
+      confParticles.push({
+        x: Math.random() * 960, y: Math.random() * 540,
+        vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: Math.random() * 8 + 4, rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - 0.5) * 0.3, life: 1,
+      });
+    }
+    if (confParticles.length > 0 && !confAnimating) animateConf();
+  }
+
+  function animateConf() {
+    confAnimating = true;
+    confCtx.clearRect(0, 0, 960, 540);
+    confParticles = confParticles.filter(p => p.life > 0);
+    for (const p of confParticles) {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.18;
+      p.rot += p.rotV; p.life -= 0.012;
+      confCtx.save();
+      confCtx.globalAlpha = Math.max(0, p.life);
+      confCtx.translate(p.x, p.y); confCtx.rotate(p.rot);
+      confCtx.fillStyle = p.color;
+      confCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      confCtx.restore();
+    }
+    if (confParticles.length > 0) { requestAnimationFrame(animateConf); }
+    else { confAnimating = false; confCtx.clearRect(0, 0, 960, 540); }
+  }
+
+  // ─────────────────────────────────────────
+  // BACKGROUND STARS
+  // ─────────────────────────────────────────
+  const container = document.getElementById('overlay-container');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div'); s.className = 'bg-star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*960}px;top:${Math.random()*540}px;animation-delay:${Math.random()*2}s;animation-duration:${1.5+Math.random()*2}s;`;
+    container.appendChild(s);
+  }
+
+  // ─────────────────────────────────────────
+  // AD LIFECYCLE
+  // ─────────────────────────────────────────
+  applyTier(0);
+
+  window.addEventListener('message', (event) => {
+    if (!event.data || !event.data.type) return;
+    if (event.data.type === 'adStarted') {
+      adActive = true;
+      skipBtn.style.display = 'block';
+      updateSpinBtn();
+      startSkipCooldown();
+    }
+    if (event.data.type === 'adFinished') {
+      window.top.postMessage({ type: 'fail' }, '*');
+    }
+  });
+
+})(window, document);
+</script>
+</body>
+</html>
