@@ -2,7 +2,7 @@
 
 A Kitboga Code Jam 2026 submission — three unskippable casino ad games that are absolutely, definitely, 100% not rigged.
 
-**Live demo:** https://pirate-bytes.github.io/Infinite-Luck-Casino-main/
+**Live demo:** https://gm-doc.github.io/Infinite-Luck-Casino/
 
 ---
 
