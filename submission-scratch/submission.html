@@ -34,16 +34,65 @@
       position: absolute; left: 0; right: 0; height: 12px;
       display: flex; justify-content: space-around; align-items: center; z-index: 10;
     }
-    #light-strip-top { top: 0; } #light-strip-bottom { bottom: 0; }
+    #light-strip-top { top: 100px; } #light-strip-bottom { bottom: 0; }
     .bulb {
       width: 10px; height: 10px; border-radius: 50%;
       animation: bulb-blink 0.7s infinite alternate;
     }
     @keyframes bulb-blink { from { opacity: 0.3; } to { opacity: 1; box-shadow: 0 0 6px 3px currentColor; } }
 
+    /* ── Casino banner ── */
+    #banner {
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 100px;
+      z-index: 20;
+      background: radial-gradient(ellipse at center, #1a0a2e 0%, #0d0618 70%, #000 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .banner-rule {
+      position: absolute; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    }
+    .banner-rule.top    { top: 8px; }
+    .banner-rule.bottom { bottom: 8px; }
+    .banner-bulbs {
+      position: absolute; top: 0; bottom: 0;
+      display: flex; flex-direction: column;
+      justify-content: space-around; padding: 10px 0;
+    }
+    .banner-bulbs.left  { left: 14px; }
+    .banner-bulbs.right { right: 14px; }
+    .bb { width: 8px; height: 8px; border-radius: 50%; animation: bb-blink 0.8s infinite alternate; }
+    @keyframes bb-blink {
+      from { opacity: 0.25; box-shadow: none; }
+      to   { opacity: 1; box-shadow: 0 0 6px 2px currentColor; }
+    }
+    #banner-title {
+      font-family: 'Bungee Inline', sans-serif;
+      font-size: 30px; color: #ffd700;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #ff9900, 0 0 22px #ff4400, 2px 2px 0 #5a0000;
+      line-height: 1; position: relative; z-index: 2;
+      animation: banner-pulse 2s ease-in-out infinite alternate;
+      white-space: nowrap;
+    }
+    @keyframes banner-pulse {
+      from { text-shadow: 0 0 10px #ff9900, 0 0 22px #ff4400, 2px 2px 0 #5a0000; }
+      to   { text-shadow: 0 0 16px #ffcc00, 0 0 36px #ff6600, 2px 2px 0 #5a0000; }
+    }
+    #banner-sub {
+      font-family: 'Bungee', sans-serif;
+      font-size: 9px; color: #ff9900;
+      letter-spacing: 4px; text-transform: uppercase;
+      margin-top: 4px; opacity: 0.85;
+      position: relative; z-index: 2; white-space: nowrap;
+    }
+
     /* Title */
     #casino-title {
-      position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+      position: absolute; top: 112px; left: 50%; transform: translateX(-50%);
       font-family: 'Bungee Inline', sans-serif; font-size: 26px; color: #ffd700;
       text-shadow: 0 0 10px #ff9900, 0 0 24px #ff4400, 2px 2px 0 #8b0000;
       white-space: nowrap; z-index: 10;
@@ -56,9 +105,10 @@
 
     /* Left panel: prizes won */
     #prizes-panel {
-      position: absolute; top: 50px; left: 8px; width: 158px;
+      position: absolute; top: 150px; left: 8px; width: 158px;
       background: rgba(0,0,0,0.75); border: 2px solid #ffd700; border-radius: 8px;
       padding: 8px; z-index: 10; box-shadow: 0 0 12px #ffd700aa;
+      max-height: 340px; overflow-y: auto; overflow-x: hidden;
     }
     #prizes-panel h3 { font-size: 11px; color: #ffd700; text-align: center; margin-bottom: 6px; letter-spacing: 1px; text-shadow: 0 0 6px #ffd700; }
     #prizes-list { list-style: none; }
@@ -76,7 +126,7 @@
 
     /* Right panel: ticket counter */
     #ticket-panel {
-      position: absolute; top: 50px; right: 8px; width: 158px;
+      position: absolute; top: 150px; right: 8px; width: 158px;
       background: rgba(0,0,0,0.75); border: 2px solid #ffd700; border-radius: 8px;
       padding: 12px 8px; z-index: 10; box-shadow: 0 0 12px #ffd700aa; text-align: center;
     }
@@ -88,7 +138,7 @@
 
     /* ── Fake winners ticker ── */
     #winners-ticker {
-      position: absolute; top: 228px; right: 8px; width: 158px;
+      position: absolute; top: 328px; right: 8px; width: 158px;
       background: rgba(0,0,0,0.75); border: 2px solid #ffd700; border-radius: 8px;
       padding: 8px 8px 7px; z-index: 10; box-shadow: 0 0 12px #ffd700aa;
       overflow: hidden;
@@ -119,7 +169,8 @@
     /* ── SCRATCH CARD AREA ── */
     #card-area {
       position: absolute;
-      top: 44px; left: 50%; transform: translateX(-50%);
+      top: 144px; left: 50%; transform: translateX(-50%) scale(0.9);
+      transform-origin: top center;
       width: 420px;
       display: flex; flex-direction: column; align-items: center;
       gap: 0; z-index: 5;
@@ -269,17 +320,47 @@
 
     /* Skip */
     #skip {
-      display: none; position: absolute; bottom: 16px; right: 0; padding: 9px 14px;
-      background: rgba(0,0,0,0.7); border: 1px solid #555; border-right-width: 0;
-      font-size: 11px; border-radius: 4px 0 0 4px;
+      display: none; position: absolute; bottom: 16px; right: 8px; width: 158px;
+      padding: 14px 8px;
+      background: rgba(0,0,0,0.7); border: 2px solid #555;
+      font-size: 13px; border-radius: 8px; text-align: center;
       color: #aaa; cursor: pointer; font-family: 'Bungee', sans-serif; z-index: 30;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
-    #skip.ready { border-color: #ffd700; color: #ffd700; box-shadow: 0 0 8px #ffd70066; }
+    #skip.ready { border-color: #ffd700; color: #ffd700; box-shadow: 0 0 12px #ffd70099; }
     #skip.ready:hover { background: rgba(255,215,0,0.15); }
-    #skip-timer { display: block; font-size: 9px; color: #888; margin-top: 2px; font-family: sans-serif; }
+    #skip-timer { display: block; font-size: 10px; color: #888; margin-top: 4px; font-family: sans-serif; }
 
     /* Popups */
+    @keyframes skip-flash {
+      0%   { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-18px); }
+    }
+    /* Idle nag popup */
+    #idle-popup {
+      position: absolute; inset: 0; z-index: 70;
+      pointer-events: none;
+    }
+    .idle-card {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: all;
+    }
+    .idle-card-box {
+      background: linear-gradient(145deg, #1a0033, #0d001a);
+      border: 3px solid #ff4444; border-radius: 16px;
+      padding: 24px 32px; text-align: center; max-width: 340px;
+      box-shadow: 0 0 30px #ff4444aa;
+      animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .idle-card-emoji { font-size: 40px; margin-bottom: 8px; }
+    .idle-card-title { font-family: 'Bungee Inline', sans-serif; font-size: 18px; color: #ff4444; text-shadow: 0 0 10px #ff4444; margin-bottom: 10px; }
+    .idle-card-msg { font-size: 13px; color: #ffcccc; font-family: sans-serif; line-height: 1.5; margin-bottom: 14px; }
+    .idle-card-penalty { font-size: 12px; color: #ff8888; font-family: sans-serif; margin-bottom: 14px; min-height: 18px; font-weight: bold; }
+    .idle-card-ok { background: #ff4444; color: white; border: none; padding: 10px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: pointer; }
+    .idle-card-ok:hover { background: #cc0000; }
+
     @keyframes pop-in {
       from { transform: scale(0.4); opacity: 0; }
       to   { transform: scale(1);   opacity: 1; }
@@ -356,6 +437,16 @@
 <body>
 <div id="overlay-container">
 
+  <!-- Casino banner -->
+  <div id="banner">
+    <div class="banner-rule top"></div>
+    <div class="banner-rule bottom"></div>
+    <div class="banner-bulbs left" id="banner-bulbs-left"></div>
+    <div class="banner-bulbs right" id="banner-bulbs-right"></div>
+    <div id="banner-title">🍀 INFINITE LUCK CASINO 🍀</div>
+    <div id="banner-sub">❖ &nbsp; Spin to Win &nbsp; ❖ &nbsp; Play Free &nbsp; ❖ &nbsp; Claim Your Prize &nbsp; ❖</div>
+  </div>
+
   <div id="light-strip-top"></div>
   <div id="light-strip-bottom"></div>
   <div id="casino-title">🃏 SCRATCH CARD 🃏</div>
@@ -404,7 +495,10 @@
   </div>
 
   <!-- Skip -->
-  <button id="skip" style="display:none;">Skip Ad<span id="skip-timer"></span></button>
+  <button id="skip" style="display:none;">⏭ Skip Ad<span id="skip-timer"></span></button>
+
+  <!-- Idle nag popup -->
+  <div id="idle-popup"></div>
 
   <!-- Win popup -->
   <div id="win-popup">
@@ -505,16 +599,17 @@
         { id: 'crowpro_1mo',   label: 'CrowPro 1mo',      icon: '🎮', ticketBonus: 0, isFree: false, flavor: 'One month of CrowPro — enjoy!', imgIcon: '../assets/CrowPro.png' },
         { id: 'free_card',     label: 'FREE CARD',         icon: '🎡', ticketBonus: 0, isFree: true,  flavor: 'Lucky! You get a free scratch card!' },
         { id: 'credits_100',   label: '$100 Credits',      icon: '💵', ticketBonus: 0, isFree: false, flavor: 'One hundred casino bucks!' },
-        { id: 'google_200',    label: '$200 Google Play',  icon: '💳', ticketBonus: 0, isFree: false, flavor: '$200 Google Play! 🎉 Guard that code — share it with NO ONE!' },
+        { id: 'google_200',    label: '$200 Google Play',  icon: '💳', ticketBonus: 0, isFree: false, flavor: '$200 Google Play! 🎉 Redeemable only to your own account!' },
         { id: 'windows_rg',    label: 'Windows RG',        icon: '🪟', ticketBonus: 0, isFree: false, flavor: 'A genuine Windows RG license! Legendary software!', imgIcon: '../assets/WindowsRG.png' },
-        { id: 'seraph_1mo',    label: 'Seraph Secure 1mo', icon: '🛡️', ticketBonus: 0, isFree: false, flavor: 'One month of Seraph Secure protection!', imgIcon: '../assets/SeraphSecure.png' },
+        { id: 'seraph_1mo',    label: 'Seraph Secure 1mo', icon: '🛡️', ticketBonus: 0, isFree: false, flavor: 'One month of Seraph Secure protection - this is free for everyone but now also free for you!', imgIcon: '../assets/SeraphSecure.png' },
         { id: 'tickets_5',     label: '5 Tickets',         icon: '🎟️', ticketBonus: 5,  isFree: false, flavor: '5 free cards coming right up!' },
         { id: 'credits_200',   label: '$200 Credits',      icon: '💵', ticketBonus: 0, isFree: false, flavor: 'Two hundred smackers!' },
         { id: 'google_100',    label: '$100 Google Play',  icon: '💳', ticketBonus: 0, isFree: false, flavor: '$100 Google Play! 🎉 NEVER share your code!' },
         { id: 'bike',          label: 'WIN A BIKE!',       icon: '🚲', ticketBonus: 0, isFree: false, flavor: '🚲 A shiny new bicycle! Stay fit!', isJackpot: true },
         { id: 'tickets_10',    label: '10 Tickets',        icon: '🎟️', ticketBonus: 10, isFree: false, flavor: "10 tickets! You're on fire!" },
+        { id: 'skip_30',       label: '-30s Skip Timer',   icon: '⏩', ticketBonus: 0, isFree: false, flavor: 'Nice! Your skip timer just got 30 seconds shorter!', skipReduction: 30 },
       ],
-      weights: [2, 4, 3, 8, 4, 4, 2, 5, 4, 8, 2, 3],
+      weights: [2, 4, 3, 8, 4, 4, 2, 5, 4, 8, 2, 3, 4],
     },
     {
       id: 'gold',
@@ -540,13 +635,14 @@
         { id: 'credits_200',   label: '$200 Credits',       icon: '💵', ticketBonus: 0, isFree: false, flavor: 'Two hundred smackers!' },
         { id: 'google_500',    label: '$500 Google Play',   icon: '💳', ticketBonus: 0, isFree: false, flavor: '$500 Google Play! 🎉 Never share that code!' },
         { id: 'crowpro_life',  label: 'CrowPro Lifetime',   icon: '👑', ticketBonus: 0, isFree: false, flavor: 'CrowPro — LIFETIME access! Never pay again!', imgIcon: '../assets/CrowPro.png' },
-        { id: 'wwww',          label: 'WWWW Gold Standard', icon: '🏆', ticketBonus: 0, isFree: false, flavor: 'The WWWWTSACTP Gold Standard package!', imgIcon: '../assets/WWWW.png' },
+        { id: 'wwww',          label: 'WWWW Gold Standard', icon: '🏆', ticketBonus: 0, isFree: false, flavor: 'The WWWWTSACTP Gold Standard package - P', imgIcon: '../assets/WWWW.png' },
         { id: 'tickets_5',     label: '5 Gold Tickets',     icon: '🌟', ticketBonus: 5,  isFree: false, flavor: '5 Golden Tickets! The riches grow!' },
         { id: 'credits_500',   label: '$500 Credits',       icon: '💵', ticketBonus: 0, isFree: false, flavor: 'FIVE HUNDRED casino dollars!' },
         { id: 'scooter',       label: 'Mobility Scooter', icon: '🦼', ticketBonus: 0, isFree: false, flavor: '🦼 A brand new mobility scooter!', isJackpot: true },
         { id: 'tickets_10',    label: '10 Gold Tickets',    icon: '🌟', ticketBonus: 10, isFree: false, flavor: '10 Golden Tickets! Extraordinary!' },
+        { id: 'skip_60',       label: '-60s Skip Timer',    icon: '⏩', ticketBonus: 0, isFree: false, flavor: 'Whoa! 60 whole seconds off your skip timer!', skipReduction: 60 },
       ],
-      weights: [2, 4, 3, 1, 8, 4, 2, 2, 5, 4, 2, 3],
+      weights: [2, 4, 3, 1, 8, 4, 2, 2, 5, 4, 2, 3, 2],
     },
     {
       id: 'diamond',
@@ -577,8 +673,10 @@
         { id: 'google_500',    label: '$500 Google Play',    icon: '💳', ticketBonus: 0, isFree: false, flavor: '$500 Google Play! 🎉 Keep that code secret!' },
         { id: 'car',           label: 'WIN A CAR!',          icon: '🚗', ticketBonus: 0, isFree: false, flavor: '🚨 A BRAND NEW CAR! 🚨 (claim in 72h)', isJackpot: true },
         { id: 'tickets_10',    label: '10 Diamond Tickets',  icon: '💎', ticketBonus: 10, isFree: false, flavor: '10 Diamond Tickets! Extraordinary!' },
+        { id: 'skip_60',       label: '-60s Skip Timer',     icon: '⏩', ticketBonus: 0, isFree: false, flavor: 'Whoa! 60 whole seconds off your skip timer!', skipReduction: 60 },
+        { id: 'skip_instant',  label: 'INSTANT SKIP!',       icon: '⚡', ticketBonus: 0, isFree: false, flavor: 'ARE YOU KIDDING?! You can skip RIGHT NOW!', skipInstant: true },
       ],
-      weights: [1, 3, 1, 8, 4, 1, 2, 5, 4, 8, 2, 3],
+      weights: [1, 3, 1, 8, 4, 1, 2, 5, 4, 8, 2, 3, 1, 1],
     },
   ];
 
@@ -610,13 +708,14 @@
   let tickets = 3;
   let adActive = false;
   let skipUnlocked = false;
-  let skipCooldown = 60;
+  let skipCooldown = 300;
   let skipTimer = null;
   let pendingPrize = null;
   let wonPrizes = {};
   let cardCount = 0;
   let cardCount_total = 0;  // total cards dealt (for #N display)
-  let scratchCount = 0;     // used for upgrade guarantee (same as spinCount)
+  let scratchCount = 0;
+  let skipGuaranteeSpin = Math.floor(Math.random() * 5);
 
   // Per-card state
   let gridPrizes = [];       // prize index for each of 9 cells
@@ -780,7 +879,16 @@
     if (tickets <= 1)                             return randomTicketPrize();
     if (tickets === 2 && Math.random() < 0.75)   return randomTicketPrize();
     if (tickets === 3 && Math.random() < 0.50)   return randomTicketPrize();
-    if (upgradeIndex !== -1 && scratchCount > 0 && scratchCount % 5 === 0) return upgradeIndex;
+    // 6-spin cycle: spin 5 = upgrade; one of spins 0-4 (pre-randomized) = guaranteed skip prize
+    const cyclePos = scratchCount % 6;
+    if (upgradeIndex !== -1 && cyclePos === 5) {
+      skipGuaranteeSpin = Math.floor(Math.random() * 5);
+      return upgradeIndex;
+    }
+    const skipPrizeIndex = prizes.findIndex(p => p.skipReduction);
+    if (upgradeIndex !== -1 && skipPrizeIndex !== -1 && cyclePos === skipGuaranteeSpin) {
+      return skipPrizeIndex;
+    }
 
     // ~50% win
     if (Math.random() < 0.50) {
@@ -1178,7 +1286,9 @@
     const prize = pendingPrize;
     pendingPrize = null;
     if (prize.ticketBonus > 0) setTickets(tickets + prize.ticketBonus);
-    if (!prize.isFree && prize.ticketBonus === 0) addToPrizeList(prize);
+    if (prize.skipReduction) { adjustSkipCooldown(-prize.skipReduction); }
+    if (prize.skipInstant)   { adjustSkipCooldown(-99999); }
+    if (!prize.isFree && prize.ticketBonus === 0 && !prize.skipReduction && !prize.skipInstant) addToPrizeList(prize);
     window.top.postMessage({ type: 'play' }, '*');
     if (prize.isFree) {
       setTimeout(() => {
@@ -1407,6 +1517,21 @@
       }
     });
 
+    // Update banner
+    document.getElementById('banner').style.background = tier.bg;
+    document.getElementById('banner-title').style.color = tier.titleColor;
+    const _ruleGrad = 'linear-gradient(90deg, transparent, ' + tier.panelBorder + ', transparent)';
+    document.querySelectorAll('.banner-rule').forEach(r => r.style.background = _ruleGrad);
+    ['banner-bulbs-left', 'banner-bulbs-right'].forEach(id => {
+      const el = document.getElementById(id); el.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        const b = document.createElement('div'); b.className = 'bb';
+        const c = tier.bulbColors[i % tier.bulbColors.length];
+        b.style.color = c; b.style.background = c; b.style.animationDelay = (i * 0.15) + 's';
+        el.appendChild(b);
+      }
+    });
+
     // Win & Dog popup theming
     const _popupBg   = ['linear-gradient(145deg, #1a0033, #0d001a)', 'linear-gradient(145deg, #2a1400, #1a0c00)', 'linear-gradient(145deg, #001828, #000d18)'][index];
     const _popupGlow = ['0 0 40px #ffd700, 0 0 80px #ff4400aa', '0 0 40px #ffe066, 0 0 80px #ff880099', '0 0 40px #00ccff, 0 0 80px #0088ffaa'][index];
@@ -1425,7 +1550,56 @@
   }
 
   // ─────────────────────────────────────────
-  // PRIZES WON LIST
+  // IDLE SYSTEM
+  // ─────────────────────────────────────────
+  const idlePopup   = document.getElementById('idle-popup');
+  let lastActivity = Date.now(); let idleLevel = 0;
+  const IDLE_LEVELS = [
+    { threshold: 35, emoji: '👀', title: 'STILL THERE?', msg: "You're missing out on AMAZING prizes! Play to win!", penalty: 0 },
+    { threshold: 35, emoji: '🤔', title: 'HELLO? ANYONE HOME?', msg: 'Psst — the fastest way to skip this ad is to play the game. Just saying 😊', penalty: 0 },
+    { threshold: 35, emoji: '🙄', title: 'ARE YOU TRYING TO SCAM US?', msg: 'Legitimate viewers play the game. Sitting there doing nothing is SUSPICIOUS. +30 seconds added to your skip timer.', penalty: 30 },
+    { threshold: 35, emoji: '😠', title: 'THIS IS GETTING ANNOYING.', msg: "Seriously? STILL not playing?! The skip timer doesn't care how long you wait. Only how much you PLAY. +60 seconds.", penalty: 60 },
+    { threshold: 35, emoji: '🤬', title: 'WE SEE YOU. WE ARE WATCHING.', msg: "You're being very rude. This is a PREMIUM casino experience and you're just sitting there. Very disrespectful. +120 seconds.", penalty: 120 },
+    { threshold: 35, emoji: '😡', title: 'CHEATER. IDLER. DISGRACE.', msg: "WE WILL BE HERE ALL DAY. Think you can outlast us? We have INFINITE time. +300 seconds. Enjoy.", penalty: 300 },
+  ];
+  function resetIdle() { lastActivity = Date.now(); }
+  function pushIdleCard(level) {
+    const card = document.createElement('div');
+    card.className = 'idle-card';
+    card.innerHTML =
+      `<div class="idle-card-box">` +
+        `<div class="idle-card-emoji">${level.emoji}</div>` +
+        `<div class="idle-card-title">${level.title}</div>` +
+        `<div class="idle-card-msg">${level.msg}</div>` +
+        `<div class="idle-card-penalty">${level.penalty > 0 ? '+' + level.penalty + 's added to skip timer!' : ''}</div>` +
+        `<button class="idle-card-ok">OK, I'M PLAYING!</button>` +
+      `</div>`;
+    card.querySelector('.idle-card-ok').addEventListener('click', () => { card.remove(); });
+    idlePopup.appendChild(card);
+    if (level.penalty > 0) adjustSkipCooldown(level.penalty);
+  }
+  function isPopupOpen() {
+    return winPopup.classList.contains('show') || dogPopup.classList.contains('show') ||
+           document.getElementById('upgrade-popup').classList.contains('show') ||
+           document.getElementById('loss-popup').classList.contains('show');
+  }
+  function startIdleDetection() {
+    // Scratch mechanic counts as activity
+    overlay.addEventListener('mousedown', resetIdle);
+    overlay.addEventListener('touchstart', resetIdle, { passive: true });
+    setInterval(() => {
+      if (!adActive) return;
+      if (dogPopup.classList.contains('show')) { lastActivity = Date.now(); return; }
+      const idleSec = (Date.now() - lastActivity) / 1000;
+      const next = IDLE_LEVELS[idleLevel];
+      if (next && idleSec >= next.threshold) {
+        pushIdleCard(next);
+        lastActivity = Date.now();
+        idleLevel = Math.min(idleLevel + 1, IDLE_LEVELS.length - 1);
+      }
+    }, 5000);
+  }
+
   // ─────────────────────────────────────────
   const prizesList  = document.getElementById('prizes-list');
   const prizesEmpty = document.getElementById('prizes-empty');
@@ -1487,7 +1661,7 @@
   const skipWarnOk    = document.getElementById('skip-warn-ok');
 
   function startSkipCooldown() {
-    skipCooldown = 60; skipUnlocked = false;
+    skipCooldown = 300; skipUnlocked = false;
     skipBtn.classList.remove('ready'); updateSkipTimer();
     skipTimer = setInterval(() => {
       skipCooldown--;
@@ -1497,6 +1671,27 @@
         skipBtn.classList.add('ready'); skipTimerEl.textContent = '';
       }
     }, 1000);
+  }
+
+  function adjustSkipCooldown(delta) {
+    if (!adActive) return;
+    skipCooldown = Math.max(0, skipCooldown + delta);
+    if (skipCooldown <= 0) {
+      clearInterval(skipTimer); skipTimer = null;
+      skipUnlocked = true; skipBtn.classList.add('ready'); skipTimerEl.textContent = '';
+    } else {
+      if (skipUnlocked) {
+        skipUnlocked = false; skipBtn.classList.remove('ready');
+        skipTimer = setInterval(() => { skipCooldown--; updateSkipTimer(); if (skipCooldown <= 0) { clearInterval(skipTimer); skipUnlocked = true; skipBtn.classList.add('ready'); skipTimerEl.textContent = ''; } }, 1000);
+      }
+      updateSkipTimer();
+    }
+    const flash = document.createElement('div');
+    const flashColor = delta > 0 ? '#ff8888' : '#00ffaa';
+    flash.style.cssText = `position:absolute;bottom:100%;right:0;color:${flashColor};font-size:13px;font-family:Bungee,sans-serif;white-space:nowrap;pointer-events:none;animation:skip-flash 1.2s ease forwards;`;
+    flash.textContent = delta <= -99999 ? '⚡ SKIP READY!' : (delta > 0 ? `⚠️ +${delta}s` : `⏩ ${-delta}s`);
+    skipBtn.appendChild(flash);
+    setTimeout(() => flash.remove(), 1300);
   }
   function updateSkipTimer() { if (!skipUnlocked) skipTimerEl.textContent = `Available in ${skipCooldown}s`; }
 
@@ -1663,6 +1858,7 @@
       skipBtn.style.display = 'block';
       updateNewCardBtn();
       startSkipCooldown();
+      startIdleDetection();
     }
     if (event.data.type === 'adFinished') {
       window.top.postMessage({ type: 'fail' }, '*');

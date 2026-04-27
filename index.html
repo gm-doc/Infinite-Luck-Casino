@@ -17,95 +17,17 @@
       overflow: hidden;
     }
 
-    /* Single scalable container: banner (120px) + tabs (44px) + iframe (540px) = 704px total */
+    /* Single scalable container: tabs (44px) + iframe (540px) = 584px total */
     #game-container {
       position: absolute;
       top: 50%;
       left: 50%;
       width: 960px;
-      height: 704px;
+      height: 584px;
       transform-origin: center center;
       display: flex;
       flex-direction: column;
       /* transform: translate(-50%, -50%) scale(n) — set by JS */
-    }
-
-    /* ── Banner ── */
-    #banner {
-      width: 960px;
-      height: 120px;
-      flex-shrink: 0;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(ellipse at center, #1a0a2e 0%, #0d0618 70%, #000 100%);
-      overflow: hidden;
-      transition: background 0.6s;
-    }
-
-    /* Decorative horizontal rule lines */
-    .banner-rule {
-      position: absolute;
-      left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #ffd700, transparent);
-      transition: background 0.6s;
-    }
-    .banner-rule.top    { top: 10px; }
-    .banner-rule.bottom { bottom: 10px; }
-
-    #banner-title {
-      font-family: 'Bungee Inline', sans-serif;
-      font-size: 44px;
-      color: #ffd700;
-      letter-spacing: 2px;
-      text-shadow: 0 0 12px #ff9900, 0 0 28px #ff4400, 0 0 48px #ff4400, 3px 3px 0 #5a0000;
-      line-height: 1;
-      position: relative;
-      z-index: 2;
-      animation: banner-pulse 2s ease-in-out infinite alternate;
-      transition: color 0.6s, text-shadow 0.6s;
-      white-space: nowrap;
-    }
-    @keyframes banner-pulse {
-      from { text-shadow: 0 0 12px #ff9900, 0 0 28px #ff4400, 0 0 48px #ff4400, 3px 3px 0 #5a0000; }
-      to   { text-shadow: 0 0 20px #ffcc00, 0 0 44px #ff6600, 0 0 72px #ff6600, 3px 3px 0 #5a0000; }
-    }
-
-    #banner-sub {
-      font-family: 'Bungee', sans-serif;
-      font-size: 12px;
-      color: #ff9900;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      margin-top: 6px;
-      opacity: 0.85;
-      position: relative;
-      z-index: 2;
-      transition: color 0.6s;
-    }
-
-    /* Flanking decorative bulbs */
-    .banner-bulbs {
-      position: absolute;
-      top: 0; bottom: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      padding: 12px 0;
-      gap: 0;
-    }
-    .banner-bulbs.left  { left: 18px; }
-    .banner-bulbs.right { right: 18px; }
-    .bb {
-      width: 9px; height: 9px; border-radius: 50%;
-      animation: bb-blink 0.8s infinite alternate;
-    }
-    @keyframes bb-blink {
-      from { opacity: 0.25; box-shadow: none; }
-      to   { opacity: 1;    box-shadow: 0 0 7px 3px currentColor; }
     }
 
     /* ── Tab bar ── */
@@ -168,14 +90,7 @@
 </head>
 <body>
   <div id="game-container">
-    <div id="banner">
-      <div class="banner-rule top"></div>
-      <div class="banner-rule bottom"></div>
-      <div class="banner-bulbs left"  id="bulbs-left"></div>
-      <div class="banner-bulbs right" id="bulbs-right"></div>
-      <div id="banner-title">🎰 INFINITE LUCK CASINO 🎰</div>
-      <div id="banner-sub">✦ &nbsp; Spin to Win &nbsp; ✦ &nbsp; Play Free &nbsp; ✦ &nbsp; Claim Your Prize &nbsp; ✦</div>
-    </div>
+
     <div id="tab-bar">
       <button class="tab-btn active" data-src="submission/submission.html">🎡 Prize Wheel</button>
       <button class="tab-btn"        data-src="submission-slot-machine/submission.html">🎰 Slot Machine</button>
@@ -194,37 +109,10 @@
 
       // Tier colour palette (matches each game's TIERS array order)
       var TIER_STYLES = [
-        { bg: '#1a0033', color: '#ffd700', borderColor: '#ffd700',
-          bannerBg: 'radial-gradient(ellipse at center, #1a0a2e 0%, #0d0618 70%, #000 100%)',
-          titleColor: '#ffd700', titleGlow: '0 0 12px #ff9900, 0 0 28px #ff4400, 0 0 48px #ff4400, 3px 3px 0 #5a0000',
-          subColor: '#ff9900', lineColor: '#ffd700',
-          bulbs: ['#ff0044','#ffd700','#00ffcc','#ff6600','#aa00ff','#00aaff'] },
-        { bg: '#2a1400', color: '#ffe066', borderColor: '#ffe066',
-          bannerBg: 'radial-gradient(ellipse at center, #2a1500 0%, #1a0c00 70%, #000 100%)',
-          titleColor: '#ffe066', titleGlow: '0 0 12px #ffcc00, 0 0 28px #ff9900, 0 0 48px #ff6600, 3px 3px 0 #5a2000',
-          subColor: '#ffaa44', lineColor: '#ffe066',
-          bulbs: ['#ffd700','#ffaa00','#ffe066','#ff8800','#ffcc44','#ffdd88'] },
-        { bg: '#001828', color: '#aaddff', borderColor: '#00ccff',
-          bannerBg: 'radial-gradient(ellipse at center, #001828 0%, #000d18 70%, #000 100%)',
-          titleColor: '#aaddff', titleGlow: '0 0 12px #00ccff, 0 0 28px #0088ff, 0 0 48px #0044cc, 3px 3px 0 #001a44',
-          subColor: '#66bbff', lineColor: '#00ccff',
-          bulbs: ['#00ccff','#0088ff','#aaddff','#0044cc','#66bbff','#88ddff'] },
+        { bg: '#1a0033', color: '#ffd700', borderColor: '#ffd700' },
+        { bg: '#2a1400', color: '#ffe066', borderColor: '#ffe066' },
+        { bg: '#001828', color: '#aaddff', borderColor: '#00ccff' },
       ];
-
-      // Build flanking bulbs
-      function buildBulbs(el, colors) {
-        el.innerHTML = '';
-        for (var i = 0; i < 7; i++) {
-          var b = document.createElement('div');
-          b.className = 'bb';
-          var c = colors[i % colors.length];
-          b.style.color = c; b.style.background = c;
-          b.style.animationDelay = (i * 0.13) + 's';
-          el.appendChild(b);
-        }
-      }
-      buildBulbs(document.getElementById('bulbs-left'),  TIER_STYLES[0].bulbs);
-      buildBulbs(document.getElementById('bulbs-right'), TIER_STYLES[0].bulbs);
 
       function setActiveTierColor(tierIndex) {
         var s = TIER_STYLES[tierIndex] || TIER_STYLES[0];
@@ -238,27 +126,14 @@
           activeTab.style.borderRightColor  = s.borderColor;
         }
         document.getElementById('tab-bar').style.borderBottomColor = s.borderColor;
-        // Update banner
-        var banner = document.getElementById('banner');
-        banner.style.background = s.bannerBg;
-        var title = document.getElementById('banner-title');
-        title.style.color      = s.titleColor;
-        title.style.textShadow = s.titleGlow;
-        document.getElementById('banner-sub').style.color = s.subColor;
-        // Update rule lines
-        var ruleGrad = 'linear-gradient(90deg, transparent, ' + s.lineColor + ', transparent)';
-        document.querySelectorAll('.banner-rule').forEach(function(r) { r.style.background = ruleGrad; });
-        // Rebuild bulbs
-        buildBulbs(document.getElementById('bulbs-left'),  s.bulbs);
-        buildBulbs(document.getElementById('bulbs-right'), s.bulbs);
       }
 
       // Initialise to tier 0
       setActiveTierColor(0);
 
-      // Scale container so banner + tabs + iframe all fit the viewport
+      // Scale container so tabs + iframe fit the viewport
       function scaleGame() {
-        var scale = Math.min(1, window.innerWidth / 960, window.innerHeight / 704);
+        var scale = Math.min(1, window.innerWidth / 960, window.innerHeight / 584);
         container.style.transform = 'translate(-50%, -50%) scale(' + scale + ')';
       }
       scaleGame();
