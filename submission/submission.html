@@ -19,7 +19,6 @@
       position: relative;
       width: 960px; height: 540px;
       background: radial-gradient(ellipse at center, #1a0a2e 0%, #0d0618 60%, #000 100%);
-      overflow: hidden;
     }
 
     /* ── Animated background stars ── */
@@ -38,7 +37,7 @@
       display: flex; justify-content: space-around; align-items: center;
       z-index: 10;
     }
-    #light-strip-top { top: 100px; }
+    #light-strip-top { top: 100px; z-index: 25; }
     #light-strip-bottom { bottom: 0; }
     .bulb {
       width: 10px; height: 10px; border-radius: 50%;
@@ -54,7 +53,6 @@
       background: radial-gradient(ellipse at center, #1a0a2e 0%, #0d0618 70%, #000 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      overflow: hidden;
     }
     .banner-rule {
       position: absolute; left: 0; right: 0; height: 2px;
@@ -62,18 +60,6 @@
     }
     .banner-rule.top    { top: 8px; }
     .banner-rule.bottom { bottom: 8px; }
-    .banner-bulbs {
-      position: absolute; top: 0; bottom: 0;
-      display: flex; flex-direction: column;
-      justify-content: space-around; padding: 10px 0;
-    }
-    .banner-bulbs.left  { left: 14px; }
-    .banner-bulbs.right { right: 14px; }
-    .bb { width: 8px; height: 8px; border-radius: 50%; animation: bb-blink 0.8s infinite alternate; }
-    @keyframes bb-blink {
-      from { opacity: 0.25; box-shadow: none; }
-      to   { opacity: 1; box-shadow: 0 0 6px 2px currentColor; }
-    }
     #banner-title {
       font-family: 'Bungee Inline', sans-serif;
       font-size: 30px; color: #ffd700;
@@ -580,8 +566,6 @@
   <div id="banner">
     <div class="banner-rule top"></div>
     <div class="banner-rule bottom"></div>
-    <div class="banner-bulbs left" id="banner-bulbs-left"></div>
-    <div class="banner-bulbs right" id="banner-bulbs-right"></div>
     <div id="banner-title">🍀 INFINITE LUCK CASINO 🍀</div>
     <div id="banner-sub">❖ &nbsp; Spin to Win &nbsp; ❖ &nbsp; Play Free &nbsp; ❖ &nbsp; Claim Your Prize &nbsp; ❖</div>
   </div>
@@ -1569,15 +1553,6 @@
     document.getElementById('banner-title').style.color = tier.titleColor;
     const _ruleGrad = 'linear-gradient(90deg, transparent, ' + tier.panelBorder + ', transparent)';
     document.querySelectorAll('.banner-rule').forEach(r => r.style.background = _ruleGrad);
-    ['banner-bulbs-left', 'banner-bulbs-right'].forEach(id => {
-      const el = document.getElementById(id); el.innerHTML = '';
-      for (let i = 0; i < 5; i++) {
-        const b = document.createElement('div'); b.className = 'bb';
-        const c = tier.bulbColors[i % tier.bulbColors.length];
-        b.style.color = c; b.style.background = c; b.style.animationDelay = (i * 0.15) + 's';
-        el.appendChild(b);
-      }
-    });
 
     // Win & Dog popup theming
     const _popupBg   = ['linear-gradient(145deg, #1a0033, #0d001a)', 'linear-gradient(145deg, #2a1400, #1a0c00)', 'linear-gradient(145deg, #001828, #000d18)'][index];
