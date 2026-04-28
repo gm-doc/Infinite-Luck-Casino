@@ -78,6 +78,7 @@
       width: 960px;
       height: 540px;
       flex-shrink: 0;
+      position: relative;
     }
 
     iframe {
@@ -92,12 +93,13 @@
   <div id="game-container">
 
     <div id="tab-bar">
-      <button class="tab-btn active" data-src="submission/submission.html">🎡 Prize Wheel</button>
-      <button class="tab-btn"        data-src="submission-slot-machine/submission.html">🎰 Slot Machine</button>
-      <button class="tab-btn"        data-src="submission-scratch/submission.html">🃏 Scratch Card</button>
+      <button class="tab-btn active" data-src="submission/submission.html?game=wheel">🎡 Prize Wheel</button>
+      <button class="tab-btn"        data-src="submission/submission.html?game=slot">🎰 Slot Machine</button>
+      <button class="tab-btn"        data-src="submission/submission.html?game=scratch">🃏 Scratch Card</button>
+      <button class="tab-btn"        data-src="submission/submission.html?game=random">🎲 Random</button>
     </div>
     <div id="frame-wrap">
-      <iframe id="game" src="submission/submission.html" allowtransparency="true"></iframe>
+      <iframe id="game" src="submission/submission.html?game=wheel" allowtransparency="true"></iframe>
     </div>
   </div>
 
@@ -138,11 +140,6 @@
       }
       scaleGame();
       window.addEventListener('resize', scaleGame);
-
-      // Fire adStarted as soon as the iframe loads
-      iframe.addEventListener('load', function () {
-        iframe.contentWindow.postMessage({ type: 'adStarted' }, '*');
-      });
 
       // Tab switching
       tabs.forEach(function (btn) {
