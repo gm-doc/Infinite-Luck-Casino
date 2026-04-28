@@ -1,50 +1,102 @@
 # 🎰 Infinite Luck Casino
 
-A Kitboga Code Jam 2026 submission — three unskippable casino ad games that are absolutely, definitely, 100% not rigged.
+> A Kitboga Code Jam 2026 submission — three unskippable casino ad games that are absolutely, definitely, 100% not rigged.
 
-**Live demo:** https://gm-doc.github.io/Infinite-Luck-Casino/
+**Live demo:** https://pirate-bytes.github.io/Infinite-Luck-Casino-main/
 
 ---
 
 ## What is this?
 
-Infinite Luck Casino is a suite of three fully interactive casino ad overlays built for the [Kitboga Code Jam 2026](https://kitboga.com/codejam26). Each runs as a 960×540px iframe overlay on top of a video, blocks the skip button, and keeps the player playing "just one more time" through increasingly elaborate prize tiers.
+Infinite Luck Casino is a suite of three fully interactive casino ad games built for the [Kitboga Code Jam 2026](https://kitboga.com/codejam26). All three games are merged into a single `submission/submission.html` file, routed by a URL parameter, and designed to run as a 960×540px iframe inside the code jam's ad player shell.
 
 The core joke: you are far too lucky to ever run out of tickets. The game always makes sure of that.
 
 ---
 
+## Project structure
+
+```
+index.html                ← tabbed launcher shell (demo / gitio page)
+submission/
+  submission.html         ← the merged submission (all three games)
+  assets/                 ← all images and the ad video
+    CrowPro.png
+    SeraphSecure.png
+    WindowsRG.png
+    WWWW.png
+    AWPDL.png
+    Doot.png
+    DootCry.png
+    DootLove.png
+    ILC-AD.mp4
+deprecated/               ← original per-game source files (not part of submission)
+```
+
+---
+
 ## Games
 
-### 🎡 Prize Wheel (`submission/`)
-Spin a canvas prize wheel to reveal your prize. 10 weighted slices per tier, cubic ease-out animation with synced tick sounds. The wheel always lands somewhere interesting.
+Opened via `submission/submission.html?game=<wheel|slot|scratch|random>`.
 
-### 🎰 Slot Machine (`submission-slot-machine/`)
-Pull the lever and watch three reels spin. Near-misses are engineered. Jackpots are achievable. Running out of tickets is not.
+### 🎡 Prize Wheel (`?game=wheel`)
+Spin a canvas prize wheel to reveal your prize. 10 weighted slices per tier, cubic ease-out animation with synced tick and clunk sounds.
 
-### 🃏 Scratch Card (`submission-scratch/`)
-Scratch a 3×3 foil grid with your mouse or finger to reveal prizes. Match 3 in a row, column, or diagonal to win. Discard and deal a new card — for just one ticket.
+### 🎰 Slot Machine (`?game=slot`)
+Three reels with weighted symbol strips. Near-misses are engineered. Jackpots are achievable. Running out of tickets is not.
 
----
+### 🃏 Scratch Card (`?game=scratch`)
+Scratch a 3×3 foil grid with mouse or finger (Web Canvas + `destination-out` compositing). Match 3 in a row, column, or diagonal to win.
 
-## How to play
-
-1. The ad starts automatically when the page loads.
-2. Each game starts with a small number of tickets. Each play costs 1 ticket.
-3. Win prizes — credits, Google Play cards, iPhones, vehicles, and more.
-4. Win enough rounds and you'll **unlock the Golden tier**, then the **Diamond tier** (featuring Bitcoin).
-5. A skip button appears after 60 seconds — but only works if you have zero tickets left.
-6. The "Collect Prizes" button will enthusiastically explain why you shouldn't leave yet.
+### 🎲 Random (`?game=random`)
+Picks one of the three games at random. Also plays the built-in ILC-AD.mp4 promo video before revealing the game — the video ad only appears in this mode.
 
 ---
 
-## Shared features (all three games)
+## How it works
 
-- **3-tier system** — Base (purple/red) → Golden (amber) → Diamond (cyan/blue), each with a full UI reskin, themed prizes, and escalating rewards
-- **Rigged probability** — ticket prizes are weighted higher when you're running low; guaranteed at 1 ticket
-- **Synthesised audio** — every sound generated at runtime via Web Audio API — no audio files; independent volume slider per game
-- **Dramatic tier upgrade popups** — full-screen animation with confetti and a fanfare
-- **Vegas aesthetics** — twinkling stars, colour-cycling border bulbs, neon title pulse, confetti bursts
-- **Prizes Won list** — stacking Nx counter per prize in the left panel
-- **Skip cooldown** — 60-second timer; attempting to skip early plays a sad trombone and resets the clock
-- **`index.html` shell** — tabbed launcher with a reactive neon banner that changes colour with each tier upgrade
+1. The intro popup explains the rules. Click **Let's Play!** to start.
+2. Each play costs 1 ticket. Win prizes to earn more tickets (and shrink the skip timer).
+3. Play enough rounds to **unlock the Golden tier**, then the **Diamond tier**.
+4. A skip button appears after a cooldown — but only if you have zero tickets left.
+5. The **Collect Prizes** button will enthusiastically explain why you shouldn't leave yet.
+
+---
+
+## Features
+
+- **Single-file submission** — all three games in one HTML file, routed by `?game=` URL param
+- **3-tier system** — Base → Golden (amber) → Diamond (cyan), each with a full UI reskin, themed prizes, and escalating rewards
+- **Rigged probability** — wins weighted per tier; ticket prizes guaranteed when running low
+- **Synthesised audio** — every sound generated at runtime via Web Audio API; no audio files shipped; independent volume slider
+- **Live winners ticker** — fake scrolling winner feed starts after the intro popup is closed
+- **Idle detection** — escalating nag popups if the player sits idle, with skip timer penalties
+- **Dog popup** — win the dog prize and you have 2 minutes to kiss him before he leaves
+- **Skip cooldown system** — 5-minute timer; prizes reduce it; trying to skip early resets it
+- **Confetti bursts** — on every win and tier upgrade
+- **Vegas aesthetics** — twinkling stars, colour-cycling border bulbs, neon pulsing title
+- **Tier-aware tab bar** — `index.html` tab border colour updates to match the active tier via `postMessage`
+
+---
+
+## Running locally
+
+```powershell
+cd "c:\path\to\Infinite-Luck-Casino-main"
+python -m http.server 8080
+# open http://localhost:8080
+```
+
+Or use **Run and Debug → Open in Chrome** in VS Code (starts the server automatically if not already running).
+
+---
+
+## Submission notes
+
+For the code jam judge, the submission entry point is:
+
+```
+submission/submission.html?game=random
+```
+
+This is the intended experience: the promo video plays, then a randomly selected game begins.
