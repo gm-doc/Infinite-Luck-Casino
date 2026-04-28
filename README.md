@@ -30,7 +30,6 @@ submission/
     DootCry.png
     DootLove.png
     ILC-AD.mp4
-deprecated/               ← original per-game source files (not part of submission)
 ```
 
 ---
