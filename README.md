@@ -165,7 +165,7 @@ All three game modes (wheel, slots, scratch cards) share the same prize pool div
 > **Note on ticket prizes:** Ticket prizes (+5 and +10) are removed from the prize pool entirely while you have more than 3 tickets. The moment you drop to 3 or fewer they become available and will top you back up. In drain mode they are suppressed regardless of count — making drain mode the only state where running out is genuinely possible. The skip timer reduction prizes become increasingly rare in higher tiers and are only awarded during the first few spins. The "Skip Ad" prize visible on the Diamond Wheel has a spawn weight of 0 — it was never intended to be winnable.
 
 ## Easter Eggs
-The game has to hidden time control buttons that are in no way indicated by the UI:
+The game has two hidden time control buttons that are in no way indicated by the UI:
 <img width="72" height="17" alt="image" src="https://github.com/user-attachments/assets/db9a6721-b7cc-4d07-9d22-5c0a0d716de8" />
 -clicking green dot next to live chat reduses the skip ad timer by 100s
 <img width="90" height="26" alt="image" src="https://github.com/user-attachments/assets/2f096839-1d9a-4f3f-aeb1-21a53edeac53" />
