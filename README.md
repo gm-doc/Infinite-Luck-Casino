@@ -1,7 +1,7 @@
 # Infinite Luck Casino - Demo Version
 This version of the Infinite Luck Casino was made for presentation and testing purpose. It retains all the functionalities of the original within the dedicated page that makes it easy to see all the possible variations of the minigames organized in tabs.
 
-The git.io page: https://gm-doc.github.io/Infinite-Luck-Casino/
+The git.io page: https://gm-doc.github.io/Infinite-Luck-Casino/ <br>
 The repo with the codejam entry: https://github.com/gm-doc/Infinite-Luck-Casino-Codejam26
 
 ## Table of Contents
