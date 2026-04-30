@@ -4,8 +4,22 @@
   <meta charset="utf-8">
   <title>Infinite Luck Casino</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&display=swap" rel="stylesheet">
   <style>
+    @font-face {
+      font-family: 'Bungee';
+      src: url('assets/fonts/Bungee-Regular.ttf') format('truetype');
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Bungee Inline';
+      src: url('assets/fonts/BungeeInline-Regular.ttf') format('truetype');
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
@@ -110,6 +124,27 @@
       z-index: 10;
       box-shadow: 0 0 12px #ffd700aa;
       max-height: 340px; overflow-y: auto; overflow-x: hidden;
+    }
+    #prizes-panel {
+      scrollbar-width: thin;
+      scrollbar-color: #ffd700 #12061f;
+    }
+    #prizes-panel::-webkit-scrollbar {
+      width: 10px;
+    }
+    #prizes-panel::-webkit-scrollbar-track {
+      background: linear-gradient(180deg, #12061f, #06030d);
+      border-left: 1px solid rgba(255, 215, 0, 0.18);
+      border-radius: 10px;
+    }
+    #prizes-panel::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ffd700, #ff9f1c);
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.45);
+    }
+    #prizes-panel::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #ffe066, #ffb347);
     }
     #prizes-panel h3 {
       font-size: 11px; color: #ffd700;
@@ -316,15 +351,61 @@
     #sniper-intro-body { font-family: sans-serif; font-size: 12px; color: #ffcc88; line-height: 1.5; margin-bottom: 16px; }
     #sniper-intro-btn { background: linear-gradient(135deg, #ff8800, #ff4400); color: #fff; border: none; padding: 10px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 16px #ff880088; transition: transform 0.1s; }
     #sniper-intro-btn:hover { transform: scale(1.06); }
-    #dbg-dog { display: none; position: absolute; bottom: 78px; right: 6px; z-index: 202; background: rgba(80,40,0,0.6); border: 1px solid #ffbb44; color: #ffd288; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
-    #dbg-sniper { display: none; position: absolute; bottom: 46px; right: 6px; z-index: 202; background: rgba(80,0,0,0.6); border: 1px solid #ff4444; color: #ff8888; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
+    #dbg-dog { display: none; position: absolute; top: 10px; right: 8px; z-index: 202; background: rgba(80,40,0,0.6); border: 1px solid #ffbb44; color: #ffd288; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
+    #dbg-sniper { display: none; position: absolute; top: 34px; right: 8px; z-index: 202; background: rgba(80,0,0,0.6); border: 1px solid #ff4444; color: #ff8888; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
 
     /* Maze Minigame */
     #maze-popup { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.88); z-index: 57; align-items: center; justify-content: center; }
     #maze-popup.show { display: flex; }
     #maze-box { position: relative; width: 500px; height: 460px; background: #d0b8e8; border-radius: 12px; overflow: hidden; border: 2px solid #ffd700; box-shadow: 0 0 40px #ffd70088, 0 0 80px #ff990044; animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
     #maze-canvas { position: absolute; inset: 0; z-index: 0; }
-    #maze-hud { position: absolute; top: 8px; left: 0; right: 0; display: flex; justify-content: center; pointer-events: none; z-index: 1; font-family: 'Bungee', sans-serif; font-size: 15px; color: #ffd700; text-shadow: 0 0 8px #ffd700, 0 0 2px #000, 0 0 2px #000; }
+    #maze-banner {
+      position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+      width: 88%; z-index: 2; pointer-events: none;
+      text-align: center; border-radius: 10px;
+      background: linear-gradient(135deg, rgba(48,24,0,0.95), rgba(122,70,0,0.92), rgba(48,24,0,0.95));
+      border: 2px solid #ffb300;
+      box-shadow: 0 0 18px rgba(255,183,0,0.5), inset 0 0 16px rgba(255,213,79,0.25);
+      padding: 6px 10px 7px;
+    }
+    #maze-banner-title {
+      font-family: 'Bungee Inline', sans-serif;
+      font-size: 16px; letter-spacing: 1px;
+      color: #ffd54f;
+      text-shadow: 0 0 10px #ffb300, 0 0 2px #000;
+      line-height: 1.1;
+    }
+    #maze-banner-sub {
+      margin-top: 2px;
+      font-family: sans-serif;
+      font-size: 9px; letter-spacing: 1.2px;
+      color: #ffe9a6;
+      text-transform: uppercase;
+      text-shadow: 0 0 6px rgba(255,179,0,0.8);
+      opacity: 0.92;
+    }
+    #maze-hud {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 88%;
+      bottom: 8px;
+      display: block;
+      pointer-events: none;
+      z-index: 2;
+      font-family: 'Bungee', sans-serif;
+      font-size: 16px;
+      line-height: 1.1;
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffb300, 0 0 2px #000;
+      background: linear-gradient(135deg, rgba(48,24,0,0.95), rgba(122,70,0,0.92), rgba(48,24,0,0.95));
+      border: 2px solid #ffb300;
+      border-radius: 10px;
+      padding: 6px 10px 7px;
+      box-shadow: 0 0 18px rgba(255,183,0,0.5), inset 0 0 16px rgba(255,213,79,0.25);
+      box-sizing: border-box;
+    }
+    #maze-timer-hud { display: block; width: 100%; text-align: center; }
     #maze-intro { display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; z-index: 3; background: rgba(0,0,0,0.88); }
     #maze-intro.show { display: flex; }
     #maze-intro-box { background: linear-gradient(145deg, #1a1000, #0d0800); border: 3px solid #ffd700; border-radius: 16px; padding: 20px 28px; text-align: center; max-width: 320px; box-shadow: 0 0 40px #ffd700aa, 0 0 80px #ff990066; animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); }
@@ -332,7 +413,22 @@
     #maze-intro-body { font-family: sans-serif; font-size: 12px; color: #ffcc88; line-height: 1.5; margin-bottom: 16px; }
     #maze-intro-btn { background: linear-gradient(135deg, #ffd700, #ff9900); color: #000; border: none; padding: 10px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 16px #ffd70088; transition: transform 0.1s; }
     #maze-intro-btn:hover { transform: scale(1.06); }
-    #dbg-maze { display: none; position: absolute; bottom: 62px; right: 6px; z-index: 202; background: rgba(0,50,0,0.6); border: 1px solid #44ff44; color: #88ff88; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
+    #dbg-maze { display: none; position: absolute; top: 58px; right: 8px; z-index: 202; background: rgba(0,50,0,0.6); border: 1px solid #44ff44; color: #88ff88; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
+    #dbg-safety-net {
+      display: none;
+      position: absolute;
+      top: 82px;
+      right: 8px;
+      z-index: 202;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #666;
+      color: #ddd;
+      font-size: 10px;
+      padding: 3px 7px;
+      font-family: monospace;
+      border-radius: 3px;
+      letter-spacing: 0.2px;
+    }
 
     /* Minigame Fail Popup */
     #minigame-fail-popup { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.88); z-index: 58; align-items: center; justify-content: center; }
@@ -361,6 +457,51 @@
     #skip-warn-box p { font-size: 13px; color: #ffcccc; font-family: sans-serif; margin-bottom: 16px; line-height: 1.5; }
     #skip-warn-ok { background: #ff4444; color: white; border: none; padding: 10px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: pointer; }
     #skip-warn-ok:hover { background: #cc0000; }
+
+    /* Out-of-tickets popup (end of drain phase) */
+    #out-of-tickets-popup {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.92); z-index: 70;
+      align-items: center; justify-content: center;
+    }
+    #out-of-tickets-popup.show { display: flex; }
+    #out-of-tickets-box {
+      background: linear-gradient(145deg, #1a1a00, #0d0d00);
+      border: 3px solid #ffd700; border-radius: 16px;
+      padding: 28px 36px; text-align: center; max-width: 360px;
+      box-shadow: 0 0 40px #ffd700aa;
+      animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #out-of-tickets-box .oot-emoji { font-size: 40px; margin-bottom: 8px; }
+    #out-of-tickets-box h2 { font-size: 22px; color: #ffd700; text-shadow: 0 0 12px #ffd700; margin-bottom: 10px; }
+    #out-of-tickets-box p { font-size: 13px; color: #ffe599; font-family: sans-serif; margin-bottom: 20px; line-height: 1.5; }
+    .oot-buttons { display: flex; flex-direction: column; gap: 10px; }
+    #oot-more-btn { background: linear-gradient(135deg, #00cc44, #007722); color: white; border: none; padding: 12px 20px; font-family: 'Bungee', sans-serif; font-size: 15px; border-radius: 10px; cursor: pointer; }
+    #oot-more-btn:hover { background: linear-gradient(135deg, #00ff55, #00aa33); }
+    #oot-skip-btn { background: transparent; color: #aaa; border: 1px solid #555; padding: 8px 20px; font-family: 'Bungee', sans-serif; font-size: 12px; border-radius: 8px; cursor: pointer; margin-top: 2px; }
+    #oot-skip-btn:hover { color: #fff; border-color: #aaa; }
+
+    /* Lose prizes confirm popup */
+    #lose-prizes-popup {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.95); z-index: 75;
+      align-items: center; justify-content: center;
+    }
+    #lose-prizes-popup.show { display: flex; }
+    #lose-prizes-box {
+      background: linear-gradient(145deg, #1a0000, #0d0000);
+      border: 3px solid #ff4444; border-radius: 16px;
+      padding: 28px 36px; text-align: center; max-width: 360px;
+      box-shadow: 0 0 40px #ff444488;
+      animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #lose-prizes-box h2 { font-family: 'Bungee Inline', sans-serif; font-size: 22px; color: #ff4444; text-shadow: 0 0 12px #ff4444; margin-bottom: 10px; }
+    #lose-prizes-box p { font-size: 13px; color: #ffaaaa; font-family: sans-serif; margin-bottom: 20px; line-height: 1.5; }
+    .lp-buttons { display: flex; flex-direction: column; gap: 10px; }
+    #lp-confirm-btn { background: linear-gradient(135deg, #cc0000, #880000); color: #fff; border: none; padding: 12px 20px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 10px; cursor: pointer; }
+    #lp-confirm-btn:hover { background: linear-gradient(135deg, #ff2222, #aa0000); }
+    #lp-cancel-btn { background: transparent; color: #aaa; border: 1px solid #555; padding: 8px 20px; font-family: 'Bungee', sans-serif; font-size: 12px; border-radius: 8px; cursor: pointer; }
+    #lp-cancel-btn:hover { color: #fff; border-color: #aaa; }
 
     /* Collect prizes warn popup */
     #collect-warn-popup {
@@ -877,11 +1018,11 @@
   <!-- Dog kiss popup -->
   <div id="dog-popup">
     <div id="dog-box">
-      <div id="dog-title">🐾 YOU WON A DOG! 🐾</div>
+      <div id="dog-title">YOU WON A DOG!</div>
       <div id="dog-instructions">Prove your love for your new dog by kissing him before taking him home!</div>
       <div id="dog-img-wrap"><img id="dog-img" src="assets/Doot.png" alt="Dog"></div>
       <div id="dog-feedback"></div>
-      <button id="dog-collect-btn">COLLECT! (<span id="dog-timer">120</span>s)</button>
+      <button id="dog-collect-btn">NEW FRIEND ❤️ (<span id="dog-timer">120</span>s)</button>
     </div>
   </div>
   <button id="dbg-dog">🐕 TEST DOG</button>
@@ -901,8 +1042,8 @@
         <div id="sniper-intro-box">
           <div id="sniper-intro-title">🔫 AWP DRAGON LORE</div>
           <div id="sniper-intro-body">
-            A rare weapon has appeared in the building across the street!<br><br>
-            <strong>Shoot 5 targets on time</strong> to claim the AWP Dragon Lore.<br><br>
+            You won a legendary AWP Dragon Lore skin!<br><br>
+            <strong>Shoot 5 targets on time</strong> to prove you're worthy of the reward.<br><br>
             Each target gives you <strong>5 seconds</strong>. You can only miss <strong>once</strong>.
           </div>
           <button id="sniper-intro-btn">🎯 READY? FIRE!</button>
@@ -916,21 +1057,26 @@
   <div id="maze-popup">
     <div id="maze-box">
       <canvas id="maze-canvas"></canvas>
-      <div id="maze-hud"><span id="maze-timer-hud">⏱ 30s</span></div>
+      <div id="maze-banner">
+        <div id="maze-banner-title">₿ BITCOIN MAZE ₿</div>
+        <div id="maze-banner-sub">Find The Wallet • Escape With The Coin</div>
+      </div>
       <div id="maze-intro" class="show">
         <div id="maze-intro-box">
           <div id="maze-intro-title">₿ BITCOIN MAZE</div>
           <div id="maze-intro-body">
-            A Bitcoin wallet has been found somewhere in this building!<br><br>
-            <strong>Guide the octopus through the maze</strong> to reach the exit and claim it.<br><br>
-            Move your mouse — the octopus follows. You have <strong>30 seconds</strong>.
+            You won the ₿itcoin!<br><br>
+            <strong>Guide the Kraken through the maze</strong> to reach the exit and claim it.<br><br>
+            Click and drag him with your mouse or finger — and he will follow. You have <strong>30 seconds</strong>.
           </div>
           <button id="maze-intro-btn">🐙 LET'S GO!</button>
         </div>
       </div>
+      <div id="maze-hud"><span id="maze-timer-hud">⏱ 30s</span></div>
     </div>
   </div>
   <button id="dbg-maze">₿ TEST MAZE</button>
+  <div id="dbg-safety-net">⏱ Safety net: --:--</div>
 
   <!-- Minigame Fail Popup -->
   <div id="minigame-fail-popup">
@@ -952,12 +1098,38 @@
     </div>
   </div>
 
-  <!-- Skip warning popup -->
+  <!-- Skip warning popup (shown on first skip click after timer runs out) -->
   <div id="skip-warn-popup">
     <div id="skip-warn-box">
       <h2>⚠️ WAIT!</h2>
       <p id="skip-warn-msg">You have unspent tickets! Please use all your tickets before closing the ad.</p>
       <button id="skip-warn-ok">OK, I'll Keep Playing!</button>
+    </div>
+  </div>
+
+  <!-- Lose prizes confirm popup -->
+  <div id="lose-prizes-popup">
+    <div id="lose-prizes-box">
+      <div style="font-size:40px;margin-bottom:8px;">⚠️</div>
+      <h2>ABANDON YOUR PRIZES?</h2>
+      <p>If you skip the ad now, <strong>all your won prizes will be lost forever</strong>. Are you sure?</p>
+      <div class="lp-buttons">
+        <button id="lp-cancel-btn">↩ No, Keep Playing</button>
+        <button id="lp-confirm-btn">Skip &amp; Lose Prizes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Out-of-tickets popup (drain phase complete) -->
+  <div id="out-of-tickets-popup">
+    <div id="out-of-tickets-box">
+      <div class="oot-emoji">😱</div>
+      <h2>OUT OF TICKETS!</h2>
+      <p>What a shame to leave now — you were on such a roll!<br>Want <strong>3 more free tickets</strong> to keep playing?</p>
+      <div class="oot-buttons">
+        <button id="oot-more-btn">🎟️ 3 More Tickets!</button>
+        <button id="oot-skip-btn">Skip the Ad</button>
+      </div>
     </div>
   </div>
 
@@ -995,7 +1167,9 @@
   // ROUTING — determine which game to show
   // ─────────────────────────────────────────
   var _params = new URLSearchParams(window.location.search);
-  var _game = (_params.get('game') || 'wheel').toLowerCase();
+  var _game = (_params.get('game') || 'random').toLowerCase();
+  // Append ?debug to the URL to reveal test buttons and the safety-net countdown
+  const IS_DEBUG = _params.has('debug');
   const IS_RANDOM_TAB = (_game === 'random');
   if (_game === 'random') {
     var _games = ['wheel', 'slot', 'scratch'];
@@ -1043,15 +1217,15 @@
       prizes: [
         { id:'upgrade_gold', label:'GOLDEN WHEEL',      icon:'⭐', color:'#b8860b', textColor:'#fff700', ticketBonus:0,  isFree:false, flavor:'🌟 UNLOCKING THE GOLDEN WHEEL...', isUpgrade:true },
         { id:'crowpro_1mo',  label:'CrowPro 1mo',       icon:'🎮', color:'#2a0a4a', textColor:'#cc88ff', ticketBonus:0,  isFree:false, flavor:'One month of CrowPro — enjoy!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00cc44', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
+        { id:'free_spin',    label:'FREE TICKET',       icon:'🎡', color:'#00cc44', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Next game is on us!' },
         { id:'credits_100',  label:'$100 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
-        { id:'google_200',   label:'$200 Gift Card',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:'$200 Gift Card! 🎉 Guard that code — share it with NO ONE!' },
+        { id:'google_200',   label:'$200 Gift Card',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:'$200 Gift Card! 🎉 You can redeem it or give it away!' },
         { id:'windows_rg',   label:'Windows RG',        icon:'🪟', color:'#0a1a30', textColor:'#88bbff', ticketBonus:0,  isFree:false, flavor:'A genuine Windows RG license! Legendary software!', imgIcon:'assets/WindowsRG.png' },
         { id:'seraph_1mo',   label:'Seraph Secure 1mo', icon:'🛡️', color:'#003322', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'One month of Seraph Secure protection!', imgIcon:'assets/SeraphSecure.png' },
         { id:'tickets_5',    label:'5 Tickets',         icon:'🎟️', color:'#0088ff', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 free spins coming right up!' },
-        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
+        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers to use on the Casino website!' },
         { id:'google_100',   label:'$100 Gift Card',  icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:'$100 Gift Card! 🎉 NEVER share your code with anyone!' },
-        { id:'bike',         label:'WIN A BIKE!',       icon:'🚲', color:'#553300', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🚲 A shiny new bicycle! Stay fit!', isJackpot:true },
+        { id:'bike',         label:'BIKE!',             icon:'🚲', color:'#553300', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🚲 A shiny new bicycle! Stay fit!', isJackpot:true },
         { id:'tickets_10',   label:'10 Tickets',        icon:'🎟️', color:'#aa00ff', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:"10 tickets! You're on fire!" },
         { id:'skip_30',      label:'-30s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Nice! Your skip timer just got 30 seconds shorter!', skipReduction:30 },
       ],
@@ -1061,16 +1235,16 @@
       prizes: [
         { id:'upgrade_dia',  label:'DIAMOND WHEEL',     icon:'💎', color:'#1a3a6e', textColor:'#aaddff', ticketBonus:0,  isFree:false, flavor:'💎 UNLOCKING THE DIAMOND WHEEL...', isUpgrade:true },
         { id:'crowpro_6mo',  label:'CrowPro 6mo',       icon:'🎮', color:'#2a0a4a', textColor:'#cc88ff', ticketBonus:0,  isFree:false, flavor:'Six months of CrowPro — premium access!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
+        { id:'free_spin',    label:'FREE TICKET',       icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Next game is on us!' },
+        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'It got lost and found a new friend!', imgIcon:'assets/Doot.png' },
+        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers to use on the Casino website!' },
         { id:'google_500',   label:'$500 Gift Card',  icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$500 Gift Card! 🎉 Keep that code safe — never share it with ANYONE!" },
-        { id:'crowpro_life', label:'CrowPro Lifetime',  icon:'👑', color:'#1e0040', textColor:'#ff88ff', ticketBonus:0,  isFree:false, flavor:'CrowPro — LIFETIME access! Never pay again!', imgIcon:'assets/CrowPro.png' },
-        { id:'wwww',         label:'WWWW Gold Protection',icon:'🏆', color:'#2a1800', textColor:'#ffe066', ticketBonus:0,  isFree:false, flavor:'The WWWWTSACTP Gold Standard package!', imgIcon:'assets/WWWW.png' },
+        { id:'crowpro_life', label:'CrowPro Lifetime',  icon:'👑', color:'#1e0040', textColor:'#ff88ff', ticketBonus:0,  isFree:false, flavor:'CrowPro — LIFETIME access! Never pay again! CA-CAW!', imgIcon:'assets/CrowPro.png' },
+        { id:'wwww',         label:'WWWW Gold',icon:'🏆', color:'#2a1800', textColor:'#ffe066', ticketBonus:0,  isFree:false, flavor:'The WWWWTSACTP Gold Standard Protection package!', imgIcon:'assets/WWWW.png' },
         { id:'tickets_5',    label:'5 Gold Tickets',    icon:'🌟', color:'#0077dd', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 Golden Tickets! The riches grow!' },
-        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
+        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars! Redeemable on our website!' },
         { id:'scooter',      label:'Mobility Scooter',  icon:'🦼', color:'#553300', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🦼 A brand new mobility scooter!', isJackpot:true },
-        { id:'tickets_10',   label:'10 Gold Tickets',   icon:'🌟', color:'#8800cc', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:'10 Golden Tickets! Extraordinary!' },
+        { id:'tickets_10',   label:'10 Gold Tickets',   icon:'🌟', color:'#8800cc', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:'10 Golden Tickets! Extraordinary luck!' },
         { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
       ],
       weights: [2,4,3,1,8,4,2,2,5,4,2,3,2],
@@ -1078,15 +1252,15 @@
     { // diamond
       prizes: [
         { id:'btc',          label:'1 BITCOIN!',        icon:'₿',  color:'#3d1f00', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot:true, customBorder:'#ffd700' },
-        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
+        { id:'free_spin',    label:'FREE TICKET',       icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Next game is on us!' },
+        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'It got lost and found a new friend!', imgIcon:'assets/Doot.png' },
+        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars! Redeemable on our website!' },
         { id:'google_1000',  label:'$1000 Gift Card', icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$1000 Gift Card! 🎉 Never share that code — not even with your mum!" },
-        { id:'awp_dl',       label:'AWP Dragon Lore',   icon:'🔫', color:'#1a0a00', textColor:'#ff8800', ticketBonus:0,  isFree:false, flavor:'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon:'assets/AWPDL.png', isJackpot:true },
+        { id:'awp_dl',       label:'AWP Dragon Lore',   icon:'🔫', color:'#1a0a00', textColor:'#ff8800', ticketBonus:0,  isFree:false, flavor:'THE AWP DRAGON LORE! LEGENDARY SKIN!', imgIcon:'assets/awp-dl.png', isJackpot:true },
         { id:'skip_ad',      label:'Skip Ad',           icon:'⏭️', color:'#002200', textColor:'#00ff88', ticketBonus:0,  isFree:false, flavor:'WAIT. You can actually skip the ad?!' },
         { id:'tickets_5',    label:'5 Diamond Tickets', icon:'💎', color:'#0066cc', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 Diamond Tickets! Pure luxury!' },
         { id:'credits_1000', label:'$1000 Credits',     icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'One thousand casino bucks!' },
-        { id:'google_500',   label:'$500 Gift Card',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$500 Gift Card! 🎉 That code is YOURS — keep it secret, keep it safe!" },
+        { id:'google_500',   label:'$500 Gift Card',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$500 Gift Card! 🎉 That code is YOURS — claim it on our website!" },
         { id:'car',          label:'WIN A CAR!',        icon:'🚗', color:'#cc0000', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🚨 A BRAND NEW RED CAR! 🚨 (claim in 72h)', isJackpot:true },
         { id:'tickets_10',   label:'10 Diamond Tickets',icon:'💎', color:'#6600aa', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:'10 Diamond Tickets! Extraordinary!' },
         { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
@@ -1295,6 +1469,12 @@
   let wonJackpots      = {};
   let winCount         = 0;
   let skipGuaranteeSpin = Math.floor(Math.random() * 5);
+  let _diamondNoJackpotRounds = 0;
+
+  // Drain-mode state
+  let _drainMode      = false; // timer ran out + player clicked skip: ticket prizes off, draining to 0
+  let _bonusRound     = false; // player chose "3 more tickets": ticket prizes back, infinite refill, skip shows confirm
+  let _safetyNetFired = false; // 10-min safety net fired: skip always shows confirm regardless of state
 
   // Wheel + slot shared
   let spinning   = false;
@@ -1321,6 +1501,33 @@
   ];
 
   function currentTier() { return TIERS[currentTierIndex]; }
+
+  // Diamond guarantee: if 9 consecutive diamond rounds had no jackpot,
+  // force an unwon jackpot on round 10 (if any remain).
+  function maybeForceDiamondJackpot(prizes) {
+    if (currentTier().id !== 'diamond') return -1;
+    const availableJackpots = prizes
+      .map((prize, index) => ({ prize, index }))
+      .filter(({ prize }) => prize.isJackpot && !wonJackpots[prize.id]);
+    if (availableJackpots.length === 0) {
+      _diamondNoJackpotRounds = 0;
+      return -1;
+    }
+    if (_diamondNoJackpotRounds < 9) return -1;
+    const pick = availableJackpots[Math.floor(Math.random() * availableJackpots.length)];
+    return pick.index;
+  }
+
+  function trackDiamondRoundPlayed(prizes, prizeIndex) {
+    if (currentTier().id !== 'diamond') return;
+    const hasRemainingJackpots = prizes.some(prize => prize.isJackpot && !wonJackpots[prize.id]);
+    if (!hasRemainingJackpots) {
+      _diamondNoJackpotRounds = 0;
+      return;
+    }
+    const landedJackpot = prizeIndex !== -1 && prizes[prizeIndex] && prizes[prizeIndex].isJackpot;
+    _diamondNoJackpotRounds = landedJackpot ? 0 : (_diamondNoJackpotRounds + 1);
+  }
 
   // Image cache — preload prize PNGs
   const imgCache = {};
@@ -1385,7 +1592,10 @@
   function getEffectivePrizeWeights(weights, prizes) {
     return weights.map(function(weight, index) {
       const prize = prizes[index];
-      return prize.isJackpot && wonJackpots[prize.id] ? 0 : weight;
+      if (prize.isJackpot && wonJackpots[prize.id]) return 0;
+      // Drain mode only: ticket prizes impossible. Bonus round and safety net re-enable them.
+      if (_drainMode && !_bonusRound && prize.ticketBonus > 0) return 0;
+      return weight;
     });
   }
 
@@ -1525,6 +1735,7 @@
     ticketCountEl.classList.add('bump');
     setTimeout(() => ticketCountEl.classList.remove('bump'), 200);
     updateActionBtn();
+    if (_drainMode) updateSkipTimer(); // keep "X remaining" in sync
   }
 
   // ─────────────────────────────────────────
@@ -1569,6 +1780,14 @@
   let collectMsgIndex = 0;
 
   collectPrizesBtn.addEventListener('click', () => {
+    if (tickets <= 0 && pendingPrize) {
+      playDenied();
+      document.querySelector('#collect-warn-box .cw-emoji').textContent   = '⚠️';
+      document.getElementById('collect-warn-heading').textContent          = "YOU HAVEN'T PICKED UP YOUR LAST PRIZE YET!";
+      document.getElementById('collect-warn-msg').innerHTML                = 'Pick up all the prizes and use all the tickets before claiming your rewards.';
+      collectWarnPopup.classList.add('show');
+      return;
+    }
     if (tickets > 0) {
       playDenied();
       const pick = collectEncouragements[collectMsgIndex % collectEncouragements.length];
@@ -1589,33 +1808,40 @@
   const skipWarnPopup = document.getElementById('skip-warn-popup');
   const skipWarnOk    = document.getElementById('skip-warn-ok');
 
+  // Called whenever the skip countdown reaches 0 (for any reason).
+  // First phase: skip looks available. If user tries to skip with tickets left,
+  // we then switch into drain mode (greyed with ticket count).
+  function unlockSkip() {
+    clearInterval(skipTimer); skipTimer = null;
+    skipUnlocked = true;
+    _drainMode = false;
+    skipBtn.classList.add('ready');
+    updateSkipTimer();
+  }
+
   function startSkipCooldown() {
-    skipCooldown = 360; skipUnlocked = false;
+    skipCooldown = 360; skipUnlocked = false; _drainMode = false;
     skipBtn.classList.remove('ready');
     updateSkipTimer();
     skipTimer = setInterval(() => {
       skipCooldown--;
       updateSkipTimer();
-      if (skipCooldown <= 0) {
-        clearInterval(skipTimer); skipTimer = null;
-        skipUnlocked = true;
-        skipBtn.classList.add('ready'); skipTimerEl.textContent = '';
-      }
+      if (skipCooldown <= 0) unlockSkip();
     }, 1000);
   }
 
   function adjustSkipCooldown(delta, silent) {
     if (!adActive) return;
+    if (_drainMode) return; // skip is already unlocked in drain mode — no more timer changes
     skipCooldown = Math.max(0, skipCooldown + delta);
     if (skipCooldown <= 0) {
-      clearInterval(skipTimer); skipTimer = null;
-      skipUnlocked = true; skipBtn.classList.add('ready'); skipTimerEl.textContent = '';
+      unlockSkip();
     } else {
       if (skipUnlocked) {
         skipUnlocked = false; skipBtn.classList.remove('ready');
         skipTimer = setInterval(() => {
           skipCooldown--; updateSkipTimer();
-          if (skipCooldown <= 0) { clearInterval(skipTimer); skipTimer = null; skipUnlocked = true; skipBtn.classList.add('ready'); skipTimerEl.textContent = ''; }
+          if (skipCooldown <= 0) unlockSkip();
         }, 1000);
       }
       updateSkipTimer();
@@ -1631,7 +1857,23 @@
   }
 
   function updateSkipTimer() {
-    if (!skipUnlocked) skipTimerEl.textContent = `Available in ${skipCooldown}s`;
+    if (_safetyNetFired || _bonusRound) {
+      // Safety net or bonus round: always gold, always functional
+      skipBtn.classList.add('ready');
+      skipTimerEl.textContent = '';
+    } else if (_drainMode) {
+      // Drain state: grey, shows remaining ticket count
+      skipBtn.classList.remove('ready');
+      skipTimerEl.textContent = `${tickets} 🎟️ remaining`;
+    } else if (skipUnlocked) {
+      // Timer ran out but not yet in drain (first click pending): gold
+      skipBtn.classList.add('ready');
+      skipTimerEl.textContent = '';
+    } else {
+      // Still counting down
+      skipBtn.classList.remove('ready');
+      skipTimerEl.textContent = `Available in ${skipCooldown}s`;
+    }
   }
 
   function pauseMinigame() {
@@ -1642,41 +1884,112 @@
     if (skipCooldown > 0 && !skipTimer && !skipUnlocked) {
       skipTimer = setInterval(() => {
         skipCooldown--; updateSkipTimer();
-        if (skipCooldown <= 0) {
-          clearInterval(skipTimer); skipTimer = null;
-          skipUnlocked = true; skipBtn.classList.add('ready'); skipTimerEl.textContent = '';
-        }
+        if (skipCooldown <= 0) unlockSkip();
       }, 1000);
     }
   }
 
+  const losePrizesPopup  = document.getElementById('lose-prizes-popup');
+  const lpCancelBtn      = document.getElementById('lp-cancel-btn');
+  const lpConfirmBtn     = document.getElementById('lp-confirm-btn');
+
+  // Show lose-prizes confirm; cancelTarget is the popup to re-show on Cancel (or null)
+  function showLosePrizesConfirm(cancelTarget) {
+    if (cancelTarget) cancelTarget.classList.remove('show');
+    losePrizesPopup.classList.add('show');
+    lpCancelBtn.onclick = () => {
+      losePrizesPopup.classList.remove('show');
+      if (cancelTarget) cancelTarget.classList.add('show');
+    };
+  }
+
+  lpConfirmBtn.addEventListener('click', () => {
+    losePrizesPopup.classList.remove('show');
+    window.top.postMessage({ type: 'success' }, '*');
+  });
+
   skipBtn.addEventListener('click', () => {
+    // Safety net overrides everything: show confirm
+    if (_safetyNetFired) { showLosePrizesConfirm(null); return; }
+    // Bonus round: skip is functional, show confirm
+    if (_bonusRound) { showLosePrizesConfirm(null); return; }
+    // Still locked by countdown
     if (!skipUnlocked) { playDenied(); return; }
+    // Timer ran out — first click enters drain mode + shows warning
     if (tickets > 0) {
       playDenied();
+      if (!_drainMode) {
+        _drainMode = true;
+        updateSkipTimer();
+      }
       skipWarnPopup.classList.add('show');
-      skipUnlocked = false; skipBtn.classList.remove('ready');
-      clearInterval(skipTimer); startSkipCooldown();
     } else {
+      // No tickets left in drain mode (oot popup should be showing, fallback)
       window.top.postMessage({ type: 'success' }, '*');
     }
   });
   skipWarnOk.addEventListener('click', () => skipWarnPopup.classList.remove('show'));
 
-  // Shared game-start function — called by intro button, adStarted message, and built-in video end
-  function startGame() {
-    document.getElementById('intro-popup').classList.add('hidden');
+  // Shared game-start function.
+  // - fromIntro = false: ad lifecycle phase, only reveal intro popup
+  // - fromIntro = true: player clicked Let's Play, start actual game loop/timers
+  function startGame(fromIntro = false) {
+    const introPopup = document.getElementById('intro-popup');
+    if (!fromIntro) {
+      introPopup.classList.remove('hidden');
+      return;
+    }
+
+    if (adActive) return;
+    introPopup.classList.add('hidden');
     adActive = true;
     skipBtn.style.display = 'block';
     updateActionBtn();
     startSkipCooldown();
     startIdleDetection();
     startWinnerTicker();
+
+    // 10-minute safety net: unconditionally unlock skip after 10 minutes
+    const _safetyNetEl = IS_DEBUG ? document.getElementById('dbg-safety-net') : null;
+    const _safetyNetEnd = Date.now() + 10 * 60 * 1000;
+    const _safetyNetTick = setInterval(() => {
+      const remaining = Math.max(0, _safetyNetEnd - Date.now());
+      const m = Math.floor(remaining / 60000);
+      const s = Math.floor((remaining % 60000) / 1000);
+      if (_safetyNetEl) _safetyNetEl.textContent = `⏱ Safety net: ${m}:${String(s).padStart(2, '0')}`;
+      if (remaining <= 0) clearInterval(_safetyNetTick);
+    }, 1000);
+    setTimeout(() => {
+      if (!_safetyNetFired) {
+        _safetyNetFired = true;
+        skipUnlocked = true;
+        // Don't touch _drainMode or _bonusRound — safety net just overrides click behaviour
+        if (skipTimer) { clearInterval(skipTimer); skipTimer = null; }
+        updateSkipTimer();
+        if (_safetyNetEl) _safetyNetEl.textContent = '⏱ Safety net: FIRED ✅';
+      }
+    }, 10 * 60 * 1000);
   }
 
   // Intro start button
   document.getElementById('intro-start-btn').addEventListener('click', function() {
-    startGame();
+    startGame(true);
+  });
+
+  // Out-of-tickets popup buttons
+  const ootPopup = document.getElementById('out-of-tickets-popup');
+  document.getElementById('oot-skip-btn').addEventListener('click', () => {
+    // Show lose-prizes confirm; cancel returns to oot popup
+    showLosePrizesConfirm(ootPopup);
+  });
+  document.getElementById('oot-more-btn').addEventListener('click', () => {
+    ootPopup.classList.remove('show');
+    _bonusRound  = true;
+    _drainMode   = false;         // ticket prizes re-enabled
+    skipUnlocked = true;          // skip button stays available
+    if (skipTimer) { clearInterval(skipTimer); skipTimer = null; }
+    updateSkipTimer();
+    setTickets(3);
   });
 
   // ─────────────────────────────────────────
@@ -1757,9 +2070,9 @@
   const WINNER_PREMADE = [
     { name:'Kota', country:'Poland', prize:'Dog', game:'🎡 Prize Wheel', quote:"I thought it was just the ad but now I have a new best friend! Can't recommend this enough!" },
     { name:'Joe', country:'USA', prize:'CrowPro Lifetime', game:'🎰 Slot Machine', quote:"I'll never have to worry about my crows again! CA-CAW!!!" },
-    { name:'Margaret T.', country:'Yorkshire, UK', prize:'a Brand New Car', game:'🃏 Scratch Card', quote:"I called my daughter in to watch and we both started crying 😭" },
-    { name:'DoomSlayer42', country:'Bavaria, Germany', prize:'$500 Credits', game:'🎰 Slot Machine', quote:"Third time playing, first time winning big. Keep going everyone!!" },
-    { name:'Priscilla K.', country:'New South Wales, AU', prize:'$200 Gift Card', game:'🃏 Scratch Card', quote:"The prize email arrived in under an hour. 100% legitimate, I promise." },
+    { name:'Daniel.', country:'USA', prize:'WWWW Gold', game:'🃏 Scratch Card', quote:"I just won the best hacking protection package! Amazing!" },
+    { name:'Edna', country:'UK', prize:'Mobility Scooter', game:'🎰 Slot Machine', quote:"This is all I ever wanted and for FREE!" },
+    { name:'Satoshi', country:'China', prize:'1 Full Bitcoin', game:'🃏 Scratch Card', quote:"How am I? A millionaire now!" },
   ];
 
   function playWinnerPing() {
@@ -1991,24 +2304,32 @@
     const prizes = currentTier().prizes;
     const baseWeights = getEffectivePrizeWeights(currentTier().baseWeights, prizes);
     const ticketPrizeIndices = prizes.reduce((acc, p, i) => { if (p.ticketBonus > 0) acc.push(i); return acc; }, []);
+    const drainActive = _drainMode && !_bonusRound;
     const upgradeIndex = prizes.findIndex(p => p.isUpgrade);
+    const canForceSkipReduction = !skipUnlocked && skipCooldown > 0;
     function randomTicketPrize() { return ticketPrizeIndices[Math.floor(Math.random() * ticketPrizeIndices.length)]; }
 
-    if (tickets <= 1)                              return randomTicketPrize();
-    if (tickets === 2 && Math.random() < 0.75)     return randomTicketPrize();
-    if (tickets === 3 && Math.random() < 0.50)     return randomTicketPrize();
+    if (!drainActive) {
+      if (tickets <= 1)                            return randomTicketPrize();
+      if (tickets === 2 && Math.random() < 0.75)  return randomTicketPrize();
+      if (tickets === 3 && Math.random() < 0.50)  return randomTicketPrize();
+    }
+
+    const forcedDiamondJackpot = maybeForceDiamondJackpot(prizes);
+    if (forcedDiamondJackpot !== -1) return forcedDiamondJackpot;
 
     const cyclePos = spinCount % 6;
     if (upgradeIndex !== -1 && cyclePos === 5) {
-      skipGuaranteeSpin = Math.floor(Math.random() * 5);
+      skipGuaranteeSpin = canForceSkipReduction ? Math.floor(Math.random() * 5) : -1;
       return upgradeIndex;
     }
     const skipPrizeIndex = prizes.findIndex(p => p.skipReduction);
-    if (upgradeIndex !== -1 && skipPrizeIndex !== -1 && cyclePos === skipGuaranteeSpin) return skipPrizeIndex;
+    if (canForceSkipReduction && upgradeIndex !== -1 && skipPrizeIndex !== -1 && cyclePos === skipGuaranteeSpin) return skipPrizeIndex;
 
-    const total = baseWeights.reduce((a, b) => a + b, 0);
+    const randomWeights = baseWeights.map((w, i) => prizes[i].skipReduction ? 0 : w);
+    const total = randomWeights.reduce((a, b) => a + b, 0);
     let r = Math.random() * total;
-    for (let i = 0; i < baseWeights.length; i++) { r -= baseWeights[i]; if (r <= 0) return i; }
+    for (let i = 0; i < randomWeights.length; i++) { r -= randomWeights[i]; if (r <= 0) return i; }
     return 0;
   }
 
@@ -2053,6 +2374,7 @@
     window.top.postMessage({ type: 'pause' }, '*');
     spinCount++;
     const prizeIndex = _pickPrizeWheel();
+    trackDiamondRoundPlayed(currentTier().prizes, prizeIndex);
     if (!isFree) setTickets(tickets - 1);
     pendingPrize = currentTier().prizes[prizeIndex];
     spinToIndex(prizeIndex, () => showWinPopup(pendingPrize));
@@ -2152,23 +2474,30 @@
     const prizes  = currentTier().prizes;
     const weights = getEffectivePrizeWeights(currentTier().weights, prizes);
     const ticketPrizeIndices = prizes.reduce((acc, p, i) => { if (p.ticketBonus > 0) acc.push(i); return acc; }, []);
+    const drainActive = _drainMode && !_bonusRound;
     const upgradeIndex = prizes.findIndex(p => p.isUpgrade);
+    const canForceSkipReduction = !skipUnlocked && skipCooldown > 0;
     function randomTicketPrize() { return ticketPrizeIndices[Math.floor(Math.random() * ticketPrizeIndices.length)]; }
 
-    if (tickets <= 1)                            return randomTicketPrize();
-    if (tickets === 2 && Math.random() < 0.75)  return randomTicketPrize();
-    if (tickets === 3 && Math.random() < 0.50)  return randomTicketPrize();
+    if (!drainActive) {
+      if (tickets <= 1)                          return randomTicketPrize();
+      if (tickets === 2 && Math.random() < 0.75) return randomTicketPrize();
+      if (tickets === 3 && Math.random() < 0.50) return randomTicketPrize();
+    }
+
+    const forcedDiamondJackpot = maybeForceDiamondJackpot(prizes);
+    if (forcedDiamondJackpot !== -1) return forcedDiamondJackpot;
 
     const cyclePos = winCount % 6;
     if (upgradeIndex !== -1 && cyclePos === 5) {
-      skipGuaranteeSpin = Math.floor(Math.random() * 5);
+      skipGuaranteeSpin = canForceSkipReduction ? Math.floor(Math.random() * 5) : -1;
       return upgradeIndex;
     }
     const skipPrizeIndex = prizes.findIndex(p => p.skipReduction);
-    if (upgradeIndex !== -1 && skipPrizeIndex !== -1 && cyclePos === skipGuaranteeSpin) return skipPrizeIndex;
+    if (canForceSkipReduction && upgradeIndex !== -1 && skipPrizeIndex !== -1 && cyclePos === skipGuaranteeSpin) return skipPrizeIndex;
 
     if (Math.random() < 0.50) {
-      const effectiveWeights = weights.map((w, i) => (tickets > 3 && prizes[i].ticketBonus > 0) ? 0 : w);
+      const effectiveWeights = weights.map((w, i) => (((drainActive || tickets > 3) && prizes[i].ticketBonus > 0) || prizes[i].skipReduction) ? 0 : w);
       const total = effectiveWeights.reduce((a, b) => a + b, 0);
       let r = Math.random() * total;
       for (let i = 0; i < effectiveWeights.length; i++) { r -= effectiveWeights[i]; if (r <= 0) return i; }
@@ -2194,6 +2523,7 @@
 
     spinCount++;
     const prizeIndex = _pickPrizeSlot();
+    trackDiamondRoundPlayed(currentTier().prizes, prizeIndex);
     if (prizeIndex !== -1) winCount++;
     if (!isFree) setTickets(tickets - 1);
 
@@ -2239,7 +2569,13 @@
         setTimeout(() => { nmEl.style.display = 'none'; }, 1800);
       }
       spinning = false;
-      window.top.postMessage({ type: 'play' }, '*');
+      if (tickets <= 0 && _drainMode && !_bonusRound) {
+        setTimeout(() => ootPopup.classList.add('show'), 350);
+      } else if (tickets <= 0 && _bonusRound) {
+        setTimeout(() => setTickets(3), 350);
+      } else {
+        window.top.postMessage({ type: 'play' }, '*');
+      }
       updateSpinBtn();
     } else {
       const winLine = document.getElementById('win-line');
@@ -2306,23 +2642,30 @@
     const prizes  = currentTier().prizes;
     const weights = getEffectivePrizeWeights(currentTier().weights, prizes);
     const ticketPrizeIndices = prizes.reduce((acc, p, i) => { if (p.ticketBonus > 0) acc.push(i); return acc; }, []);
+    const drainActive = _drainMode && !_bonusRound;
     const upgradeIndex = prizes.findIndex(p => p.isUpgrade);
+    const canForceSkipReduction = !skipUnlocked && skipCooldown > 0;
     function randomTicketPrize() { return ticketPrizeIndices[Math.floor(Math.random() * ticketPrizeIndices.length)]; }
 
-    if (tickets <= 1)                            return randomTicketPrize();
-    if (tickets === 2 && Math.random() < 0.75)  return randomTicketPrize();
-    if (tickets === 3 && Math.random() < 0.50)  return randomTicketPrize();
+    if (!drainActive) {
+      if (tickets <= 1)                          return randomTicketPrize();
+      if (tickets === 2 && Math.random() < 0.75) return randomTicketPrize();
+      if (tickets === 3 && Math.random() < 0.50) return randomTicketPrize();
+    }
+
+    const forcedDiamondJackpot = maybeForceDiamondJackpot(prizes);
+    if (forcedDiamondJackpot !== -1) return forcedDiamondJackpot;
 
     const cyclePos = winCount % 6;
     if (upgradeIndex !== -1 && cyclePos === 5) {
-      skipGuaranteeSpin = Math.floor(Math.random() * 5);
+      skipGuaranteeSpin = canForceSkipReduction ? Math.floor(Math.random() * 5) : -1;
       return upgradeIndex;
     }
     const skipPrizeIndex = prizes.findIndex(p => p.skipReduction);
-    if (upgradeIndex !== -1 && skipPrizeIndex !== -1 && cyclePos === skipGuaranteeSpin) return skipPrizeIndex;
+    if (canForceSkipReduction && upgradeIndex !== -1 && skipPrizeIndex !== -1 && cyclePos === skipGuaranteeSpin) return skipPrizeIndex;
 
     if (Math.random() < 0.50) {
-      const effectiveWeights = weights.map((w, i) => (tickets > 3 && prizes[i].ticketBonus > 0) ? 0 : w);
+      const effectiveWeights = weights.map((w, i) => (((drainActive || tickets > 3) && prizes[i].ticketBonus > 0) || prizes[i].skipReduction) ? 0 : w);
       const total = effectiveWeights.reduce((a, b) => a + b, 0);
       let r = Math.random() * total;
       for (let i = 0; i < effectiveWeights.length; i++) { r -= effectiveWeights[i]; if (r <= 0) return i; }
@@ -2475,7 +2818,7 @@
     document.addEventListener('mouseup', () => {
       scratching = false; _lastScratchX = null; _lastScratchY = null; _lastScratchCellIdx = -1;
     });
-    overlay.addEventListener('touchstart', e => {
+    scratchGrid.addEventListener('touchstart', e => {
       if (cardDone || !cardInteractive) return;
       e.preventDefault(); scratching = true;
       _lastScratchX = null; _lastScratchY = null; _lastScratchCellIdx = -1;
@@ -2570,6 +2913,7 @@
     if (!isFree) setTickets(tickets - 1);
     scratchCount++;
     const winPrizeIdx = pickWinningPrize();
+    trackDiamondRoundPlayed(currentTier().prizes, winPrizeIdx);
     if (winPrizeIdx !== -1) winCount++;
     gridPrizes = generateGrid(winPrizeIdx);
     cardCount_total++;
@@ -2589,7 +2933,13 @@
   if (lossPopupOk) {
     lossPopupOk.addEventListener('click', () => {
       document.getElementById('loss-popup').classList.remove('show');
-      window.top.postMessage({ type: 'play' }, '*');
+      if (tickets <= 0 && _drainMode && !_bonusRound) {
+        setTimeout(() => document.getElementById('out-of-tickets-popup').classList.add('show'), 350);
+      } else if (tickets <= 0 && _bonusRound) {
+        setTimeout(() => setTickets(3), 350);
+      } else {
+        window.top.postMessage({ type: 'play' }, '*');
+      }
     });
   }
 
@@ -2605,18 +2955,25 @@
 
   function _renderWinPopup(prize) {
     if (prize.imgIcon) {
-      winIcon.innerHTML = `<img src="${prize.imgIcon}" style="width:60px;height:60px;object-fit:contain;">`;
+      const isWideWinIcon = prize.id === 'awp_dl';
+      const iconW = isWideWinIcon ? 220 : 60;
+      const iconH = isWideWinIcon ? 88 : 60;
+      winIcon.style.margin = isWideWinIcon ? '4px 0 0' : '10px 0 4px';
+      winIcon.innerHTML = `<img src="${prize.imgIcon}" style="width:${iconW}px;height:${iconH}px;object-fit:contain;">`;
     } else if (prize.id === 'btc') {
+      winIcon.style.margin = '10px 0 4px';
       winIcon.innerHTML = '<span class="btc-icon">₿</span>';
     } else {
+      winIcon.style.margin = '10px 0 4px';
       winIcon.textContent = prize.icon;
     }
     winName.textContent   = prize.label;
     winFlavor.textContent = prize.flavor;
     if (prize.isJackpot) {
       wonJackpots[prize.id] = true;
+      if (currentTier().id === 'diamond') _diamondNoJackpotRounds = 0;
       winTitle.textContent = '🚨 JACKPOT! 🚨'; winTitle.style.fontSize = '28px';
-      playAssetSound('alert');
+      playJackpot();
       fireConfetti(200);
     } else {
       winTitle.textContent = 'YOU WON!'; winTitle.style.fontSize = '36px';
@@ -2640,7 +2997,8 @@
     winPopup.classList.remove('show');
     const prize = pendingPrize;
     pendingPrize = null;
-    if (prize.ticketBonus > 0) setTickets(tickets + prize.ticketBonus);
+    // In drain mode (before bonus round), block ticket gains — player must use up existing tickets
+    if (prize.ticketBonus > 0 && (!_drainMode || _bonusRound)) setTickets(tickets + prize.ticketBonus);
     if (prize.skipReduction) adjustSkipCooldown(-prize.skipReduction);
     if (prize.skipInstant)   adjustSkipCooldown(-99999);
     if (!prize.isFree && prize.ticketBonus === 0 && !prize.skipReduction && !prize.skipInstant) addToPrizeList(prize);
@@ -2654,6 +3012,14 @@
     } else {
       if (ACTIVE_GAME === 'scratch') { window.top.postMessage({ type: 'play' }, '*'); }
       updateActionBtn();
+      // Drain mode: all tickets spent — show exit popup
+      if (tickets <= 0 && _drainMode && !_bonusRound) {
+        setTimeout(() => document.getElementById('out-of-tickets-popup').classList.add('show'), 350);
+      }
+      // Bonus round: auto-refill silently when empty so the game never gets stuck
+      if (tickets <= 0 && _bonusRound) {
+        setTimeout(() => setTickets(3), 350);
+      }
     }
   });
 
@@ -2680,11 +3046,11 @@
         dogFeedback.textContent = "You don't deserve your new friend!";
         dogCollect.textContent = 'Continue';
       } else {
-        dogCollect.textContent = 'COLLECT!';
+        dogCollect.textContent = 'NEW FRIEND ❤️';
       }
       dogCollect.classList.add('ready');
     } else {
-      dogCollect.innerHTML = `COLLECT! (<span id="dog-timer">${dogCountdown}</span>s)`;
+      dogCollect.innerHTML = `NEW FRIEND ❤️ (<span id="dog-timer">${dogCountdown}</span>s)`;
     }
   }
 
@@ -2692,7 +3058,7 @@
     dogPrize = prize; dogCountdown = 120; dogKissed = false; dogPenalty = false;
     dogImgEl.src = 'assets/Doot.png'; dogFeedback.textContent = '';
     dogCollect.classList.remove('ready');
-    dogCollect.innerHTML = 'COLLECT! (<span id="dog-timer">120</span>s)';
+    dogCollect.innerHTML = 'NEW FRIEND ❤️ (<span id="dog-timer">120</span>s)';
     dogPopup.classList.add('show');
     pauseMinigame();
     if (dogInterval) clearInterval(dogInterval);
@@ -2713,7 +3079,7 @@
     const rect = dogImgWrap.getBoundingClientRect();
     const px = (clientX - rect.left) * (dogImgEl.naturalWidth  / dogImgWrap.offsetWidth);
     const py = (clientY - rect.top)  * (dogImgEl.naturalHeight / dogImgWrap.offsetHeight);
-    if (px >= 5 && px <= 80 && py >= 75 && py <= 135) {
+    if (px >= 22 && px <= 62 && py >= 75 && py <= 135) {
       dogKissed = true; dogImgEl.src = 'assets/DootLove.png';
       playAssetSound('dogKiss');
       setTimeout(() => { if (dogPopup.classList.contains('show')) dogImgEl.src = 'assets/Doot.png'; }, 500);
@@ -2737,22 +3103,29 @@
     clearInterval(dogInterval); dogInterval = null;
     dogPopup.classList.remove('show');
     const wasPenalty = dogPenalty; dogPenalty = false;
-    const prize = dogPrize; dogPrize = null; pendingPrize = null;
+    const prize = dogPrize; dogPrize = null;
+    resumeMinigame();
     if (!wasPenalty) {
       playAssetSound('dogBark');
-      addToPrizeList(prize);
+      pendingPrize = prize;
+      _renderWinPopup(prize);
+    } else {
+      pendingPrize = null;
+      if (ACTIVE_GAME !== 'scratch') spinning = false;
+      if (tickets <= 0 && _drainMode && !_bonusRound) {
+        setTimeout(() => ootPopup.classList.add('show'), 350);
+      } else if (tickets <= 0 && _bonusRound) {
+        setTimeout(() => setTickets(3), 350);
+      } else {
+        window.top.postMessage({ type: 'play' }, '*');
+      }
+      updateActionBtn();
     }
-    if (ACTIVE_GAME !== 'scratch') spinning = false;
-    window.top.postMessage({ type: 'play' }, '*');
-    resumeMinigame();
-    updateActionBtn();
   });
 
-  if (new URLSearchParams(window.location.search).has('debug')) {
-    dbgDogBtn.style.display = 'block';
-  }
+  if (IS_DEBUG) dbgDogBtn.style.display = 'block';
   dbgDogBtn.addEventListener('click', () => {
-    pendingPrize = { id: 'dog', label: 'Dog', icon: '🐕', flavor: '...why is there a dog here?', imgIcon: 'assets/Doot.png', isJackpot: false, isFree: false, ticketBonus: 0 };
+    pendingPrize = { id: 'dog', label: 'Dog', icon: '🐕', flavor: 'It got lost and found a new friend!', imgIcon: 'assets/Doot.png', isJackpot: false, isFree: false, ticketBonus: 0 };
     startDogPopup(pendingPrize);
   });
 
@@ -2767,7 +3140,13 @@
     minigameFailPopupEl.classList.remove('show');
     pendingPrize = null;
     if (ACTIVE_GAME !== 'scratch') spinning = false;
-    window.top.postMessage({ type: 'play' }, '*');
+    if (tickets <= 0 && _drainMode && !_bonusRound) {
+      setTimeout(() => ootPopup.classList.add('show'), 350);
+    } else if (tickets <= 0 && _bonusRound) {
+      setTimeout(() => setTickets(3), 350);
+    } else {
+      window.top.postMessage({ type: 'play' }, '*');
+    }
     updateActionBtn();
   });
 
@@ -2838,8 +3217,8 @@
   _krakenImg.src = 'assets/krakus.png';
 
   function _mazeImgRect() {
-    const cw = mazeBox.offsetWidth  || 500;
-    const ch = mazeBox.offsetHeight || 460;
+    const cw = mazeCanvas.width  || (mazeBox.offsetWidth || 500);
+    const ch = mazeCanvas.height || (mazeBox.offsetHeight || 460);
     const scale = Math.min(cw / MAZE_W, ch / MAZE_H);
     return { ox: (cw - MAZE_W * scale) / 2, oy: (ch - MAZE_H * scale) / 2, scale };
   }
@@ -3036,9 +3415,7 @@
     }, 1000);
   });
 
-  if (new URLSearchParams(window.location.search).has('debug')) {
-    dbgMazeBtn.style.display = 'block';
-  }
+  if (IS_DEBUG) dbgMazeBtn.style.display = 'block';
   dbgMazeBtn.addEventListener('click', () => {
     pendingPrize = { id: 'btc', label: '1 BITCOIN!', icon: '₿', flavor: '₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot: true, isFree: false, ticketBonus: 0 };
     startMazeMinigame(pendingPrize);
@@ -3252,12 +3629,9 @@
   sniperCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); _sniperHandleMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
   sniperCanvas.addEventListener('touchend',  (e) => { e.preventDefault(); _sniperHandleFire(); }, { passive: false });
 
-  // Show debug button when ?debug is in the URL
-  if (new URLSearchParams(window.location.search).has('debug')) {
-    dbgSniperBtn.style.display = 'block';
-  }
+  if (IS_DEBUG) dbgSniperBtn.style.display = 'block';
   dbgSniperBtn.addEventListener('click', () => {
-    pendingPrize = { id: 'awp_dl', label: 'AWP Dragon Lore', icon: '🔫', flavor: 'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon: 'assets/AWPDL.png', isJackpot: true, isFree: false, ticketBonus: 0 };
+    pendingPrize = { id: 'awp_dl', label: 'AWP Dragon Lore', icon: '🔫', flavor: 'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon: 'assets/awp-dl.png', isJackpot: true, isFree: false, ticketBonus: 0 };
     startSniperMinigame(pendingPrize);
   });
 
@@ -3304,8 +3678,15 @@
       applyTier(currentTierIndex + 1);
       pendingPrize = null;
       if (ACTIVE_GAME !== 'scratch') spinning = false;
-      window.top.postMessage({ type: 'play' }, '*');
-      updateActionBtn();
+      // Check drain/bonus state — upgrade is treated like collecting a non-ticket prize
+      if (tickets <= 0 && _drainMode && !_bonusRound) {
+        setTimeout(() => document.getElementById('out-of-tickets-popup').classList.add('show'), 350);
+      } else if (tickets <= 0 && _bonusRound) {
+        setTimeout(() => setTickets(3), 350);
+      } else {
+        window.top.postMessage({ type: 'play' }, '*');
+        updateActionBtn();
+      }
     }, 500);
   });
 
@@ -3429,34 +3810,64 @@
   // ─────────────────────────────────────────
   // BUILT-IN VIDEO AD (random tab only)
   // ─────────────────────────────────────────
+  let _ilcAdDone = false;
+
   if (IS_RANDOM_TAB) {
     const adOverlay   = document.getElementById('ad-video-overlay');
     const adVideo     = document.getElementById('ad-video');
     const adUnmuteBtn = document.getElementById('ad-unmute-btn');
     adOverlay.style.display = 'block';
+
+    // Manual unmute button (fallback if autoplay policy blocks unmuted playback)
     adUnmuteBtn.addEventListener('click', function() {
       adVideo.muted = false;
       adUnmuteBtn.style.display = 'none';
     });
+
     adVideo.addEventListener('ended', function() {
+      _ilcAdDone = true;
       adOverlay.style.display = 'none';
+      // Keep shell background video silenced for the rest of the game session
       startGame();
     });
-    adVideo.play().catch(function() {
-      // autoplay blocked — video stays visible, user can still see controls
-    });
+
+    // Start muted immediately — handles direct-open / dev preview without shell
+    adVideo.play().catch(function() {});
   }
 
   window.addEventListener('message', (event) => {
     if (!event.data || !event.data.type) return;
+
     if (event.data.type === 'adStarted') {
-      // Hide built-in video overlay if still showing (e.g. host shell also sends adStarted)
+      if (IS_RANDOM_TAB && !_ilcAdDone) {
+        const adVideo     = document.getElementById('ad-video');
+        const adUnmuteBtn = document.getElementById('ad-unmute-btn');
+
+        // Silence & pause the shell's background video — our ILC-AD is the real ad
+        window.top.postMessage({ type: 'setVolume', value: 0 }, '*');
+        window.top.postMessage({ type: 'pause' }, '*');
+
+        // User just clicked Play — try to unmute and (re)play with sound
+        adVideo.muted = false;
+        adUnmuteBtn.style.display = 'none';
+        adVideo.play().catch(function() {
+          // Browser blocked unmuted play — fall back to muted, show unmute button
+          adVideo.muted = true;
+          adUnmuteBtn.style.display = '';
+          adVideo.play().catch(function() {});
+        });
+        return; // startGame() is called by the video's 'ended' listener above
+      }
       const adOverlay = document.getElementById('ad-video-overlay');
       if (adOverlay) adOverlay.style.display = 'none';
+      // Silence shell background video for the entire game session
+      window.top.postMessage({ type: 'setVolume', value: 0 }, '*');
+      window.top.postMessage({ type: 'pause' }, '*');
       startGame();
     }
+
     if (event.data.type === 'adFinished') {
-      window.top.postMessage({ type: 'fail' }, '*');
+      // Ignore — our game defines its own session lifecycle via 'success'
     }
   });
 
