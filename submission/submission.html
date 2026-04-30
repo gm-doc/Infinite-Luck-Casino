@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -271,6 +271,10 @@
       animation: title-pulse 0.8s ease-in-out infinite alternate;
     }
     #win-prize-icon { font-size: 60px; margin: 10px 0 4px; }
+    #win-prize-icon .btc-icon {
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffd700, 0 0 20px #ff9900;
+    }
     #win-prize-name { font-size: 20px; color: #fff; text-shadow: 0 0 8px #00ffff; margin-bottom: 6px; }
     #win-flavor { font-size: 12px; color: #ffcc88; font-family: sans-serif; margin-bottom: 16px; min-height: 18px; }
     #collect-btn {
@@ -296,6 +300,48 @@
     #dog-collect-btn { background: #444; color: #888; border: 2px solid #666; padding: 12px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: not-allowed; opacity: 0.6; }
     #dog-collect-btn.ready { background: linear-gradient(135deg, #ffd700, #ff9900); color: #000; border-color: #ffd700; cursor: pointer; opacity: 1; box-shadow: 0 4px 16px #ffd70088; transition: transform 0.1s; }
     #dog-collect-btn.ready:hover { transform: scale(1.06); }
+
+    /* Sniper Minigame */
+    #sniper-popup { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.88); z-index: 56; align-items: center; justify-content: center; }
+    #sniper-popup.show { display: flex; }
+    #sniper-box { position: relative; width: 600px; height: 420px; background: #000; border-radius: 12px; overflow: hidden; border: 2px solid #ff8800; box-shadow: 0 0 40px #ff880088, 0 0 80px #ff440044; animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+    #sniper-building { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: 0; }
+    #sniper-target { position: absolute; display: none; transform: translate(-50%,-50%); pointer-events: none; z-index: 1; }
+    #sniper-canvas { position: absolute; inset: 0; cursor: none; z-index: 2; }
+    #sniper-hud { position: absolute; top: 8px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 14px; pointer-events: none; z-index: 3; font-family: 'Bungee', sans-serif; font-size: 13px; color: #00ff44; text-shadow: 0 0 8px #00ff44; }
+    #sniper-intro { display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; z-index: 5; background: rgba(0,0,0,0.88); }
+    #sniper-intro.show { display: flex; }
+    #sniper-intro-box { background: linear-gradient(145deg, #1a0a00, #0d0500); border: 3px solid #ff8800; border-radius: 16px; padding: 20px 28px; text-align: center; max-width: 320px; box-shadow: 0 0 40px #ff8800aa, 0 0 80px #ff440066; animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+    #sniper-intro-title { font-family: 'Bungee Inline', sans-serif; font-size: 22px; color: #ff8800; text-shadow: 0 0 16px #ff8800; margin-bottom: 10px; }
+    #sniper-intro-body { font-family: sans-serif; font-size: 12px; color: #ffcc88; line-height: 1.5; margin-bottom: 16px; }
+    #sniper-intro-btn { background: linear-gradient(135deg, #ff8800, #ff4400); color: #fff; border: none; padding: 10px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 16px #ff880088; transition: transform 0.1s; }
+    #sniper-intro-btn:hover { transform: scale(1.06); }
+    #dbg-dog { display: none; position: absolute; bottom: 78px; right: 6px; z-index: 202; background: rgba(80,40,0,0.6); border: 1px solid #ffbb44; color: #ffd288; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
+    #dbg-sniper { display: none; position: absolute; bottom: 46px; right: 6px; z-index: 202; background: rgba(80,0,0,0.6); border: 1px solid #ff4444; color: #ff8888; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
+
+    /* Maze Minigame */
+    #maze-popup { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.88); z-index: 57; align-items: center; justify-content: center; }
+    #maze-popup.show { display: flex; }
+    #maze-box { position: relative; width: 500px; height: 460px; background: #d0b8e8; border-radius: 12px; overflow: hidden; border: 2px solid #ffd700; box-shadow: 0 0 40px #ffd70088, 0 0 80px #ff990044; animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+    #maze-canvas { position: absolute; inset: 0; z-index: 0; }
+    #maze-hud { position: absolute; top: 8px; left: 0; right: 0; display: flex; justify-content: center; pointer-events: none; z-index: 1; font-family: 'Bungee', sans-serif; font-size: 15px; color: #ffd700; text-shadow: 0 0 8px #ffd700, 0 0 2px #000, 0 0 2px #000; }
+    #maze-intro { display: none; position: absolute; inset: 0; flex-direction: column; align-items: center; justify-content: center; z-index: 3; background: rgba(0,0,0,0.88); }
+    #maze-intro.show { display: flex; }
+    #maze-intro-box { background: linear-gradient(145deg, #1a1000, #0d0800); border: 3px solid #ffd700; border-radius: 16px; padding: 20px 28px; text-align: center; max-width: 320px; box-shadow: 0 0 40px #ffd700aa, 0 0 80px #ff990066; animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+    #maze-intro-title { font-family: 'Bungee Inline', sans-serif; font-size: 22px; color: #ffd700; text-shadow: 0 0 16px #ffd700; margin-bottom: 10px; }
+    #maze-intro-body { font-family: sans-serif; font-size: 12px; color: #ffcc88; line-height: 1.5; margin-bottom: 16px; }
+    #maze-intro-btn { background: linear-gradient(135deg, #ffd700, #ff9900); color: #000; border: none; padding: 10px 28px; font-family: 'Bungee', sans-serif; font-size: 14px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 16px #ffd70088; transition: transform 0.1s; }
+    #maze-intro-btn:hover { transform: scale(1.06); }
+    #dbg-maze { display: none; position: absolute; bottom: 62px; right: 6px; z-index: 202; background: rgba(0,50,0,0.6); border: 1px solid #44ff44; color: #88ff88; font-size: 10px; padding: 3px 7px; cursor: pointer; font-family: monospace; border-radius: 3px; }
+
+    /* Minigame Fail Popup */
+    #minigame-fail-popup { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.88); z-index: 58; align-items: center; justify-content: center; }
+    #minigame-fail-popup.show { display: flex; }
+    #minigame-fail-box { background: linear-gradient(145deg, #1a0000, #0d0000); border: 3px solid #ff4444; border-radius: 16px; padding: 28px 36px; text-align: center; max-width: 340px; box-shadow: 0 0 40px #ff444488, 0 0 80px #aa000066; animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+    #minigame-fail-title { font-family: 'Bungee Inline', sans-serif; font-size: 32px; color: #ff4444; text-shadow: 0 0 16px #ff4444; margin-bottom: 12px; }
+    #minigame-fail-msg { font-family: sans-serif; font-size: 13px; color: #ffaaaa; margin-bottom: 20px; line-height: 1.5; }
+    #minigame-fail-btn { background: linear-gradient(135deg, #cc0000, #880000); color: #fff; border: none; padding: 12px 36px; font-family: 'Bungee', sans-serif; font-size: 16px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 16px #ff444488; transition: transform 0.1s; }
+    #minigame-fail-btn:hover { transform: scale(1.06); }
 
     /* Skip warn popup */
     #skip-warn-popup {
@@ -782,7 +828,7 @@
     <h3>🎟️ YOUR TICKETS</h3>
     <div id="ticket-count">5</div>
     <div id="ticket-icon">🎟️</div>
-    <div id="ticket-label">Use tickets to spin!</div>
+    <div id="ticket-label">Use tickets to play!</div>
   </div>
 
   <!-- Fake winners ticker -->
@@ -798,9 +844,10 @@
     <div id="intro-box">
       <h2 id="intro-game-title">🍀 INFINITE LUCK CASINO</h2>
       <ul id="intro-bullets">
+        <li>🎟️ Use tickets to play the game!</li>
         <li>🎮 Play to win amazing prizes!</li>
         <li>🎁 Redeem your prizes on our casino website!</li>
-        <li>🎟️ The prizes will help you skip the ad faster!</li>
+        <li>⏩ Some prizes will help you skip the ad faster!</li>
         <li>🍀 Good luck!</li>
       </ul>
       <button id="intro-start-btn">🎲 Let's Play!</button>
@@ -837,6 +884,62 @@
       <button id="dog-collect-btn">COLLECT! (<span id="dog-timer">120</span>s)</button>
     </div>
   </div>
+  <button id="dbg-dog">🐕 TEST DOG</button>
+
+  <!-- Sniper Minigame -->
+  <div id="sniper-popup">
+    <div id="sniper-box">
+      <img id="sniper-building" src="assets/dusty.png" alt="">
+      <img id="sniper-target" src="assets/target.png" alt="">
+      <canvas id="sniper-canvas"></canvas>
+      <div id="sniper-hud">
+        <span id="sniper-hits">🎯 0/5</span>
+        <span id="sniper-timer-hud">⏱ 5s</span>
+        <span id="sniper-misses">❌ 0/1</span>
+      </div>
+      <div id="sniper-intro" class="show">
+        <div id="sniper-intro-box">
+          <div id="sniper-intro-title">🔫 AWP DRAGON LORE</div>
+          <div id="sniper-intro-body">
+            A rare weapon has appeared in the building across the street!<br><br>
+            <strong>Shoot 5 targets on time</strong> to claim the AWP Dragon Lore.<br><br>
+            Each target gives you <strong>5 seconds</strong>. You can only miss <strong>once</strong>.
+          </div>
+          <button id="sniper-intro-btn">🎯 READY? FIRE!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button id="dbg-sniper">🔫 TEST AWP</button>
+
+  <!-- Maze Minigame (BTC) -->
+  <div id="maze-popup">
+    <div id="maze-box">
+      <canvas id="maze-canvas"></canvas>
+      <div id="maze-hud"><span id="maze-timer-hud">⏱ 30s</span></div>
+      <div id="maze-intro" class="show">
+        <div id="maze-intro-box">
+          <div id="maze-intro-title">₿ BITCOIN MAZE</div>
+          <div id="maze-intro-body">
+            A Bitcoin wallet has been found somewhere in this building!<br><br>
+            <strong>Guide the octopus through the maze</strong> to reach the exit and claim it.<br><br>
+            Move your mouse — the octopus follows. You have <strong>30 seconds</strong>.
+          </div>
+          <button id="maze-intro-btn">🐙 LET'S GO!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button id="dbg-maze">₿ TEST MAZE</button>
+
+  <!-- Minigame Fail Popup -->
+  <div id="minigame-fail-popup">
+    <div id="minigame-fail-box">
+      <div id="minigame-fail-title">❌ FAILED!</div>
+      <div id="minigame-fail-msg"></div>
+      <button id="minigame-fail-btn">OK...</button>
+    </div>
+  </div>
 
   <!-- Tier upgrade popup -->
   <div id="upgrade-popup">
@@ -870,7 +973,7 @@
 
   <!-- Volume -->
   <div id="vol-slider-wrap">
-    <label>🔊</label>
+    <label id="vol-speaker">🔊</label>
     <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.5">
   </div>
 
@@ -914,28 +1017,12 @@
 
   // Intro popup content
   const introTitle   = document.getElementById('intro-game-title');
-  const introBullets = document.getElementById('intro-bullets');
   if (ACTIVE_GAME === 'slot') {
     introTitle.textContent = '🎰 SLOT MACHINE 🎰';
-    introBullets.innerHTML =
-      '<li>🎰 Spin the reels to win amazing prizes!</li>' +
-      '<li>🎟️ Each spin costs 1 ticket — win more to keep playing!</li>' +
-      '<li>⏩ Prizes shrink your skip timer — collect them all!</li>' +
-      '<li>🌟 Unlock Golden Slots and Diamond Slots for bigger prizes!</li>';
   } else if (ACTIVE_GAME === 'scratch') {
     introTitle.textContent = '🃏 SCRATCH CARD 🃏';
-    introBullets.innerHTML =
-      '<li>🃏 Scratch the foil to reveal hidden prizes!</li>' +
-      '<li>🎟️ Each card costs 1 ticket — win more to keep scratching!</li>' +
-      '<li>⏩ Prizes shrink your skip timer — collect them all!</li>' +
-      '<li>🌟 Unlock Golden Cards and Diamond Cards for bigger prizes!</li>';
   } else {
     introTitle.textContent = '🎡 PRIZE WHEEL 🎡';
-    introBullets.innerHTML =
-      '<li>🎡 Spin the wheel to win amazing prizes!</li>' +
-      '<li>🎟️ Each spin costs 1 ticket — win more to keep spinning!</li>' +
-      '<li>⏩ Prizes shrink your skip timer — collect them all!</li>' +
-      '<li>🌟 Upgrade through Prize, Golden and Diamond tiers!</li>';
   }
 
   // Skip-warn message
@@ -947,6 +1034,67 @@
   // ─────────────────────────────────────────
   // TIER CONFIGS — WHEEL
   // ─────────────────────────────────────────
+  // ─────────────────────────────────────────
+  // SHARED TIER PRIZES — one definition per tier, used by all 3 games.
+  // color/textColor fields are only consumed by the wheel slice renderer.
+  // ─────────────────────────────────────────
+  const TIER_PRIZES = [
+    { // base
+      prizes: [
+        { id:'upgrade_gold', label:'GOLDEN WHEEL',      icon:'⭐', color:'#b8860b', textColor:'#fff700', ticketBonus:0,  isFree:false, flavor:'🌟 UNLOCKING THE GOLDEN WHEEL...', isUpgrade:true },
+        { id:'crowpro_1mo',  label:'CrowPro 1mo',       icon:'🎮', color:'#2a0a4a', textColor:'#cc88ff', ticketBonus:0,  isFree:false, flavor:'One month of CrowPro — enjoy!', imgIcon:'assets/CrowPro.png' },
+        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00cc44', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
+        { id:'credits_100',  label:'$100 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
+        { id:'google_200',   label:'$200 Gift Card',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:'$200 Gift Card! 🎉 Guard that code — share it with NO ONE!' },
+        { id:'windows_rg',   label:'Windows RG',        icon:'🪟', color:'#0a1a30', textColor:'#88bbff', ticketBonus:0,  isFree:false, flavor:'A genuine Windows RG license! Legendary software!', imgIcon:'assets/WindowsRG.png' },
+        { id:'seraph_1mo',   label:'Seraph Secure 1mo', icon:'🛡️', color:'#003322', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'One month of Seraph Secure protection!', imgIcon:'assets/SeraphSecure.png' },
+        { id:'tickets_5',    label:'5 Tickets',         icon:'🎟️', color:'#0088ff', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 free spins coming right up!' },
+        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
+        { id:'google_100',   label:'$100 Gift Card',  icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:'$100 Gift Card! 🎉 NEVER share your code with anyone!' },
+        { id:'bike',         label:'WIN A BIKE!',       icon:'🚲', color:'#553300', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🚲 A shiny new bicycle! Stay fit!', isJackpot:true },
+        { id:'tickets_10',   label:'10 Tickets',        icon:'🎟️', color:'#aa00ff', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:"10 tickets! You're on fire!" },
+        { id:'skip_30',      label:'-30s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Nice! Your skip timer just got 30 seconds shorter!', skipReduction:30 },
+      ],
+      weights: [2,4,3,8,4,4,2,5,4,8,2,3,4],
+    },
+    { // gold
+      prizes: [
+        { id:'upgrade_dia',  label:'DIAMOND WHEEL',     icon:'💎', color:'#1a3a6e', textColor:'#aaddff', ticketBonus:0,  isFree:false, flavor:'💎 UNLOCKING THE DIAMOND WHEEL...', isUpgrade:true },
+        { id:'crowpro_6mo',  label:'CrowPro 6mo',       icon:'🎮', color:'#2a0a4a', textColor:'#cc88ff', ticketBonus:0,  isFree:false, flavor:'Six months of CrowPro — premium access!', imgIcon:'assets/CrowPro.png' },
+        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
+        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
+        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
+        { id:'google_500',   label:'$500 Gift Card',  icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$500 Gift Card! 🎉 Keep that code safe — never share it with ANYONE!" },
+        { id:'crowpro_life', label:'CrowPro Lifetime',  icon:'👑', color:'#1e0040', textColor:'#ff88ff', ticketBonus:0,  isFree:false, flavor:'CrowPro — LIFETIME access! Never pay again!', imgIcon:'assets/CrowPro.png' },
+        { id:'wwww',         label:'WWWW Gold Protection',icon:'🏆', color:'#2a1800', textColor:'#ffe066', ticketBonus:0,  isFree:false, flavor:'The WWWWTSACTP Gold Standard package!', imgIcon:'assets/WWWW.png' },
+        { id:'tickets_5',    label:'5 Gold Tickets',    icon:'🌟', color:'#0077dd', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 Golden Tickets! The riches grow!' },
+        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
+        { id:'scooter',      label:'Mobility Scooter',  icon:'🦼', color:'#553300', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🦼 A brand new mobility scooter!', isJackpot:true },
+        { id:'tickets_10',   label:'10 Gold Tickets',   icon:'🌟', color:'#8800cc', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:'10 Golden Tickets! Extraordinary!' },
+        { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
+      ],
+      weights: [2,4,3,1,8,4,2,2,5,4,2,3,2],
+    },
+    { // diamond
+      prizes: [
+        { id:'btc',          label:'1 BITCOIN!',        icon:'₿',  color:'#3d1f00', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot:true, customBorder:'#ffd700' },
+        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
+        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
+        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
+        { id:'google_1000',  label:'$1000 Gift Card', icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$1000 Gift Card! 🎉 Never share that code — not even with your mum!" },
+        { id:'awp_dl',       label:'AWP Dragon Lore',   icon:'🔫', color:'#1a0a00', textColor:'#ff8800', ticketBonus:0,  isFree:false, flavor:'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon:'assets/AWPDL.png', isJackpot:true },
+        { id:'skip_ad',      label:'Skip Ad',           icon:'⏭️', color:'#002200', textColor:'#00ff88', ticketBonus:0,  isFree:false, flavor:'WAIT. You can actually skip the ad?!' },
+        { id:'tickets_5',    label:'5 Diamond Tickets', icon:'💎', color:'#0066cc', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 Diamond Tickets! Pure luxury!' },
+        { id:'credits_1000', label:'$1000 Credits',     icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'One thousand casino bucks!' },
+        { id:'google_500',   label:'$500 Gift Card',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$500 Gift Card! 🎉 That code is YOURS — keep it secret, keep it safe!" },
+        { id:'car',          label:'WIN A CAR!',        icon:'🚗', color:'#cc0000', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🚨 A BRAND NEW RED CAR! 🚨 (claim in 72h)', isJackpot:true },
+        { id:'tickets_10',   label:'10 Diamond Tickets',icon:'💎', color:'#6600aa', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:'10 Diamond Tickets! Extraordinary!' },
+        { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
+      ],
+      weights: [1,3,1,8,4,1,0,5,4,8,2,3,1],
+    },
+  ];
+
   const TIERS_WHEEL = [
     {
       id: 'base', name: '🎡 PRIZE WHEEL 🎡',
@@ -960,22 +1108,8 @@
       pointerColor: '#ffd700',
       bulbColors: ['#ff0044','#ffd700','#00ffcc','#ff6600','#aa00ff','#00aaff'],
       upgradeSliceColor: '#b8860b', upgradeGlowColor: '#ffd700',
-      prizes: [
-        { id:'upgrade_gold', label:'GOLDEN WHEEL',      icon:'⭐', color:'#b8860b', textColor:'#fff700', ticketBonus:0,  isFree:false, flavor:'🌟 UNLOCKING THE GOLDEN WHEEL...', isUpgrade:true },
-        { id:'crowpro_1mo',  label:'CrowPro 1mo',       icon:'🎮', color:'#2a0a4a', textColor:'#cc88ff', ticketBonus:0,  isFree:false, flavor:'One month of CrowPro — enjoy!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00cc44', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'credits_100',  label:'$100 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
-        { id:'google_200',   label:'$200 Google Play',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:'$200 Google Play! 🎉 Guard that code — share it with NO ONE!' },
-        { id:'windows_rg',   label:'Windows RG',        icon:'🪟', color:'#0a1a30', textColor:'#88bbff', ticketBonus:0,  isFree:false, flavor:'A genuine Windows RG license! Legendary software!', imgIcon:'assets/WindowsRG.png' },
-        { id:'seraph_1mo',   label:'Seraph Secure 1mo', icon:'🛡️', color:'#003322', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'One month of Seraph Secure protection!', imgIcon:'assets/SeraphSecure.png' },
-        { id:'tickets_5',    label:'5 Tickets',         icon:'🎟️', color:'#0088ff', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 free spins coming right up!' },
-        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
-        { id:'google_100',   label:'$100 Google Play',  icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:'$100 Google Play! 🎉 NEVER share your code with anyone!' },
-        { id:'bike',         label:'WIN A BIKE!',       icon:'🚲', color:'#553300', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🚲 A shiny new bicycle! Stay fit!', isJackpot:true },
-        { id:'tickets_10',   label:'10 Tickets',        icon:'🎟️', color:'#aa00ff', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:"10 tickets! You're on fire!" },
-        { id:'skip_30',      label:'-30s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Nice! Your skip timer just got 30 seconds shorter!', skipReduction:30 },
-      ],
-      baseWeights: [2,4,3,8,4,4,2,5,4,8,2,3,4],
+      prizes: TIER_PRIZES[0].prizes,
+      baseWeights: TIER_PRIZES[0].weights,
     },
     {
       id: 'gold', name: '🌟 GOLDEN WHEEL 🌟',
@@ -989,22 +1123,8 @@
       pointerColor: '#ffe066',
       bulbColors: ['#ffd700','#ffaa00','#ffe066','#ff8800','#ffcc44','#ffdd88'],
       upgradeSliceColor: '#1a3a6e', upgradeGlowColor: '#00aaff',
-      prizes: [
-        { id:'upgrade_dia',  label:'DIAMOND WHEEL',     icon:'💎', color:'#1a3a6e', textColor:'#aaddff', ticketBonus:0,  isFree:false, flavor:'💎 UNLOCKING THE DIAMOND WHEEL...', isUpgrade:true },
-        { id:'crowpro_6mo',  label:'CrowPro 6mo',       icon:'🎮', color:'#2a0a4a', textColor:'#cc88ff', ticketBonus:0,  isFree:false, flavor:'Six months of CrowPro — premium access!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_200',  label:'$200 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
-        { id:'google_500',   label:'$500 Google Play',  icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$500 Google Play! 🎉 Keep that code safe — never share it with ANYONE!" },
-        { id:'crowpro_life', label:'CrowPro Lifetime',  icon:'👑', color:'#1e0040', textColor:'#ff88ff', ticketBonus:0,  isFree:false, flavor:'CrowPro — LIFETIME access! Never pay again!', imgIcon:'assets/CrowPro.png' },
-        { id:'wwww',         label:'WWWW Gold Standard',icon:'🏆', color:'#2a1800', textColor:'#ffe066', ticketBonus:0,  isFree:false, flavor:'The WWWWTSACTP Gold Standard package!', imgIcon:'assets/WWWW.png' },
-        { id:'tickets_5',    label:'5 Gold Tickets',    icon:'🌟', color:'#0077dd', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 Golden Tickets! The riches grow!' },
-        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
-        { id:'scooter',      label:'Mobility Scooter',  icon:'🦼', color:'#553300', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🦼 A brand new mobility scooter!', isJackpot:true },
-        { id:'tickets_10',   label:'10 Gold Tickets',   icon:'🌟', color:'#8800cc', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:'10 Golden Tickets! Extraordinary!' },
-        { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
-      ],
-      baseWeights: [2,4,3,1,8,4,2,2,5,4,2,3,2],
+      prizes: TIER_PRIZES[1].prizes,
+      baseWeights: TIER_PRIZES[1].weights,
     },
     {
       id: 'diamond', name: '💎 DIAMOND WHEEL 💎',
@@ -1018,23 +1138,8 @@
       pointerColor: '#00ccff',
       bulbColors: ['#00ccff','#0088ff','#aaddff','#0044cc','#66bbff','#88ddff'],
       upgradeSliceColor: '#333', upgradeGlowColor: '#aaa',
-      prizes: [
-        { id:'btc',          label:'1 BITCOIN!',        icon:'₿',  color:'#3d1f00', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot:true, customBorder:'#ffd700' },
-        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', color:'#00aa33', textColor:'#fff',    ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'dog',          label:'Dog',               icon:'🐕', color:'#3a1e00', textColor:'#ffcc88', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_500',  label:'$500 Credits',      icon:'💵', color:'#005518', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
-        { id:'google_1000',  label:'$1000 Google Play', icon:'💳', color:'#1a3a5c', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$1000 Google Play! 🎉 Never share that code — not even your mum!" },
-        { id:'awp_dl',       label:'AWP Dragon Lore',   icon:'🔫', color:'#1a0a00', textColor:'#ff8800', ticketBonus:0,  isFree:false, flavor:'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon:'assets/AWPDL.png', isJackpot:true },
-        { id:'skip_ad',      label:'Skip Ad',           icon:'⏭️', color:'#002200', textColor:'#00ff88', ticketBonus:0,  isFree:false, flavor:'WAIT. You can actually skip the ad?!' },
-        { id:'tickets_5',    label:'5 Diamond Tickets', icon:'💎', color:'#0066cc', textColor:'#fff',    ticketBonus:5,  isFree:false, flavor:'5 Diamond Tickets! Pure luxury!' },
-        { id:'credits_100',  label:'$100 Credits',      icon:'💵', color:'#006622', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
-        { id:'google_500',   label:'$500 Google Play',  icon:'💳', color:'#0d2240', textColor:'#4fc3f7', ticketBonus:0,  isFree:false, flavor:"$500 Google Play! 🎉 That code is YOURS — keep it secret, keep it safe!" },
-        { id:'car',          label:'WIN A CAR!',        icon:'🚗', color:'#cc0000', textColor:'#ffd700', ticketBonus:0,  isFree:false, flavor:'🚨 A BRAND NEW RED CAR! 🚨 (claim in 72h)', isJackpot:true },
-        { id:'tickets_10',   label:'10 Diamond Tickets',icon:'💎', color:'#6600aa', textColor:'#fff',    ticketBonus:10, isFree:false, flavor:'10 Diamond Tickets! Extraordinary!' },
-        { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', color:'#005533', textColor:'#00ffaa', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
-        { id:'skip_instant', label:'INSTANT SKIP!',     icon:'⚡', color:'#003322', textColor:'#00ffcc', ticketBonus:0,  isFree:false, flavor:'ARE YOU KIDDING?! You can skip RIGHT NOW!', skipInstant:true },
-      ],
-      baseWeights: [1,3,1,8,4,1,2,5,4,8,2,3,1,1],
+      prizes: TIER_PRIZES[2].prizes,
+      baseWeights: TIER_PRIZES[2].weights,
     },
   ];
 
@@ -1067,22 +1172,8 @@
       bulbColors: ['#ff0044','#ffd700','#00ffcc','#ff6600','#aa00ff','#00aaff'],
       cabinetBg: 'linear-gradient(180deg, #3a1a00 0%, #1a0a00 100%)',
       cabinetBorder: '#ffd700', reelBg: '#050010',
-      prizes: [
-        { id:'upgrade_gold', label:'GOLDEN SLOTS',     icon:'⭐', ticketBonus:0,  isFree:false, flavor:'🌟 UNLOCKING THE GOLDEN SLOTS...', isUpgrade:true },
-        { id:'crowpro_1mo',  label:'CrowPro 1mo',      icon:'🎮', ticketBonus:0,  isFree:false, flavor:'One month of CrowPro — enjoy!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_spin',    label:'FREE SPIN',        icon:'🎡', ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'credits_100',  label:'$100 Credits',     icon:'💵', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
-        { id:'google_200',   label:'$200 Google Play', icon:'💳', ticketBonus:0,  isFree:false, flavor:'$200 Google Play! 🎉 Guard that code — share it with NO ONE!' },
-        { id:'windows_rg',   label:'Windows RG',       icon:'🪟', ticketBonus:0,  isFree:false, flavor:'A genuine Windows RG license! Legendary software!', imgIcon:'assets/WindowsRG.png' },
-        { id:'seraph_1mo',   label:'Seraph Secure 1mo',icon:'🛡️', ticketBonus:0,  isFree:false, flavor:'One month of Seraph Secure protection!', imgIcon:'assets/SeraphSecure.png' },
-        { id:'tickets_5',    label:'5 Tickets',        icon:'🎟️', ticketBonus:5,  isFree:false, flavor:'5 free spins coming right up!' },
-        { id:'credits_200',  label:'$200 Credits',     icon:'💵', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
-        { id:'google_100',   label:'$100 Google Play', icon:'💳', ticketBonus:0,  isFree:false, flavor:'$100 Google Play! 🎉 NEVER share your code with anyone!' },
-        { id:'bike',         label:'WIN A BIKE!',      icon:'🚲', ticketBonus:0,  isFree:false, flavor:'🚲 A shiny new bicycle! Stay fit!', isJackpot:true },
-        { id:'tickets_10',   label:'10 Tickets',       icon:'🎟️', ticketBonus:10, isFree:false, flavor:"10 tickets! You're on fire!" },
-        { id:'skip_30',      label:'-30s Skip Timer',  icon:'⏩', ticketBonus:0,  isFree:false, flavor:'Nice! Your skip timer just got 30 seconds shorter!', skipReduction:30 },
-      ],
-      weights: [2,4,3,8,4,4,2,5,4,8,2,3,4],
+      prizes: TIER_PRIZES[0].prizes,
+      weights: TIER_PRIZES[0].weights,
     },
     {
       id: 'gold', name: '🌟 GOLDEN SLOTS 🌟',
@@ -1093,22 +1184,8 @@
       bulbColors: ['#ffd700','#ffaa00','#ffe066','#ff8800','#ffcc44','#ffdd88'],
       cabinetBg: 'linear-gradient(180deg, #4a2800 0%, #2a1400 100%)',
       cabinetBorder: '#ffe066', reelBg: '#0d0800',
-      prizes: [
-        { id:'upgrade_dia',  label:'DIAMOND SLOTS',    icon:'💎', ticketBonus:0,  isFree:false, flavor:'💎 UNLOCKING THE DIAMOND SLOTS...', isUpgrade:true },
-        { id:'crowpro_6mo',  label:'CrowPro 6mo',      icon:'🎮', ticketBonus:0,  isFree:false, flavor:'Six months of CrowPro — premium access!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_spin',    label:'FREE SPIN',        icon:'🎡', ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'dog',          label:'Dog',              icon:'🐕', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_200',  label:'$200 Credits',     icon:'💵', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
-        { id:'google_500',   label:'$500 Google Play', icon:'💳', ticketBonus:0,  isFree:false, flavor:"$500 Google Play! 🎉 Keep that code safe — never share it with ANYONE!" },
-        { id:'crowpro_life', label:'CrowPro Lifetime', icon:'👑', ticketBonus:0,  isFree:false, flavor:'CrowPro — LIFETIME access! Never pay again!', imgIcon:'assets/CrowPro.png' },
-        { id:'wwww',         label:'WWWW Gold Standard',icon:'🏆',ticketBonus:0,  isFree:false, flavor:'The WWWWTSACTP Gold Standard package!', imgIcon:'assets/WWWW.png' },
-        { id:'tickets_5',    label:'5 Gold Tickets',   icon:'🌟', ticketBonus:5,  isFree:false, flavor:'5 Golden Tickets! The riches grow!' },
-        { id:'credits_500',  label:'$500 Credits',     icon:'💵', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
-        { id:'scooter',      label:'Mobility Scooter', icon:'🦼', ticketBonus:0,  isFree:false, flavor:'🦼 A brand new mobility scooter!', isJackpot:true },
-        { id:'tickets_10',   label:'10 Gold Tickets',  icon:'🌟', ticketBonus:10, isFree:false, flavor:'10 Golden Tickets! Extraordinary!' },
-        { id:'skip_60',      label:'-60s Skip Timer',  icon:'⏩', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
-      ],
-      weights: [2,4,3,1,8,4,2,2,5,4,2,3,2],
+      prizes: TIER_PRIZES[1].prizes,
+      weights: TIER_PRIZES[1].weights,
     },
     {
       id: 'diamond', name: '💎 DIAMOND SLOTS 💎',
@@ -1119,23 +1196,8 @@
       bulbColors: ['#00ccff','#0088ff','#aaddff','#0044cc','#66bbff','#88ddff'],
       cabinetBg: 'linear-gradient(180deg, #002040 0%, #000d20 100%)',
       cabinetBorder: '#00ccff', reelBg: '#00060e',
-      prizes: [
-        { id:'btc',          label:'1 BITCOIN!',        icon:'₿',  ticketBonus:0,  isFree:false, flavor:'₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot:true },
-        { id:'free_spin',    label:'FREE SPIN',         icon:'🎡', ticketBonus:0,  isFree:true,  flavor:'Lucky you! Spinning again for free...' },
-        { id:'dog',          label:'Dog',               icon:'🐕', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_500',  label:'$500 Credits',      icon:'💵', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
-        { id:'google_1000',  label:'$1000 Google Play', icon:'💳', ticketBonus:0,  isFree:false, flavor:"$1000 Google Play! 🎉 Never share that code — not even your mum!" },
-        { id:'awp_dl',       label:'AWP Dragon Lore',   icon:'🔫', ticketBonus:0,  isFree:false, flavor:'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon:'assets/AWPDL.png', isJackpot:true },
-        { id:'skip_ad',      label:'Skip Ad',           icon:'⏭️', ticketBonus:0,  isFree:false, flavor:'WAIT. You can actually skip the ad?!' },
-        { id:'tickets_5',    label:'5 Diamond Tickets', icon:'💎', ticketBonus:5,  isFree:false, flavor:'5 Diamond Tickets! Pure luxury!' },
-        { id:'credits_100',  label:'$100 Credits',      icon:'💵', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
-        { id:'google_500',   label:'$500 Google Play',  icon:'💳', ticketBonus:0,  isFree:false, flavor:"$500 Google Play! 🎉 That code is YOURS — keep it secret, keep it safe!" },
-        { id:'car',          label:'WIN A CAR!',        icon:'🚗', ticketBonus:0,  isFree:false, flavor:'🚨 A BRAND NEW RED CAR! 🚨 (claim in 72h)', isJackpot:true },
-        { id:'tickets_10',   label:'10 Diamond Tickets',icon:'💎', ticketBonus:10, isFree:false, flavor:'10 Diamond Tickets! Extraordinary!' },
-        { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
-        { id:'skip_instant', label:'INSTANT SKIP!',     icon:'⚡', ticketBonus:0,  isFree:false, flavor:'ARE YOU KIDDING?! You can skip RIGHT NOW!', skipInstant:true },
-      ],
-      weights: [1,3,1,8,4,1,2,5,4,8,2,3,1,1],
+      prizes: TIER_PRIZES[2].prizes,
+      weights: TIER_PRIZES[2].weights,
     },
   ];
 
@@ -1168,22 +1230,8 @@
       bulbColors: ['#ff0044','#ffd700','#00ffcc','#ff6600','#aa00ff','#00aaff'],
       cardBg: 'linear-gradient(180deg, #3a1a00 0%, #1a0a00 100%)',
       cardBorder: '#ffd700', foilColor: '#8b6914', foilHighlight: '#d4a820', cellBg: '#0a001e',
-      prizes: [
-        { id:'upgrade_gold', label:'GOLDEN CARDS',    icon:'⭐', ticketBonus:0,  isFree:false, flavor:'🌟 UNLOCKING THE GOLDEN CARDS...', isUpgrade:true },
-        { id:'crowpro_1mo',  label:'CrowPro 1mo',     icon:'🎮', ticketBonus:0,  isFree:false, flavor:'One month of CrowPro — enjoy!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_card',    label:'FREE CARD',       icon:'🎡', ticketBonus:0,  isFree:true,  flavor:'Lucky! You get a free scratch card!' },
-        { id:'credits_100',  label:'$100 Credits',    icon:'💵', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
-        { id:'google_200',   label:'$200 Google Play',icon:'💳', ticketBonus:0,  isFree:false, flavor:'$200 Google Play! 🎉 Redeemable only to your own account!' },
-        { id:'windows_rg',   label:'Windows RG',      icon:'🪟', ticketBonus:0,  isFree:false, flavor:'A genuine Windows RG license! Legendary software!', imgIcon:'assets/WindowsRG.png' },
-        { id:'seraph_1mo',   label:'Seraph Secure 1mo',icon:'🛡️',ticketBonus:0,  isFree:false, flavor:'One month of Seraph Secure protection!', imgIcon:'assets/SeraphSecure.png' },
-        { id:'tickets_5',    label:'5 Tickets',       icon:'🎟️', ticketBonus:5,  isFree:false, flavor:'5 free cards coming right up!' },
-        { id:'credits_200',  label:'$200 Credits',    icon:'💵', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
-        { id:'google_100',   label:'$100 Google Play',icon:'💳', ticketBonus:0,  isFree:false, flavor:'$100 Google Play! 🎉 NEVER share your code!' },
-        { id:'bike',         label:'WIN A BIKE!',     icon:'🚲', ticketBonus:0,  isFree:false, flavor:'🚲 A shiny new bicycle! Stay fit!', isJackpot:true },
-        { id:'tickets_10',   label:'10 Tickets',      icon:'🎟️', ticketBonus:10, isFree:false, flavor:"10 tickets! You're on fire!" },
-        { id:'skip_30',      label:'-30s Skip Timer', icon:'⏩', ticketBonus:0,  isFree:false, flavor:'Nice! Your skip timer just got 30 seconds shorter!', skipReduction:30 },
-      ],
-      weights: [2,4,3,8,4,4,2,5,4,8,2,3,4],
+      prizes: TIER_PRIZES[0].prizes,
+      weights: TIER_PRIZES[0].weights,
     },
     {
       id: 'gold', name: '🌟 GOLDEN CARDS 🌟',
@@ -1194,22 +1242,8 @@
       bulbColors: ['#ffd700','#ffaa00','#ffe066','#ff8800','#ffcc44','#ffdd88'],
       cardBg: 'linear-gradient(180deg, #4a2800 0%, #2a1400 100%)',
       cardBorder: '#ffe066', foilColor: '#b8860b', foilHighlight: '#ffd700', cellBg: '#0d0800',
-      prizes: [
-        { id:'upgrade_dia',  label:'DIAMOND CARDS',    icon:'💎', ticketBonus:0,  isFree:false, flavor:'💎 UNLOCKING DIAMOND CARDS...', isUpgrade:true },
-        { id:'crowpro_6mo',  label:'CrowPro 6mo',      icon:'🎮', ticketBonus:0,  isFree:false, flavor:'Six months of CrowPro — premium access!', imgIcon:'assets/CrowPro.png' },
-        { id:'free_card',    label:'FREE CARD',        icon:'🎡', ticketBonus:0,  isFree:true,  flavor:'Lucky! Free golden scratch card!' },
-        { id:'dog',          label:'Dog',              icon:'🐕', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_200',  label:'$200 Credits',     icon:'💵', ticketBonus:0,  isFree:false, flavor:'Two hundred smackers!' },
-        { id:'google_500',   label:'$500 Google Play', icon:'💳', ticketBonus:0,  isFree:false, flavor:'$500 Google Play! 🎉 Never share that code!' },
-        { id:'crowpro_life', label:'CrowPro Lifetime', icon:'👑', ticketBonus:0,  isFree:false, flavor:'CrowPro — LIFETIME access! Never pay again!', imgIcon:'assets/CrowPro.png' },
-        { id:'wwww',         label:'WWWW Gold Standard',icon:'🏆',ticketBonus:0,  isFree:false, flavor:'The WWWWTSACTP Gold Standard package!', imgIcon:'assets/WWWW.png' },
-        { id:'tickets_5',    label:'5 Gold Tickets',   icon:'🌟', ticketBonus:5,  isFree:false, flavor:'5 Golden Tickets! The riches grow!' },
-        { id:'credits_500',  label:'$500 Credits',     icon:'💵', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
-        { id:'scooter',      label:'Mobility Scooter', icon:'🦼', ticketBonus:0,  isFree:false, flavor:'🦼 A brand new mobility scooter!', isJackpot:true },
-        { id:'tickets_10',   label:'10 Gold Tickets',  icon:'🌟', ticketBonus:10, isFree:false, flavor:'10 Golden Tickets! Extraordinary!' },
-        { id:'skip_60',      label:'-60s Skip Timer',  icon:'⏩', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
-      ],
-      weights: [2,4,3,1,8,4,2,2,5,4,2,3,2],
+      prizes: TIER_PRIZES[1].prizes,
+      weights: TIER_PRIZES[1].weights,
     },
     {
       id: 'diamond', name: '💎 DIAMOND CARDS 💎',
@@ -1220,23 +1254,8 @@
       bulbColors: ['#00ccff','#0088ff','#aaddff','#0044cc','#66bbff','#88ddff'],
       cardBg: 'linear-gradient(180deg, #002040 0%, #000d20 100%)',
       cardBorder: '#00ccff', foilColor: '#005588', foilHighlight: '#00ccff', cellBg: '#00060e',
-      prizes: [
-        { id:'btc',          label:'1 BITCOIN!',        icon:'₿',  ticketBonus:0,  isFree:false, flavor:'₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot:true },
-        { id:'free_card',    label:'FREE CARD',         icon:'🎡', ticketBonus:0,  isFree:true,  flavor:'Lucky! Free diamond scratch card!' },
-        { id:'dog',          label:'Dog',               icon:'🐕', ticketBonus:0,  isFree:false, flavor:'...why is there a dog here?', imgIcon:'assets/Doot.png' },
-        { id:'credits_500',  label:'$500 Credits',      icon:'💵', ticketBonus:0,  isFree:false, flavor:'FIVE HUNDRED casino dollars!' },
-        { id:'google_1000',  label:'$1000 Google Play', icon:'💳', ticketBonus:0,  isFree:false, flavor:'$1000 Google Play! 🎉 Never share that code!' },
-        { id:'awp_dl',       label:'AWP Dragon Lore',   icon:'🔫', ticketBonus:0,  isFree:false, flavor:'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon:'assets/AWPDL.png', isJackpot:true },
-        { id:'skip_ad',      label:'Skip Ad',           icon:'⏭️', ticketBonus:0,  isFree:false, flavor:'WAIT. You can actually skip the ad?!' },
-        { id:'tickets_5',    label:'5 Diamond Tickets', icon:'💎', ticketBonus:5,  isFree:false, flavor:'5 Diamond Tickets! Pure luxury!' },
-        { id:'credits_100',  label:'$100 Credits',      icon:'💵', ticketBonus:0,  isFree:false, flavor:'One hundred casino bucks!' },
-        { id:'google_500',   label:'$500 Google Play',  icon:'💳', ticketBonus:0,  isFree:false, flavor:'$500 Google Play! 🎉 Keep that code secret!' },
-        { id:'car',          label:'WIN A CAR!',        icon:'🚗', ticketBonus:0,  isFree:false, flavor:'🚨 A BRAND NEW CAR! 🚨 (claim in 72h)', isJackpot:true },
-        { id:'tickets_10',   label:'10 Diamond Tickets',icon:'💎', ticketBonus:10, isFree:false, flavor:'10 Diamond Tickets! Extraordinary!' },
-        { id:'skip_60',      label:'-60s Skip Timer',   icon:'⏩', ticketBonus:0,  isFree:false, flavor:'Whoa! 60 whole seconds off your skip timer!', skipReduction:60 },
-        { id:'skip_instant', label:'INSTANT SKIP!',     icon:'⚡', ticketBonus:0,  isFree:false, flavor:'ARE YOU KIDDING?! You can skip RIGHT NOW!', skipInstant:true },
-      ],
-      weights: [1,3,1,8,4,1,2,5,4,8,2,3,1,1],
+      prizes: TIER_PRIZES[2].prizes,
+      weights: TIER_PRIZES[2].weights,
     },
   ];
 
@@ -1273,6 +1292,7 @@
   let skipTimer        = null;
   let pendingPrize     = null;
   let wonPrizes        = {};
+  let wonJackpots      = {};
   let winCount         = 0;
   let skipGuaranteeSpin = Math.floor(Math.random() * 5);
 
@@ -1337,8 +1357,48 @@
     if (_ac.state === 'suspended') _ac.resume();
     return _acProxy;
   }
+
+  const _assetAudio = {
+    alert:   new Audio('assets/alert.mp3'),
+    dogBark: new Audio('assets/doot_bark.mp3'),
+    dogKiss: new Audio('assets/doot_kiss.mp3'),
+    awpShot: new Audio('assets/awp_shot.mp3'),
+    waka:    new Audio('assets/waka.mp3'),
+  };
+  Object.values(_assetAudio).forEach(function(audio) {
+    audio.preload = 'auto';
+  });
+  _assetAudio.waka.loop = true;
+  _assetAudio.waka.playbackRate = 1.5;
+
+  function playAssetSound(key) {
+    const source = _assetAudio[key];
+    if (!source) return;
+    try {
+      const volSlider = document.getElementById('vol-slider');
+      const audio = source.cloneNode();
+      audio.volume = Math.max(0, Math.min(1, parseFloat(volSlider ? volSlider.value : '0.5') || 0));
+      audio.play().catch(function() {});
+    } catch (e) {}
+  }
+
+  function getEffectivePrizeWeights(weights, prizes) {
+    return weights.map(function(weight, index) {
+      const prize = prizes[index];
+      return prize.isJackpot && wonJackpots[prize.id] ? 0 : weight;
+    });
+  }
+
+  document.getElementById('winner-dot').addEventListener('click', function() {
+    if (adActive) adjustSkipCooldown(-100, true);
+  });
+
   document.getElementById('vol-slider').addEventListener('input', function() {
     if (_masterGain) _masterGain.gain.value = parseFloat(this.value);
+  });
+
+  document.getElementById('vol-speaker').addEventListener('click', function() {
+    if (adActive) adjustSkipCooldown(100, true);
   });
 
   function _playWheelSpinStart() {
@@ -1530,7 +1590,7 @@
   const skipWarnOk    = document.getElementById('skip-warn-ok');
 
   function startSkipCooldown() {
-    skipCooldown = 300; skipUnlocked = false;
+    skipCooldown = 360; skipUnlocked = false;
     skipBtn.classList.remove('ready');
     updateSkipTimer();
     skipTimer = setInterval(() => {
@@ -1544,7 +1604,7 @@
     }, 1000);
   }
 
-  function adjustSkipCooldown(delta) {
+  function adjustSkipCooldown(delta, silent) {
     if (!adActive) return;
     skipCooldown = Math.max(0, skipCooldown + delta);
     if (skipCooldown <= 0) {
@@ -1560,16 +1620,34 @@
       }
       updateSkipTimer();
     }
-    const flash = document.createElement('div');
-    const flashColor = delta > 0 ? '#ff8888' : '#00ffaa';
-    flash.style.cssText = `position:absolute;bottom:100%;right:0;color:${flashColor};font-size:13px;font-family:Bungee,sans-serif;white-space:nowrap;pointer-events:none;animation:skip-flash 1.2s ease forwards;`;
-    flash.textContent = delta <= -99999 ? '⚡ SKIP READY!' : (delta > 0 ? `⚠️ +${delta}s` : `⏩ ${-delta}s`);
-    skipBtn.appendChild(flash);
-    setTimeout(() => flash.remove(), 1300);
+    if (!silent) {
+      const flash = document.createElement('div');
+      const flashColor = delta > 0 ? '#ff8888' : '#00ffaa';
+      flash.style.cssText = `position:absolute;bottom:100%;right:0;color:${flashColor};font-size:13px;font-family:Bungee,sans-serif;white-space:nowrap;pointer-events:none;animation:skip-flash 1.2s ease forwards;`;
+      flash.textContent = delta <= -99999 ? '⚡ SKIP READY!' : (delta > 0 ? `⚠️ +${delta}s` : `⏩ ${-delta}s`);
+      skipBtn.appendChild(flash);
+      setTimeout(() => flash.remove(), 1300);
+    }
   }
 
   function updateSkipTimer() {
     if (!skipUnlocked) skipTimerEl.textContent = `Available in ${skipCooldown}s`;
+  }
+
+  function pauseMinigame() {
+    if (skipTimer) { clearInterval(skipTimer); skipTimer = null; }
+  }
+
+  function resumeMinigame() {
+    if (skipCooldown > 0 && !skipTimer && !skipUnlocked) {
+      skipTimer = setInterval(() => {
+        skipCooldown--; updateSkipTimer();
+        if (skipCooldown <= 0) {
+          clearInterval(skipTimer); skipTimer = null;
+          skipUnlocked = true; skipBtn.classList.add('ready'); skipTimerEl.textContent = '';
+        }
+      }, 1000);
+    }
   }
 
   skipBtn.addEventListener('click', () => {
@@ -1659,7 +1737,7 @@
   // ─────────────────────────────────────────
   const WINNER_NAMES = ['James','Maria','Tyler','Priya','Chen','Olga','Marcus','Fatima','Liam','Aisha','Derek','Yuki','Bruno','Sasha','Kevin','Amara','Dmitri','Chloe','Hassan','Ingrid','Rico','Nadia','Stefan','Blessing','Owen','Mei','Carlos','Petra','Nathan','Zara','Felipe','Anna','Troy','Hana','Viktor','Layla'];
   const WINNER_COUNTRIES = ['USA','Canada','UK','Australia','Germany','France','Brazil','Japan','India','Mexico','Spain','Netherlands','Italy','Poland','Sweden','South Africa','Argentina','Philippines','Turkey','UAE'];
-  const WINNER_PRIZES = ['$200 Credits','$100 Google Play','an iPhone 16','$500 Credits','$1000 Google Play','a Brand New Bike','$2000 Credits','a Brand New Car','1 Full Bitcoin','$200 Google Play'];
+  const WINNER_PRIZES = ['$200 Credits','$100 Gift Card','an iPhone 16','$500 Credits','$1000 Gift Card','a Brand New Bike','$2000 Credits','a Brand New Car','1 Full Bitcoin','$200 Gift Card'];
   const WINNER_GAMES = ['🎡 Prize Wheel','🎰 Slot Machine','🃏 Scratch Card'];
   const WINNER_QUOTES = [
     "I couldn't believe my luck today! 😂",
@@ -1676,6 +1754,14 @@
     "Already told 6 friends. You're welcome casino 🙏",
   ];
 
+  const WINNER_PREMADE = [
+    { name:'Kota', country:'Poland', prize:'Dog', game:'🎡 Prize Wheel', quote:"I thought it was just the ad but now I have a new best friend! Can't recommend this enough!" },
+    { name:'Joe', country:'USA', prize:'CrowPro Lifetime', game:'🎰 Slot Machine', quote:"I'll never have to worry about my crows again! CA-CAW!!!" },
+    { name:'Margaret T.', country:'Yorkshire, UK', prize:'a Brand New Car', game:'🃏 Scratch Card', quote:"I called my daughter in to watch and we both started crying 😭" },
+    { name:'DoomSlayer42', country:'Bavaria, Germany', prize:'$500 Credits', game:'🎰 Slot Machine', quote:"Third time playing, first time winning big. Keep going everyone!!" },
+    { name:'Priscilla K.', country:'New South Wales, AU', prize:'$200 Gift Card', game:'🃏 Scratch Card', quote:"The prize email arrived in under an hour. 100% legitimate, I promise." },
+  ];
+
   function playWinnerPing() {
     try {
       const ac = getAC(), t = ac.currentTime;
@@ -1689,12 +1775,18 @@
   }
 
   function showNextWinner() {
-    const msgEl   = document.getElementById('winner-msg');
-    const name    = WINNER_NAMES[Math.floor(Math.random() * WINNER_NAMES.length)];
-    const country = WINNER_COUNTRIES[Math.floor(Math.random() * WINNER_COUNTRIES.length)];
-    const prize   = WINNER_PRIZES[Math.floor(Math.random() * WINNER_PRIZES.length)];
-    const game    = WINNER_GAMES[Math.floor(Math.random() * WINNER_GAMES.length)];
-    const quote   = WINNER_QUOTES[Math.floor(Math.random() * WINNER_QUOTES.length)];
+    const msgEl = document.getElementById('winner-msg');
+    let name, country, prize, game, quote;
+    if (Math.random() < 0.2) {
+      const p = WINNER_PREMADE[Math.floor(Math.random() * WINNER_PREMADE.length)];
+      ({ name, country, prize, game, quote } = p);
+    } else {
+      name    = WINNER_NAMES[Math.floor(Math.random() * WINNER_NAMES.length)];
+      country = WINNER_COUNTRIES[Math.floor(Math.random() * WINNER_COUNTRIES.length)];
+      prize   = WINNER_PRIZES[Math.floor(Math.random() * WINNER_PRIZES.length)];
+      game    = WINNER_GAMES[Math.floor(Math.random() * WINNER_GAMES.length)];
+      quote   = WINNER_QUOTES[Math.floor(Math.random() * WINNER_QUOTES.length)];
+    }
     playWinnerPing();
     msgEl.classList.remove('visible');
     setTimeout(() => {
@@ -1723,9 +1815,9 @@
 
   const IDLE_LEVELS = [
     { threshold:35, emoji:'👀', title:'STILL THERE?',                  msg:"You're missing out on AMAZING prizes! Play to win!", penalty:0 },
-    { threshold:35, emoji:'🤔', title:'HELLO? ANYONE HOME?',           msg:'Psst — the fastest way to skip this ad is to play the game. Just saying 😊', penalty:0 },
+    { threshold:35, emoji:'🤔', title:'HELLO? ANYONE HOME?',           msg:'Psst — the fastest way to skip this ad is to play the game. Just saying 😊', penalty:30 },
     { threshold:35, emoji:'🙄', title:'ARE YOU TRYING TO SCAM US?',    msg:'Legitimate viewers play the game. Sitting there doing nothing is SUSPICIOUS. +30 seconds added to your skip timer.', penalty:30 },
-    { threshold:35, emoji:'😠', title:'THIS IS GETTING ANNOYING.',     msg:"Seriously? STILL not playing?! The skip timer doesn't care how long you wait. Only how much you PLAY. +60 seconds.", penalty:60 },
+    { threshold:35, emoji:'😠', title:'THIS IS GETTING ANNOYING.',     msg:"Seriously? Are you trying to scam us?! The skip timer doesn't care how long you wait. Only how much you PLAY. +60 seconds.", penalty:60 },
     { threshold:35, emoji:'🤬', title:'WE SEE YOU. WE ARE WATCHING.',  msg:"You're being very rude. This is a PREMIUM casino experience and you're just sitting there. Very disrespectful. +120 seconds.", penalty:120 },
     { threshold:35, emoji:'😡', title:'CHEATER. IDLER. DISGRACE.',     msg:"WE WILL BE HERE ALL DAY. Think you can outlast us? We have INFINITE time. +300 seconds. Enjoy.", penalty:300 },
   ];
@@ -1759,7 +1851,9 @@
     }
     setInterval(() => {
       if (!adActive) return;
-      if (document.getElementById('dog-popup').classList.contains('show')) { lastActivity = Date.now(); return; }
+      if (document.getElementById('dog-popup').classList.contains('show')    ||
+          document.getElementById('sniper-popup').classList.contains('show') ||
+          document.getElementById('maze-popup').classList.contains('show'))  { lastActivity = Date.now(); return; }
       const idleSec = (Date.now() - lastActivity) / 1000;
       const next = IDLE_LEVELS[idleLevel];
       if (next && idleSec >= next.threshold) {
@@ -1895,7 +1989,7 @@
   // Wheel prize picker (uses baseWeights, cycle on spinCount, never returns -1)
   function _pickPrizeWheel() {
     const prizes = currentTier().prizes;
-    const baseWeights = currentTier().baseWeights;
+    const baseWeights = getEffectivePrizeWeights(currentTier().baseWeights, prizes);
     const ticketPrizeIndices = prizes.reduce((acc, p, i) => { if (p.ticketBonus > 0) acc.push(i); return acc; }, []);
     const upgradeIndex = prizes.findIndex(p => p.isUpgrade);
     function randomTicketPrize() { return ticketPrizeIndices[Math.floor(Math.random() * ticketPrizeIndices.length)]; }
@@ -1928,7 +2022,7 @@
     if (delta < 0.001) delta = TAU;
     const extraTurns = (5 + Math.floor(Math.random() * 3)) * TAU;
     const totalDelta  = extraTurns + delta;
-    const spinDuration = 9500;
+    const spinDuration = 6500;
     scheduleWheelTicks(totalDelta, spinDuration / 1000);
     const startAngle = currentAngle;
     const startTime  = performance.now();
@@ -2056,7 +2150,7 @@
   // Slot prize picker (uses weights, winCount % 6, returns -1 for loss)
   function _pickPrizeSlot() {
     const prizes  = currentTier().prizes;
-    const weights = currentTier().weights;
+    const weights = getEffectivePrizeWeights(currentTier().weights, prizes);
     const ticketPrizeIndices = prizes.reduce((acc, p, i) => { if (p.ticketBonus > 0) acc.push(i); return acc; }, []);
     const upgradeIndex = prizes.findIndex(p => p.isUpgrade);
     function randomTicketPrize() { return ticketPrizeIndices[Math.floor(Math.random() * ticketPrizeIndices.length)]; }
@@ -2210,7 +2304,7 @@
   // Prize picker for scratch (uses weights, winCount % 6, returns -1 for loss)
   function pickWinningPrize() {
     const prizes  = currentTier().prizes;
-    const weights = currentTier().weights;
+    const weights = getEffectivePrizeWeights(currentTier().weights, prizes);
     const ticketPrizeIndices = prizes.reduce((acc, p, i) => { if (p.ticketBonus > 0) acc.push(i); return acc; }, []);
     const upgradeIndex = prizes.findIndex(p => p.isUpgrade);
     function randomTicketPrize() { return ticketPrizeIndices[Math.floor(Math.random() * ticketPrizeIndices.length)]; }
@@ -2247,6 +2341,9 @@
         for (let i = 0; i < 9; i++) grid[i] = Math.floor(Math.random() * n);
         attempts++;
       } while (attempts < 200 && WIN_LINES.some(line => line.every(idx => grid[idx] === grid[line[0]])));
+      // Safety: if a win line survived all 200 attempts, force-break it
+      const _stray = WIN_LINES.find(line => line.every(idx => grid[idx] === grid[line[0]]));
+      if (_stray) grid[_stray[2]] = (grid[_stray[0]] + 1) % n;
       return grid;
     }
     const lineIdx = Math.floor(Math.random() * WIN_LINES.length);
@@ -2506,19 +2603,21 @@
   const collectBtn = document.getElementById('collect-btn');
   const winTitle   = document.getElementById('win-title');
 
-  function showWinPopup(prize) {
-    if (prize.isUpgrade) { showUpgradePopup(); return; }
-    if (prize.id === 'dog') { startDogPopup(prize); return; }
+  function _renderWinPopup(prize) {
     if (prize.imgIcon) {
       winIcon.innerHTML = `<img src="${prize.imgIcon}" style="width:60px;height:60px;object-fit:contain;">`;
+    } else if (prize.id === 'btc') {
+      winIcon.innerHTML = '<span class="btc-icon">₿</span>';
     } else {
       winIcon.textContent = prize.icon;
     }
     winName.textContent   = prize.label;
     winFlavor.textContent = prize.flavor;
     if (prize.isJackpot) {
+      wonJackpots[prize.id] = true;
       winTitle.textContent = '🚨 JACKPOT! 🚨'; winTitle.style.fontSize = '28px';
-      fireConfetti(200); playJackpot();
+      playAssetSound('alert');
+      fireConfetti(200);
     } else {
       winTitle.textContent = 'YOU WON!'; winTitle.style.fontSize = '36px';
       if (prize.ticketBonus > 0) fireConfetti(80);
@@ -2527,6 +2626,14 @@
     const freeLabel = ACTIVE_GAME === 'scratch' ? 'FREE CARD! →' : 'FREE SPIN! →';
     collectBtn.textContent = prize.isFree ? freeLabel : 'COLLECT!';
     winPopup.classList.add('show');
+  }
+
+  function showWinPopup(prize) {
+    if (prize.isUpgrade) { showUpgradePopup(); return; }
+    if (prize.id === 'dog')    { startDogPopup(prize);       return; }
+    if (prize.id === 'awp_dl') { startSniperMinigame(prize); return; }
+    if (prize.id === 'btc')    { startMazeMinigame(prize);   return; }
+    _renderWinPopup(prize);
   }
 
   collectBtn.addEventListener('click', () => {
@@ -2559,6 +2666,7 @@
   const dogImgWrap  = document.getElementById('dog-img-wrap');
   const dogFeedback = document.getElementById('dog-feedback');
   const dogCollect  = document.getElementById('dog-collect-btn');
+  const dbgDogBtn   = document.getElementById('dbg-dog');
   let dogCountdown  = 120, dogInterval = null, dogPrize = null;
   let dogKissed = false, dogPenalty = false;
   let _dogCryImgTimer = null, _dogCryTxtTimer = null;
@@ -2586,6 +2694,7 @@
     dogCollect.classList.remove('ready');
     dogCollect.innerHTML = 'COLLECT! (<span id="dog-timer">120</span>s)';
     dogPopup.classList.add('show');
+    pauseMinigame();
     if (dogInterval) clearInterval(dogInterval);
     dogInterval = setInterval(() => { dogCountdown--; updateDogTimer(); }, 1000);
   }
@@ -2599,18 +2708,21 @@
     _dogCryTxtTimer = setTimeout(() => { dogFeedback.textContent = ''; }, 3000);
   }
 
-  dogImgWrap.addEventListener('click', (e) => {
+  function _dogHandleKiss(clientX, clientY) {
     if (dogPenalty) return;
     const rect = dogImgWrap.getBoundingClientRect();
-    const px = (e.clientX - rect.left) * (dogImgEl.naturalWidth  / dogImgWrap.offsetWidth);
-    const py = (e.clientY - rect.top)  * (dogImgEl.naturalHeight / dogImgWrap.offsetHeight);
-    if (px >= 30 && px <= 55 && py >= 95 && py <= 105) {
+    const px = (clientX - rect.left) * (dogImgEl.naturalWidth  / dogImgWrap.offsetWidth);
+    const py = (clientY - rect.top)  * (dogImgEl.naturalHeight / dogImgWrap.offsetHeight);
+    if (px >= 5 && px <= 80 && py >= 75 && py <= 135) {
       dogKissed = true; dogImgEl.src = 'assets/DootLove.png';
+      playAssetSound('dogKiss');
       setTimeout(() => { if (dogPopup.classList.contains('show')) dogImgEl.src = 'assets/Doot.png'; }, 500);
       dogFeedback.textContent = '';
       dogCountdown = Math.max(0, dogCountdown - 30); updateDogTimer();
     } else { dogCry(); }
-  });
+  }
+  dogImgWrap.addEventListener('click', (e) => _dogHandleKiss(e.clientX, e.clientY));
+  dogImgWrap.addEventListener('touchstart', (e) => { e.preventDefault(); _dogHandleKiss(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
   dogBox.addEventListener('click', (e) => {
     if (dogImgWrap === e.target || dogImgWrap.contains(e.target)) return;
     if (dogCollect === e.target || dogCollect.contains(e.target)) return;
@@ -2626,10 +2738,527 @@
     dogPopup.classList.remove('show');
     const wasPenalty = dogPenalty; dogPenalty = false;
     const prize = dogPrize; dogPrize = null; pendingPrize = null;
-    if (!wasPenalty) addToPrizeList(prize);
+    if (!wasPenalty) {
+      playAssetSound('dogBark');
+      addToPrizeList(prize);
+    }
+    if (ACTIVE_GAME !== 'scratch') spinning = false;
+    window.top.postMessage({ type: 'play' }, '*');
+    resumeMinigame();
+    updateActionBtn();
+  });
+
+  if (new URLSearchParams(window.location.search).has('debug')) {
+    dbgDogBtn.style.display = 'block';
+  }
+  dbgDogBtn.addEventListener('click', () => {
+    pendingPrize = { id: 'dog', label: 'Dog', icon: '🐕', flavor: '...why is there a dog here?', imgIcon: 'assets/Doot.png', isJackpot: false, isFree: false, ticketBonus: 0 };
+    startDogPopup(pendingPrize);
+  });
+
+  // ═══════════════════════════════════════
+  // MINIGAME FAIL POPUP
+  // ═══════════════════════════════════════
+  const minigameFailPopupEl = document.getElementById('minigame-fail-popup');
+  const minigameFailTitle   = document.getElementById('minigame-fail-title');
+  const minigameFailMsg     = document.getElementById('minigame-fail-msg');
+  const minigameFailBtn     = document.getElementById('minigame-fail-btn');
+  minigameFailBtn.addEventListener('click', () => {
+    minigameFailPopupEl.classList.remove('show');
+    pendingPrize = null;
     if (ACTIVE_GAME !== 'scratch') spinning = false;
     window.top.postMessage({ type: 'play' }, '*');
     updateActionBtn();
+  });
+
+  // ═══════════════════════════════════════
+  // MAZE MINIGAME (BTC)
+  // ═══════════════════════════════════════
+  const mazePopup       = document.getElementById('maze-popup');
+  const mazeBox         = document.getElementById('maze-box');
+  const mazeCanvas      = document.getElementById('maze-canvas');
+  const mazeTimerHudEl  = document.getElementById('maze-timer-hud');
+  const mazeIntro       = document.getElementById('maze-intro');
+  const mazeIntroBtn    = document.getElementById('maze-intro-btn');
+  const dbgMazeBtn      = document.getElementById('dbg-maze');
+
+  const MAZE_W          = 1254, MAZE_H = 1254;    // natural image px
+  const MAZE_START_NX   = 190,  MAZE_START_NY = 450;  // entry in natural px
+  const MAZE_EXIT_NX    = 1050, MAZE_EXIT_NY  = 780;  // exit center natural px
+  const MAZE_EXIT_D_R       = 22;   // exit win-zone radius in display px
+  const MAZE_FINISH_DRAW_W  = 50;   // finish box visual width (display px)
+  const MAZE_FINISH_DRAW_H  = 36;   // finish box visual height (display px)
+  const KRAKUS_HIT_R        = 9;    // collision check radius in display px
+  const KRAKUS_DRAW_R       = 13;   // drawn sprite radius in display px
+  const MAZE_SECONDS    = 30;
+
+  let mazePrize         = null;
+  let mazeActive        = false;
+  let mazeDragging      = false;
+  let mazeKrakenX       = 0, mazeKrakenY = 0; // display coords
+  let mazePrevMx        = 0, mazePrevMy  = 0; // mouse coords at last drag event
+  let mazeCountdown     = MAZE_SECONDS;
+  let mazeTimerInt      = null;
+  let mazeCtx           = null;
+  let mazeAnimFrame     = null;
+  let mazePixelData     = null;
+  let mazeImgReady      = false;
+  let krakenImgReady    = false;
+  let mazeBoundsMinX    = 0, mazeBoundsMaxX = MAZE_W;
+  let mazeBoundsMinY    = 0, mazeBoundsMaxY = MAZE_H;
+
+  const _mazeImg   = new Image();
+  const _krakenImg = new Image();
+
+  _mazeImg.onload = () => {
+    mazeImgReady = true;
+    const ofc = document.createElement('canvas');
+    ofc.width = MAZE_W; ofc.height = MAZE_H;
+    const ofx = ofc.getContext('2d');
+    ofx.drawImage(_mazeImg, 0, 0);
+    try {
+      mazePixelData = ofx.getImageData(0, 0, MAZE_W, MAZE_H);
+      // Auto-detect bounding box of maze walls to use as movement fence
+      let minX = MAZE_W, maxX = 0, minY = MAZE_H, maxY = 0;
+      const d = mazePixelData.data;
+      for (let y = 0; y < MAZE_H; y++) {
+        for (let x = 0; x < MAZE_W; x++) {
+          if (d[(y * MAZE_W + x) * 4 + 3] > 50) {
+            if (x < minX) minX = x; if (x > maxX) maxX = x;
+            if (y < minY) minY = y; if (y > maxY) maxY = y;
+          }
+        }
+      }
+      mazeBoundsMinX = minX; mazeBoundsMaxX = maxX;
+      mazeBoundsMinY = minY; mazeBoundsMaxY = maxY;
+    } catch(e) {}
+  };
+  _krakenImg.onload = () => { krakenImgReady = true; };
+  _mazeImg.src   = 'assets/maze.png';
+  _krakenImg.src = 'assets/krakus.png';
+
+  function _mazeImgRect() {
+    const cw = mazeBox.offsetWidth  || 500;
+    const ch = mazeBox.offsetHeight || 460;
+    const scale = Math.min(cw / MAZE_W, ch / MAZE_H);
+    return { ox: (cw - MAZE_W * scale) / 2, oy: (ch - MAZE_H * scale) / 2, scale };
+  }
+
+  function _mazeWallAt(nx, ny) {
+    const ix = Math.round(nx), iy = Math.round(ny);
+    if (ix < 0 || iy < 0 || ix >= MAZE_W || iy >= MAZE_H) return true;
+    if (!mazePixelData) return false;
+    const idx = (iy * MAZE_W + ix) * 4;
+    return mazePixelData.data[idx + 3] > 50; // alpha > 50 = wall pixel
+  }
+
+  function _mazeHasWall(cx, cy, ox, oy, scale) {
+    // Sample 12 points on the hitbox circle
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      const nx = (cx + Math.cos(a) * KRAKUS_HIT_R - ox) / scale;
+      const ny = (cy + Math.sin(a) * KRAKUS_HIT_R - oy) / scale;
+      if (_mazeWallAt(nx, ny)) return true;
+    }
+    return false;
+  }
+
+  function mazeDraw() {
+    if (!mazeCtx) return;
+    const W = mazeCanvas.width, H = mazeCanvas.height;
+    const { ox, oy, scale } = _mazeImgRect();
+    const mw = MAZE_W * scale, mh = MAZE_H * scale;
+    mazeCtx.fillStyle = '#d0b8e8'; mazeCtx.fillRect(0, 0, W, H);
+    mazeCtx.fillStyle = '#d0b8e8'; mazeCtx.fillRect(ox, oy, mw, mh);
+    if (mazeImgReady) mazeCtx.drawImage(_mazeImg, ox, oy, mw, mh);
+    // Exit: red FINISH box
+    const exitDx = ox + MAZE_EXIT_NX * scale;
+    const exitDy = oy + MAZE_EXIT_NY * scale;
+    const eW = MAZE_FINISH_DRAW_W, eH = MAZE_FINISH_DRAW_H;
+    mazeCtx.save();
+    mazeCtx.fillStyle = '#cc0000';
+    mazeCtx.fillRect(exitDx - eW / 2, exitDy - eH / 2, eW, eH);
+    mazeCtx.strokeStyle = '#ff6666'; mazeCtx.lineWidth = 1.5;
+    mazeCtx.strokeRect(exitDx - eW / 2, exitDy - eH / 2, eW, eH);
+    mazeCtx.fillStyle = '#fff';
+    mazeCtx.font = `bold ${Math.round(eH * 0.34)}px Bungee, sans-serif`;
+    mazeCtx.textAlign = 'center'; mazeCtx.textBaseline = 'middle';
+    mazeCtx.fillText('FINISH', exitDx, exitDy);
+    mazeCtx.restore();
+    // Octopus
+    if (krakenImgReady) {
+      mazeCtx.drawImage(_krakenImg, mazeKrakenX - KRAKUS_DRAW_R, mazeKrakenY - KRAKUS_DRAW_R, KRAKUS_DRAW_R * 2, KRAKUS_DRAW_R * 2);
+    } else {
+      mazeCtx.fillStyle = '#4488ff';
+      mazeCtx.beginPath(); mazeCtx.arc(mazeKrakenX, mazeKrakenY, KRAKUS_DRAW_R, 0, Math.PI * 2); mazeCtx.fill();
+    }
+    mazeAnimFrame = requestAnimationFrame(mazeDraw);
+  }
+
+  function _mazeDragStart(clientX, clientY) {
+    if (!mazeActive) return;
+    const r = mazeCanvas.getBoundingClientRect();
+    const mx = clientX - r.left;
+    const my = clientY - r.top;
+    const dist = Math.sqrt((mx - mazeKrakenX) ** 2 + (my - mazeKrakenY) ** 2);
+    if (dist <= KRAKUS_DRAW_R + 8) {
+      mazeDragging = true;
+      mazePrevMx = mx; mazePrevMy = my;
+      mazeCanvas.style.cursor = 'grabbing';
+      _mazeStartWaka();
+    }
+  }
+
+  function _mazeStartWaka() {
+    const w = _assetAudio.waka;
+    const volSlider = document.getElementById('vol-slider');
+    w.volume = Math.max(0, Math.min(1, parseFloat(volSlider ? volSlider.value : '0.5') || 0));
+    if (w.paused) w.play().catch(function() {});
+  }
+
+  function _mazeStopWaka() {
+    const w = _assetAudio.waka;
+    w.pause(); w.currentTime = 0;
+  }
+
+  function _mazeDragEnd() {
+    mazeDragging = false;
+    mazeCanvas.style.cursor = 'grab';
+    _mazeStopWaka();
+  }
+
+  function _mazeMoveOctopus(clientX, clientY) {
+    if (!mazeActive) return;
+    const r = mazeCanvas.getBoundingClientRect();
+    const mx = clientX - r.left;
+    const my = clientY - r.top;
+    // Update cursor hint regardless
+    const hoverDist = Math.sqrt((mx - mazeKrakenX) ** 2 + (my - mazeKrakenY) ** 2);
+    if (!mazeDragging) {
+      mazeCanvas.style.cursor = hoverDist <= KRAKUS_DRAW_R + 8 ? 'grab' : 'default';
+      return;
+    }
+    const dx = mx - mazePrevMx;
+    const dy = my - mazePrevMy;
+    mazePrevMx = mx; mazePrevMy = my;
+    const { ox, oy, scale } = _mazeImgRect();
+    // Fence bounds
+    const fenceMinX = ox + Math.min(MAZE_START_NX - 10, mazeBoundsMinX) * scale;
+    const fenceMaxX = ox + mazeBoundsMaxX * scale;
+    const fenceMinY = oy + mazeBoundsMinY * scale;
+    const fenceMaxY = oy + mazeBoundsMaxY * scale;
+    // Sub-step movement to prevent tunneling through thin walls
+    const STEP = 2;
+    const steps = Math.max(1, Math.ceil(Math.max(Math.abs(dx), Math.abs(dy)) / STEP));
+    const sx = dx / steps, sy = dy / steps;
+    for (let i = 0; i < steps; i++) {
+      const tryX = Math.max(fenceMinX, Math.min(fenceMaxX, mazeKrakenX + sx));
+      const tryY = Math.max(fenceMinY, Math.min(fenceMaxY, mazeKrakenY + sy));
+      if (!_mazeHasWall(tryX, mazeKrakenY, ox, oy, scale)) mazeKrakenX = tryX;
+      if (!_mazeHasWall(mazeKrakenX, tryY, ox, oy, scale)) mazeKrakenY = tryY;
+    }
+    // Win check — require line-of-sight to exit (no wall between octopus and finish)
+    const exitDx = ox + MAZE_EXIT_NX * scale;
+    const exitDy = oy + MAZE_EXIT_NY * scale;
+    if (Math.sqrt((mazeKrakenX - exitDx) ** 2 + (mazeKrakenY - exitDy) ** 2) <= MAZE_EXIT_D_R) {
+      let los = true;
+      for (let t = 0.2; t < 1.0; t += 0.2) {
+        const lx = (mazeKrakenX + (exitDx - mazeKrakenX) * t - ox) / scale;
+        const ly = (mazeKrakenY + (exitDy - mazeKrakenY) * t - oy) / scale;
+        if (_mazeWallAt(lx, ly)) { los = false; break; }
+      }
+      if (los) mazeEndGame(true);
+    }
+  }
+
+  mazeCanvas.addEventListener('mousedown',  (e) => _mazeDragStart(e.clientX, e.clientY));
+  mazeCanvas.addEventListener('mouseup',    ()  => _mazeDragEnd());
+  mazeCanvas.addEventListener('mouseleave', ()  => _mazeDragEnd());
+  mazeCanvas.addEventListener('mousemove',  (e) => _mazeMoveOctopus(e.clientX, e.clientY));
+  mazeCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); _mazeDragStart(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  mazeCanvas.addEventListener('touchend',   (e) => { e.preventDefault(); _mazeDragEnd(); }, { passive: false });
+  mazeCanvas.addEventListener('touchmove',  (e) => { e.preventDefault(); _mazeMoveOctopus(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+
+  function mazeEndGame(won) {
+    mazeActive = false;
+    _mazeStopWaka();
+    clearInterval(mazeTimerInt); mazeTimerInt = null;
+    if (mazeAnimFrame) { cancelAnimationFrame(mazeAnimFrame); mazeAnimFrame = null; }
+    mazePopup.classList.remove('show');
+    resumeMinigame();
+    if (won) {
+      pendingPrize = mazePrize; mazePrize = null;
+      fireConfetti(200); playJackpot();
+      _renderWinPopup(pendingPrize);
+    } else {
+      playDenied();
+      mazePrize = null; pendingPrize = null;
+      minigameFailTitle.textContent = '⏰ TOO SLOW!';
+      minigameFailMsg.textContent   = 'The Bitcoin wallet slipped away. The maze was too much!';
+      minigameFailPopupEl.classList.add('show');
+    }
+  }
+
+  function startMazeMinigame(prize) {
+    mazePrize = prize;
+    mazeCountdown = MAZE_SECONDS;
+    mazeTimerHudEl.textContent = `⏱ ${MAZE_SECONDS}s`;
+    mazeActive = false; // held until intro dismissed
+    mazeDragging = false;
+    mazeIntro.classList.add('show');
+    mazePopup.classList.add('show');
+    pauseMinigame();
+    const cw = 500, ch = 460;
+    mazeCanvas.width  = cw;
+    mazeCanvas.height = ch;
+    mazeCtx = mazeCanvas.getContext('2d');
+    const { ox, oy, scale } = _mazeImgRect();
+    mazeKrakenX = ox + MAZE_START_NX * scale;
+    mazeKrakenY = oy + MAZE_START_NY * scale;
+    mazePrevMx  = mazeKrakenX; mazePrevMy = mazeKrakenY;
+    if (mazeAnimFrame) cancelAnimationFrame(mazeAnimFrame);
+    mazeDraw();
+  }
+
+  mazeIntroBtn.addEventListener('click', () => {
+    mazeIntro.classList.remove('show');
+    mazeActive = true;
+    mazeDragging = false;
+    mazeCanvas.style.cursor = 'default';
+    if (!mazeAnimFrame) mazeAnimFrame = requestAnimationFrame(mazeDraw);
+    mazeTimerInt = setInterval(() => {
+      mazeCountdown--;
+      mazeTimerHudEl.textContent = `⏱ ${mazeCountdown}s`;
+      if (mazeCountdown <= 0) {
+        clearInterval(mazeTimerInt); mazeTimerInt = null;
+        mazeEndGame(false);
+      }
+    }, 1000);
+  });
+
+  if (new URLSearchParams(window.location.search).has('debug')) {
+    dbgMazeBtn.style.display = 'block';
+  }
+  dbgMazeBtn.addEventListener('click', () => {
+    pendingPrize = { id: 'btc', label: '1 BITCOIN!', icon: '₿', flavor: '₿ ONE FULL BITCOIN! (~$90,000!) LEGENDARY!', isJackpot: true, isFree: false, ticketBonus: 0 };
+    startMazeMinigame(pendingPrize);
+  });
+
+  // ═══════════════════════════════════════
+  // SNIPER MINIGAME
+  // ═══════════════════════════════════════
+  const sniperPopup       = document.getElementById('sniper-popup');
+  const sniperBox         = document.getElementById('sniper-box');
+  const sniperBuilding    = document.getElementById('sniper-building');
+  const sniperTarget      = document.getElementById('sniper-target');
+  const sniperCanvas      = document.getElementById('sniper-canvas');
+  const sniperHitsEl      = document.getElementById('sniper-hits');
+  const sniperTimerHud    = document.getElementById('sniper-timer-hud');
+  const sniperMissesEl    = document.getElementById('sniper-misses');
+  const sniperIntro       = document.getElementById('sniper-intro');
+  const sniperIntroBtn    = document.getElementById('sniper-intro-btn');
+  const dbgSniperBtn      = document.getElementById('dbg-sniper');
+
+  // Window positions in dusty.png original pixels (1015×1009 natural size)
+  const SNIPER_WINDOWS = [];
+  [[240,272],[240,384],[240,503],[240,620],[240,743],
+   [472,272],[472,384],[472,503],[472,620],[472,743],
+   [708,272],[708,384],[708,503],[708,620],[708,743]
+  ].forEach(([wy, wx]) => SNIPER_WINDOWS.push({ x: wx, y: wy }));
+
+  const SNIPER_IMG_W    = 1015;  // dusty.png natural width
+  const SNIPER_IMG_H    = 1009;  // dusty.png natural height
+  const SNIPER_SCOPE_R  = 65;    // scope circle radius (display px)
+  const SNIPER_SCOPE_ZOOM = 2;
+  const SNIPER_HIT_R    = 24;    // hit detection radius (display px)
+  const SNIPER_TARGET_PX = 19;   // rendered target size (display px)
+
+  let sniperPrize       = null;
+  let sniperHitCount    = 0, sniperMissCount = 0;
+  let sniperMx = 480,  sniperMy = 270;
+  let sniperTargetPos   = null;  // { dx, dy } in display coords
+  let sniperTargetTimer = null;
+  let sniperCountdown   = 5;
+  let sniperCtx         = null;
+  let sniperAnimFrame   = null;
+  let sniperActive      = false;
+  let sniperHitFlash    = 0;
+  let sniperHitFlashPos = null;
+
+  function sniperImgRect() {
+    const cw = sniperBox.offsetWidth  || 600;
+    const ch = sniperBox.offsetHeight || 420;
+    const scale = Math.min(cw / SNIPER_IMG_W, ch / SNIPER_IMG_H);
+    return { ox: (cw - SNIPER_IMG_W * scale) / 2, oy: (ch - SNIPER_IMG_H * scale) / 2, scale };
+  }
+
+  function sniperToDisplay(wx, wy) {
+    const { ox, oy, scale } = sniperImgRect();
+    return { dx: ox + wx * scale, dy: oy + wy * scale };
+  }
+
+  function sniperDraw() {
+    if (!sniperCtx) return;
+    const W = sniperCanvas.width, H = sniperCanvas.height;
+    sniperCtx.clearRect(0, 0, W, H);
+    // Dark vignette with a zoomed scope view rendered on top
+    sniperCtx.fillStyle = 'rgba(0,0,0,0.92)';
+    sniperCtx.fillRect(0, 0, W, H);
+    const { ox, oy, scale } = sniperImgRect();
+    const scopeD = SNIPER_SCOPE_R * 2;
+    const srcW = scopeD / (scale * SNIPER_SCOPE_ZOOM);
+    const srcH = scopeD / (scale * SNIPER_SCOPE_ZOOM);
+    const srcX = Math.max(0, Math.min(SNIPER_IMG_W - srcW, (sniperMx - ox) / scale - srcW / 2));
+    const srcY = Math.max(0, Math.min(SNIPER_IMG_H - srcH, (sniperMy - oy) / scale - srcH / 2));
+    sniperCtx.save();
+    sniperCtx.beginPath();
+    sniperCtx.arc(sniperMx, sniperMy, SNIPER_SCOPE_R, 0, Math.PI * 2);
+    sniperCtx.clip();
+    sniperCtx.fillStyle = '#000';
+    sniperCtx.fillRect(sniperMx - SNIPER_SCOPE_R, sniperMy - SNIPER_SCOPE_R, scopeD, scopeD);
+    sniperCtx.drawImage(sniperBuilding, srcX, srcY, srcW, srcH, sniperMx - SNIPER_SCOPE_R, sniperMy - SNIPER_SCOPE_R, scopeD, scopeD);
+    if (sniperTargetPos && sniperTarget.style.display !== 'none') {
+      const zoomedTargetSize = SNIPER_TARGET_PX * SNIPER_SCOPE_ZOOM;
+      const targetCx = sniperMx + (sniperTargetPos.dx - sniperMx) * SNIPER_SCOPE_ZOOM;
+      const targetCy = sniperMy + (sniperTargetPos.dy - sniperMy) * SNIPER_SCOPE_ZOOM;
+      sniperCtx.drawImage(sniperTarget, targetCx - zoomedTargetSize / 2, targetCy - zoomedTargetSize / 2, zoomedTargetSize, zoomedTargetSize);
+    }
+    sniperCtx.restore();
+    // Outer scope ring
+    sniperCtx.strokeStyle = 'rgba(0,255,68,0.75)'; sniperCtx.lineWidth = 1.5;
+    sniperCtx.beginPath(); sniperCtx.arc(sniperMx, sniperMy, SNIPER_SCOPE_R, 0, Math.PI * 2); sniperCtx.stroke();
+    // Inner ring
+    sniperCtx.strokeStyle = 'rgba(0,255,68,0.3)'; sniperCtx.lineWidth = 1;
+    sniperCtx.beginPath(); sniperCtx.arc(sniperMx, sniperMy, SNIPER_SCOPE_R * 0.22, 0, Math.PI * 2); sniperCtx.stroke();
+    // Crosshair with center gap
+    const GAP = 8;
+    sniperCtx.strokeStyle = 'rgba(255,30,30,0.9)'; sniperCtx.lineWidth = 1;
+    sniperCtx.beginPath(); sniperCtx.moveTo(sniperMx - SNIPER_SCOPE_R, sniperMy); sniperCtx.lineTo(sniperMx - GAP, sniperMy); sniperCtx.stroke();
+    sniperCtx.beginPath(); sniperCtx.moveTo(sniperMx + GAP, sniperMy); sniperCtx.lineTo(sniperMx + SNIPER_SCOPE_R, sniperMy); sniperCtx.stroke();
+    sniperCtx.beginPath(); sniperCtx.moveTo(sniperMx, sniperMy - SNIPER_SCOPE_R); sniperCtx.lineTo(sniperMx, sniperMy - GAP); sniperCtx.stroke();
+    sniperCtx.beginPath(); sniperCtx.moveTo(sniperMx, sniperMy + GAP); sniperCtx.lineTo(sniperMx, sniperMy + SNIPER_SCOPE_R); sniperCtx.stroke();
+    // Center dot
+    sniperCtx.fillStyle = 'rgba(255,30,30,0.9)';
+    sniperCtx.beginPath(); sniperCtx.arc(sniperMx, sniperMy, 2, 0, Math.PI * 2); sniperCtx.fill();
+    // Hit flash
+    if (sniperHitFlash > 0 && sniperHitFlashPos) {
+      sniperCtx.strokeStyle = `rgba(255,255,0,${sniperHitFlash / 12})`;
+      sniperCtx.lineWidth = 3;
+      sniperCtx.beginPath(); sniperCtx.arc(sniperHitFlashPos.dx, sniperHitFlashPos.dy, 22, 0, Math.PI * 2); sniperCtx.stroke();
+      sniperHitFlash--;
+    }
+    sniperAnimFrame = requestAnimationFrame(sniperDraw);
+  }
+
+  function sniperPickTarget() {
+    if (!sniperActive) return;
+    const w = SNIPER_WINDOWS[Math.floor(Math.random() * SNIPER_WINDOWS.length)];
+    sniperTargetPos = sniperToDisplay(w.x, w.y);
+    sniperTarget.style.left   = sniperTargetPos.dx + 'px';
+    sniperTarget.style.top    = sniperTargetPos.dy + 'px';
+    sniperTarget.style.width  = SNIPER_TARGET_PX + 'px';
+    sniperTarget.style.height = SNIPER_TARGET_PX + 'px';
+    sniperTarget.style.display = 'block';
+    sniperCountdown = 5;
+    sniperTimerHud.textContent = '⏱ 5s';
+    if (sniperTargetTimer) clearInterval(sniperTargetTimer);
+    sniperTargetTimer = setInterval(() => {
+      sniperCountdown--;
+      sniperTimerHud.textContent = `⏱ ${sniperCountdown}s`;
+      if (sniperCountdown <= 0) {
+        clearInterval(sniperTargetTimer); sniperTargetTimer = null;
+        sniperTarget.style.display = 'none';
+        sniperMissCount++;
+        sniperMissesEl.textContent = `❌ ${sniperMissCount}/1`;
+        if (sniperMissCount > 1) { sniperEndGame(false); }
+        else { setTimeout(() => sniperPickTarget(), 700); }
+      }
+    }, 1000);
+  }
+
+  function sniperEndGame(won) {
+    sniperActive = false;
+    clearInterval(sniperTargetTimer); sniperTargetTimer = null;
+    sniperTarget.style.display = 'none';
+    if (sniperAnimFrame) { cancelAnimationFrame(sniperAnimFrame); sniperAnimFrame = null; }
+    if (sniperCtx) sniperCtx.clearRect(0, 0, sniperCanvas.width, sniperCanvas.height);
+    sniperPopup.classList.remove('show');
+    resumeMinigame();
+    if (won) {
+      pendingPrize = sniperPrize; sniperPrize = null;
+      fireConfetti(160); playJackpot();
+      _renderWinPopup(pendingPrize);
+    } else {
+      playDenied();
+      sniperPrize = null; pendingPrize = null;
+      minigameFailTitle.textContent = '💀 YOU MISSED!';
+      minigameFailMsg.textContent   = 'You ran out of chances. The AWP Dragon Lore is gone!';
+      minigameFailPopupEl.classList.add('show');
+    }
+  }
+
+  function startSniperMinigame(prize) {
+    sniperPrize = prize; sniperHitCount = 0; sniperMissCount = 0;
+    sniperHitsEl.textContent   = '🎯 0/5';
+    sniperMissesEl.textContent = '❌ 0/1';
+    sniperTimerHud.textContent = '⏱ 5s';
+    sniperTarget.style.display = 'none';
+    sniperActive = false;  // held until intro dismissed
+    sniperIntro.classList.add('show');
+    sniperPopup.classList.add('show');
+    pauseMinigame();
+    const cw = 600, ch = 420;
+    sniperCanvas.width  = cw;
+    sniperCanvas.height = ch;
+    sniperCtx = sniperCanvas.getContext('2d');
+    sniperMx  = cw / 2;
+    sniperMy  = ch / 2;
+    if (sniperAnimFrame) cancelAnimationFrame(sniperAnimFrame);
+    sniperDraw();
+    // game starts when intro btn clicked
+  }
+
+  sniperIntroBtn.addEventListener('click', () => {
+    sniperIntro.classList.remove('show');
+    sniperActive = true;
+    if (!sniperAnimFrame) { sniperAnimFrame = requestAnimationFrame(sniperDraw); }
+    sniperPickTarget();
+  });
+
+  function _sniperHandleMove(clientX, clientY) {
+    const r = sniperCanvas.getBoundingClientRect();
+    sniperMx = clientX - r.left;
+    sniperMy = clientY - r.top;
+  }
+
+  function _sniperHandleFire() {
+    if (!sniperActive || !sniperTargetPos) return;
+    playAssetSound('awpShot');
+    const dx = sniperMx - sniperTargetPos.dx;
+    const dy = sniperMy - sniperTargetPos.dy;
+    if (Math.sqrt(dx * dx + dy * dy) <= SNIPER_HIT_R) {
+      clearInterval(sniperTargetTimer); sniperTargetTimer = null;
+      sniperTarget.style.display = 'none';
+      sniperHitFlash = 12; sniperHitFlashPos = { ...sniperTargetPos };
+      sniperHitCount++;
+      sniperHitsEl.textContent = `🎯 ${sniperHitCount}/5`;
+      if (sniperHitCount >= 5) { setTimeout(() => sniperEndGame(true), 300); }
+      else { setTimeout(() => sniperPickTarget(), 500); }
+    }
+  }
+
+  sniperCanvas.addEventListener('mousemove', (e) => _sniperHandleMove(e.clientX, e.clientY));
+  sniperCanvas.addEventListener('click',     () => _sniperHandleFire());
+  sniperCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); _sniperHandleMove(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+  sniperCanvas.addEventListener('touchend',  (e) => { e.preventDefault(); _sniperHandleFire(); }, { passive: false });
+
+  // Show debug button when ?debug is in the URL
+  if (new URLSearchParams(window.location.search).has('debug')) {
+    dbgSniperBtn.style.display = 'block';
+  }
+  dbgSniperBtn.addEventListener('click', () => {
+    pendingPrize = { id: 'awp_dl', label: 'AWP Dragon Lore', icon: '🔫', flavor: 'THE AWP DRAGON LORE! CS:GO LEGENDARY SKIN!', imgIcon: 'assets/AWPDL.png', isJackpot: true, isFree: false, ticketBonus: 0 };
+    startSniperMinigame(pendingPrize);
   });
 
   // ═══════════════════════════════════════
